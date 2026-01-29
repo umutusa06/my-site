@@ -1,0 +1,1 @@
+﻿window.UNI_CONFIG = {\n  name: "Samsun Üniversitesi",\n  enabled: true,\n  finalBaraj: 50,\n  mutlakEsik: 80,\n  letterSet: ["FF","DD","DC","CC","CB","BB","BA","AA"],\n  defaultWeights: { midterm: 40, final: 60 },\n  sigmaDefaults: [10,15,20],\n  notes: "Samsun Üniversitesi için aktif."\n};\n

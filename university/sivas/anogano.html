@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sivas CÜ | ANO & GANO Hesaplayıcı</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b132b;
+      --bg2:#111b33;
+      --card:#0f172a;
+      --glass:rgba(255,255,255,0.05);
+      --accent:#f7b733;
+      --accent2:#21e6c1;
+      --border:#1f2a44;
+      --text:#e8eefb;
+      --muted:#9fb1d1;
+    }
+    .shell{max-width:900px;margin:0 auto;padding:24px 18px 30px;}
+    nav.nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+    nav.nav a{
+      color:var(--text);text-decoration:none;padding:10px 14px;
+      border:1px solid var(--border);border-radius:12px;
+      background:rgba(255,255,255,0.05);font-weight:800;
+      transition:background .15s ease,border-color .15s ease,color .15s ease;
+    }
+    nav.nav a.active{border-color:var(--accent);color:var(--accent);background:rgba(247,183,51,0.12)}
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      background:radial-gradient(circle at 22% 16%, rgba(33,230,193,0.16), transparent 32%),
+                 radial-gradient(circle at 82% 8%, rgba(247,183,51,0.16), transparent 32%),
+                 linear-gradient(145deg, var(--bg), var(--bg2));
+      min-height:100vh;
+      padding:26px 18px 36px;
+      font-family:"Space Grotesk","Manrope",system-ui,-apple-system,sans-serif;
+      color:var(--text);
+    }
+    .container{
+      background:var(--glass);
+      border:1px solid var(--border);
+      border-radius:20px;
+      box-shadow:0 18px 50px rgba(0,0,0,0.28);
+      max-width:900px;
+      width:100%;
+      padding:26px;
+      margin:0 auto;
+    }
+    h1{color:var(--accent);margin:0 0 6px;font-size:30px;letter-spacing:-0.3px}
+    .bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;justify-content:space-between;margin-bottom:6px}
+    .subtitle{color:var(--muted);margin:0 0 6px;font-size:15px}
+    .muted{color:var(--muted);font-size:13px}
+    label{display:block;margin-bottom:8px;color:var(--text);font-weight:700;font-size:14px}
+    input,select{
+      width:100%;
+      padding:12px 14px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      font-size:15px;
+      transition:all 0.2s ease;
+      background:rgba(255,255,255,0.03);
+      color:var(--text);
+    }
+    input:focus,select:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 3px rgba(33,230,193,0.22);}
+    .btn{
+      width:100%;
+      padding:14px;
+      background:linear-gradient(120deg,var(--accent),#f37335);
+      color:#0b0c10;
+      border:none;
+      border-radius:12px;
+      font-size:16px;
+      font-weight:800;
+      cursor:pointer;
+      transition:all 0.2s ease;
+      box-shadow:0 12px 30px rgba(243,115,53,0.24);
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(243,115,53,0.32);}
+    .step-1-area{margin-bottom:20px;}
+    .course-row{
+      display:grid;
+      grid-template-columns:2fr 1fr 1fr;
+      gap:14px;
+      margin-bottom:14px;
+      padding:12px;
+      background:rgba(255,255,255,0.02);
+      border:1px solid var(--border);
+      border-radius:12px;
+    }
+    .gano-section{margin-top:28px;padding-top:18px;border-top:1px dashed var(--border);}
+    .checkbox-wrapper{display:flex;align-items:center;gap:10px;margin-bottom:15px;cursor:pointer;color:var(--text);}
+    .checkbox-wrapper input[type="checkbox"]{width:18px;height:18px;cursor:pointer;}
+    .previous-stats{display:grid;grid-template-columns:1fr 1fr;gap:14px;display:none;}
+    .result{
+      margin-top:26px;
+      padding:22px;
+      background:linear-gradient(135deg, rgba(33,230,193,0.1), rgba(247,183,51,0.1));
+      border-radius:16px;
+      border:1px solid var(--border);
+      display:none;
+    }
+    .result h2{text-align:center;color:var(--text);margin-bottom:14px;letter-spacing:-0.2px}
+    .result-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;}
+    .score-card{
+      background:var(--card);
+      padding:18px;
+      border-radius:12px;
+      text-align:center;
+      border:1px solid var(--border);
+      box-shadow:0 8px 26px rgba(0,0,0,0.25);
+    }
+    .score-title{font-size:13px;color:var(--muted);margin-bottom:6px;letter-spacing:0.1px}
+    .score-value{font-size:30px;font-weight:800;color:var(--accent);}
+    @media (max-width:680px){
+      .container{padding:20px;}
+      .course-row{grid-template-columns:1fr;gap:10px;}
+      .previous-stats{grid-template-columns:1fr;}
+      .result-grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="nav">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="harf_notu_otomatik_grafikli.html">Harf Notu + Grafik</a>
+      <a href="heatmap.html">Heatmap</a>
+      <a href="detaylifinal.html">Hedef Final</a>
+      <a href="anogano.html" class="active">AGNO / GANO</a>
+      <a href="hakkinda.html">Hakkında</a>
+    </nav>
+
+    <div class="container">
+      <div class="bar">
+        <div>
+          <h1>Ortalama Hesaplayıcı</h1>
+          <p class="subtitle">Sivas Cumhuriyet Üniversitesi — Dönem Ortalaması (ANO/YNO) ve Genel Ortalama (GANO/GNO)</p>
+          <div class="muted" id="uniNote"></div>
+        </div>
+      </div>
+
+      <div class="step-1-area">
+        <label>Bu dönemde kaç dersin var?</label>
+        <div style="display:flex; gap:10px;">
+          <input type="number" id="courseCount" placeholder="örn: 5" min="1" max="15">
+          <button class="btn" id="btnGenerate" style="margin-top:0; width:auto; padding:0 30px;" onclick="generateRows()">Getir</button>
+        </div>
+      </div>
+
+      <div id="calculatorBody" style="display:none;">
+        <div id="courseListArea"></div>
+
+        <div class="gano-section">
+          <label class="checkbox-wrapper">
+            <input type="checkbox" id="includeGano" onchange="toggleGanoInputs()">
+            <span>Genel ortalamamı (GANO/GNO) da hesapla</span>
+          </label>
+
+          <div class="previous-stats" id="prevStatsArea">
+            <div>
+              <label>Önceki Toplam Kredi</label>
+              <input type="number" id="prevCredits" placeholder="örn: 60">
+            </div>
+            <div>
+              <label>Önceki GANO/GNO</label>
+              <input type="number" id="prevGano" step="0.01" placeholder="örn: 2.80">
+            </div>
+          </div>
+        </div>
+
+        <button class="btn" id="btnCalc" onclick="calculate()">HESAPLA</button>
+      </div>
+
+      <div id="result" class="result"></div>
+    </div>
+  </div>
+
+<script>
+/*
+  Sivas CÜ katsayıları:
+  AA 4.00, BA 3.50, BB 3.00, CB 2.50, CC 2.00, DC 1.50, DD 1.00, FF 0.00,
+  DZ/GR/UB = 0.00 (başarısız). :contentReference[oaicite:3]{index=3}
+  YT/YZ ortalamaya dahil edilmez. :contentReference[oaicite:4]{index=4}
+*/
+
+const UNIVERSITY_CONFIGS = {
+  "Sivas Cumhuriyet Üniversitesi": {
+    enabled: true,
+    notes: "Not: YT/YZ seçilen dersler ortalamaya dahil edilmez. DZ/GR/UB = 0.00 olarak hesaplanır."
+  }
+};
+
+let activeUniversityConfig = UNIVERSITY_CONFIGS["Sivas Cumhuriyet Üniversitesi"];
+const uniNote = document.getElementById("uniNote");
+const btnGenerate = document.getElementById("btnGenerate");
+const btnCalc = document.getElementById("btnCalc");
+
+function applyUniversityConfig(cfg){
+  uniNote.textContent = cfg.notes || "";
+  const disabled = !cfg.enabled;
+  btnGenerate.disabled = disabled;
+  btnCalc.disabled = disabled;
+  btnGenerate.textContent = disabled ? "Yakında eklenecek" : "Getir";
+  btnCalc.textContent = disabled ? "Yakında eklenecek" : "HESAPLA";
+}
+applyUniversityConfig(activeUniversityConfig);
+
+function buildGradeOptions(){
+  // value: sayı (katsayı) veya özel token
+  // data-exclude="1": ortalamaya dahil edilmez (kredi de dahil edilmez)
+  return `
+    <option value="" disabled selected>Not Seç</option>
+
+    <option value="4.00">AA (4.00)</option>
+    <option value="3.50">BA (3.50)</option>
+    <option value="3.00">BB (3.00)</option>
+    <option value="2.50">CB (2.50)</option>
+    <option value="2.00">CC (2.00)</option>
+    <option value="1.50">DC (1.50)</option>
+    <option value="1.00">DD (1.00)</option>
+    <option value="0.00">FF (0.00)</option>
+
+    <option value="0.00">DZ (Devamsız - 0.00)</option>
+    <option value="0.00">GR (Sınava girmedi - 0.00)</option>
+    <option value="0.00">UB (Uygulamada başarısız - 0.00)</option>
+
+    <option value="EXC" data-exclude="1">YT (Yeterli - ortalamaya dahil değil)</option>
+    <option value="EXC" data-exclude="1">YZ (Yetersiz - ortalamaya dahil değil)</option>
+  `;
+}
+
+function generateRows() {
+  if(!activeUniversityConfig.enabled){
+    alert("Bu üniversite yakında eklenecek.");
+    return;
+  }
+  const count = Number(document.getElementById('courseCount').value);
+  const listArea = document.getElementById('courseListArea');
+  const calcBody = document.getElementById('calculatorBody');
+
+  if (!Number.isFinite(count) || count < 1) {
+    alert("Lütfen geçerli bir ders sayısı giriniz.");
+    return;
+  }
+
+  listArea.innerHTML = "";
+  const optionsHtml = buildGradeOptions();
+
+  for (let i = 1; i <= count; i++) {
+    const row = document.createElement('div');
+    row.className = 'course-row';
+    row.innerHTML = `
+      <div>
+        <input type="text" placeholder="${i}. Ders Adı (opsiyonel)">
+      </div>
+      <div>
+        <input type="number" class="credit-input" placeholder="Kredi/AKTS" min="0">
+      </div>
+      <div>
+        <select class="grade-input">
+          ${optionsHtml}
+        </select>
+      </div>
+    `;
+    listArea.appendChild(row);
+  }
+
+  calcBody.style.display = 'block';
+  setTimeout(() => {
+    calcBody.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+function toggleGanoInputs() {
+  const checkbox = document.getElementById('includeGano');
+  const area = document.getElementById('prevStatsArea');
+  area.style.display = checkbox.checked ? 'grid' : 'none';
+  if(checkbox.checked) document.getElementById('prevCredits').focus();
+}
+
+function calculate() {
+  const credits = document.querySelectorAll('.credit-input');
+  const grades = document.querySelectorAll('.grade-input');
+
+  let semesterPoints = 0;
+  let semesterCredits = 0;
+
+  let excludedCount = 0;
+
+  for (let i = 0; i < credits.length; i++) {
+    const cr = parseFloat(credits[i].value);
+    const sel = grades[i];
+    const val = sel.value;
+
+    if (!Number.isFinite(cr) || cr <= 0) continue;
+    if (!val) continue;
+
+    // YT/YZ: ortalamaya dahil değil => kredi ve puan dışarı
+    if (val === "EXC" || sel.selectedOptions[0]?.dataset?.exclude === "1") {
+      excludedCount++;
+      continue;
+    }
+
+    const gr = parseFloat(val);
+    if (!Number.isFinite(gr)) continue;
+
+    semesterPoints += (cr * gr);
+    semesterCredits += cr;
+  }
+
+  if (semesterCredits === 0) {
+    alert("Lütfen en az bir dersin kredisini ve notunu giriniz. (YT/YZ seçilen dersler ortalamaya dahil edilmez.)");
+    return;
+  }
+
+  const ano = semesterPoints / semesterCredits;
+
+  let ganoHtml = '';
+  const includeGano = document.getElementById('includeGano').checked;
+
+  if (includeGano) {
+    const prevCr = parseFloat(document.getElementById('prevCredits').value);
+    const prevGano = parseFloat(document.getElementById('prevGano').value);
+
+    if (Number.isFinite(prevCr) && prevCr >= 0 && Number.isFinite(prevGano) && prevGano >= 0) {
+      const totalPoints = (prevGano * prevCr) + semesterPoints;
+      const totalCredits = prevCr + semesterCredits;
+      const newGano = totalCredits > 0 ? (totalPoints / totalCredits) : 0;
+
+      ganoHtml = `
+        <div class="score-card" style="border: 2px solid #667eea;">
+          <div class="score-title">YENİ GENEL ORTALAMA (GANO/GNO)</div>
+          <div class="score-value">${newGano.toFixed(2)}</div>
+        </div>
+      `;
+    } else {
+      alert("GANO/GNO hesaplamak için eski toplam kredi ve ortalamanı gir.");
+      return;
+    }
+  }
+
+  const resultDiv = document.getElementById('result');
+  resultDiv.innerHTML = `
+    <h2 style="text-align:center; color:#e8eefb; margin-bottom:20px;">Hesaplama Sonucu</h2>
+    <div class="result-grid">
+      <div class="score-card">
+        <div class="score-title">DÖNEM ORTALAMASI (ANO/YNO)</div>
+        <div class="score-value">${ano.toFixed(2)}</div>
+      </div>
+      ${ganoHtml}
+    </div>
+    <div style="text-align:center; margin-top:20px; color:#cfd8ea;">
+      Toplam Dönem Kredisi (ortalamaya dahil): <strong>${semesterCredits}</strong>
+      ${excludedCount ? `<div class="muted" style="margin-top:6px;">YT/YZ gibi ortalamaya dahil olmayan ders sayısı: <strong>${excludedCount}</strong></div>` : ``}
+    </div>
+  `;
+
+  resultDiv.style.display = 'block';
+  resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,345 @@
+﻿<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Üniversite Not Simülatörü</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --card:#0f1733;
+      --card2:#101b3b;
+      --text:#eef2ff;
+      --muted:#aab4e6;
+      --line:rgba(255,255,255,.10);
+      --brand:#6c7bff;
+      --brand2:#22d3ee;
+      --danger:#ffb020;
+      --ok:#22c55e;
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 20% -10%, rgba(108,123,255,.35), transparent 60%),
+        radial-gradient(900px 500px at 90% 10%, rgba(34,211,238,.25), transparent 55%),
+        radial-gradient(800px 500px at 40% 110%, rgba(34,197,94,.18), transparent 55%),
+        var(--bg);
+      min-height:100vh;
+    }
+    .wrap{max-width:1100px;margin:0 auto;padding:28px 18px 44px}
+    .topbar{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      padding:14px 16px;border:1px solid var(--line);
+      border-radius:14px;background:rgba(255,255,255,.04);backdrop-filter: blur(10px);
+    }
+    .logo{
+      display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:.2px
+    }
+    .logo-badge{
+      width:36px;height:36px;border-radius:12px;
+      background:linear-gradient(135deg,var(--brand),var(--brand2));
+      box-shadow:0 12px 30px rgba(108,123,255,.35);
+    }
+    .top-actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+    .pill{
+      font-size:12px;color:var(--muted);border:1px solid var(--line);
+      padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.03)
+    }
+    .hero{
+      margin-top:18px;
+      display:grid;grid-template-columns:1.2fr .8fr;gap:14px;
+      align-items:stretch;
+    }
+    @media (max-width: 960px){ .hero{grid-template-columns:1fr} }
+    .heroCard{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border-radius:var(--radius);
+      padding:18px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .heroCard:before{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(600px 220px at 20% 0%, rgba(108,123,255,.35), transparent 55%);
+      pointer-events:none;
+    }
+    .heroTitle{position:relative;font-size:28px;font-weight:950;line-height:1.15;margin:0 0 8px}
+    .heroSub{position:relative;color:var(--muted);margin:0 0 14px;max-width:62ch}
+    .heroRow{position:relative;display:grid;grid-template-columns:1fr 160px;gap:10px;align-items:end}
+    @media (max-width:520px){ .heroRow{grid-template-columns:1fr} }
+    .input{
+      width:100%;padding:12px 12px;border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(0,0,0,.18);color:var(--text);
+      outline:none;
+    }
+    .input::placeholder{color:rgba(238,242,255,.55)}
+    .btn{
+      width:100%;
+      padding:12px 14px;border-radius:14px;border:none;
+      color:#071022;font-weight:900;cursor:pointer;
+      background:linear-gradient(135deg,var(--brand),var(--brand2));
+      box-shadow:0 16px 40px rgba(108,123,255,.25);
+      transition:transform .08s ease, filter .08s ease;
+    }
+    .btn:active{transform:translateY(1px)}
+    .btn:disabled{opacity:.45;cursor:not-allowed;filter:saturate(.7)}
+    .mini{
+      position:relative;
+      display:grid;gap:10px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      border-radius:var(--radius);
+      padding:18px;
+    }
+    .mini h3{margin:0;font-size:16px;font-weight:900}
+    .mini p{margin:0;color:var(--muted);font-size:13px;line-height:1.45}
+    .warn{
+      display:flex;gap:10px;align-items:flex-start;
+      padding:12px;border-radius:14px;
+      background:rgba(255,176,32,.10);border:1px solid rgba(255,176,32,.25);
+      color:#ffe6b3;
+    }
+    .warn b{color:#fff}
+    .sectionHead{
+      display:flex;justify-content:space-between;align-items:end;gap:12px;
+      margin-top:18px;
+    }
+    .sectionHead h2{margin:0;font-size:18px;font-weight:950}
+    .sectionHead span{color:var(--muted);font-size:12px}
+    .grid{
+      margin-top:12px;
+      display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
+    }
+    @media (max-width: 980px){ .grid{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width: 620px){ .grid{grid-template-columns:1fr}}
+    .uni{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border-radius:16px;padding:14px;
+      cursor:pointer; user-select:none;
+      transition:transform .10s ease, border-color .10s ease, background .10s ease;
+      position:relative; overflow:hidden;
+    }
+    .uni:hover{transform:translateY(-1px);border-color:rgba(108,123,255,.35)}
+    .uni.selected{
+      border-color:rgba(34,211,238,.55);
+      background:linear-gradient(180deg, rgba(34,211,238,.10), rgba(108,123,255,.08));
+    }
+    .uniTop{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+    .uniName{font-weight:950}
+    .badge{
+      font-size:11px;padding:4px 8px;border-radius:999px;
+      border:1px solid var(--line);color:var(--muted);
+      background:rgba(0,0,0,.14);
+      white-space:nowrap;
+    }
+    .badge.on{color:#c9ffe1;border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.10)}
+    .badge.soon{color:#ffe6b3;border-color:rgba(255,176,32,.35);background:rgba(255,176,32,.10)}
+    .uniMeta{margin-top:8px;color:var(--muted);font-size:12px;line-height:1.45}
+    .footer{
+      margin-top:18px;
+      color:rgba(238,242,255,.65);
+      font-size:12px;line-height:1.6;
+      border-top:1px solid var(--line);
+      padding-top:14px;
+    }
+    .link{color:#c7d2fe;text-decoration:none}
+    .link:hover{text-decoration:underline}
+    .toast{
+      position:fixed;left:50%;bottom:18px;transform:translateX(-50%);
+      background:rgba(15,23,51,.92);border:1px solid var(--line);
+      padding:10px 12px;border-radius:14px;color:var(--text);font-size:13px;
+      display:none;box-shadow:var(--shadow);
+      max-width:min(560px, calc(100vw - 24px));
+    }
+    .toast.show{display:block}
+    .toast small{color:var(--muted)}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="logo">
+        <div class="logo-badge"></div>
+        <div>
+          <div style="font-size:14px;">Üniversite Not Simülatörü</div>
+          <div style="font-size:12px;color:var(--muted);font-weight:700;">Frontend-only • Yönetmelik bazlı • Simülasyon</div>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <span class="pill">🧮 Harf Notu</span>
+        <span class="pill">🟪 Final–σ Heatmap</span>
+        <span class="pill">📈 Grafikler</span>
+      </div>
+    </div>
+
+    <div class="hero">
+      <div class="heroCard">
+        <h1 class="heroTitle">Üniversiteni seç, kendi bölümüne gir.</h1>
+        <p class="heroSub">
+          Her üniversite için hesaplama sayfaları ayrı hazırlanır. Sonuçlar <b>simülasyon amaçlıdır</b> ve resmi sonuç değildir.
+          (Açık kaynaklı yönergeler / yönetmelikler temel alınır.)
+        </p>
+
+        <div class="heroRow">
+          <div>
+            <label style="font-weight:900;">Üniversite ara</label>
+            <input id="search" class="input" placeholder="Örn: Anadolu, İstanbul, Samsun..." />
+            <div id="selectedLine" class="muted" style="margin-top:8px;">Seçim: <b>—</b></div>
+          </div>
+          <div>
+            <label style="font-weight:900;">Devam</label>
+            <button id="goBtn" class="btn" disabled>Üni Bölümüne Git</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mini">
+        <h3>📌 Bilgilendirme</h3>
+        <div class="warn">
+          <div style="font-size:18px;line-height:1;">⚠️</div>
+          <div>
+            <b>Resmi sayfa değildir.</b><br/>
+            <span style="color:#ffe6b3">
+              Hesaplamalar bilgilendirme ve simülasyon amaçlıdır. Kesin notlar için üniversitenin resmi sistemi/esasları geçerlidir.
+            </span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="sectionHead">
+      <h2>Üniversiteler</h2>
+      <span id="countInfo">0 sonuç</span>
+    </div>
+
+    <div id="grid" class="grid"></div>
+
+    <div class="footer">
+      <b>Yasal / Bilgilendirme Notu:</b> Bu sitedeki hesaplamalar, üniversitelerin resmi web sitelerinde yayımlanan açık kaynaklı yönetmelik ve yönergeler esas alınarak hazırlanmış bir simülasyondur.
+      Bu site herhangi bir üniversiteyle resmi olarak bağlantılı değildir ve gönüllülük esasına dayalı bir öğrenci projesidir.
+      <br/>
+      
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+<script>
+  // Üniversite listesi + klasör slugları
+  // route örneği: ./university/samsun/index.html
+const UNIVERSITIES = [
+    { name:"Samsun Üniversitesi", slug:"samsun", enabled:true, note:"Aktif bölüm" },
+
+    { name:"Anadolu Üniversitesi", slug:"anadolu", enabled:true, note:"Aktif" },
+    { name:"Mehmet Akif Ersoy Üniversitesi", slug:"maku", enabled:true, note:"Aktif bölüm" },
+    { name:"Akdeniz Üniversitesi", slug:"akdeniz", enabled:true, note:"Aktif bölüm" },
+    { name:"Ege Üniversitesi", slug:"ege", enabled:true, note:"Aktif bölüm" },
+    { name:"Kocaeli Üniversitesi", slug:"kocaeli", enabled:true, note:"Aktif bölüm" },
+    { name:"Ondokuz Mayıs Üniversitesi", slug:"omu", enabled:true, note:"Aktif" },
+    { name:"Sivas Cumhuriyet Üniversitesi", slug:"sivas", enabled:true, note:"Aktif" },
+  ];
+
+  const grid = document.getElementById("grid");
+  const search = document.getElementById("search");
+  const goBtn = document.getElementById("goBtn");
+  const selectedLine = document.getElementById("selectedLine");
+  const countInfo = document.getElementById("countInfo");
+  const toast = document.getElementById("toast");
+
+  let selected = null;
+
+  function showToast(msg){
+    toast.innerHTML = msg;
+    toast.classList.add("show");
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(()=> toast.classList.remove("show"), 2800);
+  }
+
+  function render(list){
+    grid.innerHTML = "";
+    countInfo.textContent = `${list.length} sonuç`;
+
+    list.forEach(u=>{
+      const el = document.createElement("div");
+      el.className = "uni" + ((selected && selected.slug===u.slug) ? " selected" : "");
+      el.dataset.slug = u.slug;
+
+      el.innerHTML = `
+        <div class="uniTop">
+          <div class="uniName">${u.name}</div>
+          <div class="badge ${u.enabled ? "on" : "soon"}">${u.enabled ? "AKTİF" : "YAKINDA"}</div>
+        </div>
+        <div class="uniMeta">${u.note || ""}</div>
+      `;
+
+      el.addEventListener("click", ()=>{
+        selected = u;
+        localStorage.setItem("selected_university_slug", u.slug);
+        localStorage.setItem("selected_university_name", u.name);
+        updateUI();
+        render(filterUniversities(search.value));
+      });
+
+      grid.appendChild(el);
+    });
+  }
+
+  function updateUI(){
+    if(!selected){
+      goBtn.disabled = true;
+      selectedLine.innerHTML = `Seçim: <b>—</b>`;
+      return;
+    }
+
+    selectedLine.innerHTML = `Seçim: <b>${selected.name}</b>`;
+
+    goBtn.disabled = false;
+  }
+
+  function filterUniversities(q){
+    q = (q || "").toLowerCase().trim();
+    if(!q) return UNIVERSITIES;
+    return UNIVERSITIES.filter(u => u.name.toLowerCase().includes(q) || u.slug.includes(q));
+  }
+
+  search.addEventListener("input", ()=>{
+    render(filterUniversities(search.value));
+  });
+
+  goBtn.addEventListener("click", ()=>{
+    if(!selected) return;
+    const url = `./university/${selected.slug}/index.html`;
+    if(!selected.enabled){
+      showToast(`<b>${selected.name}</b><br><small>Bu bölüm şimdilik “yakında”. Yine de taslağı açıyorum.</small>`);
+      setTimeout(()=> location.href = url, 350);
+      return;
+    }
+    location.href = url;
+  });
+
+  const lastSlug = localStorage.getItem("selected_university_slug");
+  if(lastSlug){
+    const found = UNIVERSITIES.find(u => u.slug === lastSlug);
+    if(found) selected = found;
+  } else {
+    selected = UNIVERSITIES.find(u=>u.slug==="samsun") || null;
+  }
+
+  updateUI();
+  render(filterUniversities(""));
+</script>
+</body>
+</html>

@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+
+<html lang="tr">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>Anadolu Üniversitesi | Harf Notu (Ek Kalem + Grafik)</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+
+    :root{
+
+      --bg:#0b132b;
+
+      --bg2:#111b33;
+
+      --card:#0f172a;
+
+      --glass:rgba(255,255,255,0.03);
+
+      --accent:#f7b733;
+
+      --accent2:#21e6c1;
+
+      --border:#1f2a44;
+
+      --text:#e8eefb;
+
+      --muted:#9fb1d1;
+
+    }
+
+    .shell{max-width:1100px;margin:0 auto;padding:24px 18px 30px;}
+
+    nav.nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+
+    nav.nav a{color:var(--text);text-decoration:none;padding:10px 14px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,0.05);font-weight:800;transition:background .15s ease,border-color .15s ease,color .15s ease}
+
+    nav.nav a.active{border-color:var(--accent);color:var(--accent);background:rgba(247,183,51,0.12);}
+
+    *{box-sizing:border-box;}
+
+    body{
+
+      margin:0;
+
+      padding:28px 18px 34px;
+
+      font-family:"Space Grotesk","Manrope",system-ui,-apple-system,sans-serif;
+
+      background:radial-gradient(circle at 20% 18%, rgba(33,230,193,0.16), transparent 32%),
+
+                 radial-gradient(circle at 82% 8%, rgba(247,183,51,0.16), transparent 32%),
+
+                 linear-gradient(145deg, var(--bg), var(--bg2));
+
+      color:var(--text);
+
+      line-height:1.6;
+
+    }
+
+    .container{
+
+      max-width:1100px;
+
+      margin:auto;
+
+      background:var(--glass);
+
+      border:1px solid var(--border);
+
+      border-radius:18px;
+
+      padding:22px;
+
+      box-shadow:0 18px 50px rgba(0,0,0,0.28);
+
+    }
+
+    h2{
+
+      text-align:center;
+
+      color:var(--accent);
+
+      margin:0 0 6px;
+
+      letter-spacing:-0.4px;
+
+    }
+
+    .bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;justify-content:space-between;margin-bottom:10px}
+
+    .selectWrap{display:flex;align-items:center;gap:8px;color:var(--muted);font-weight:700;font-size:14px}
+
+    select.uni{
+
+      width:auto;
+
+      min-width:220px;
+
+      padding:9px 12px;
+
+      border-radius:10px;
+
+      background:rgba(255,255,255,0.05);
+
+      border:1px solid var(--border);
+
+      color:var(--text);
+
+    }
+
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+    .full{grid-column:1/-1}
+
+    label{font-weight:700;display:block;margin-top:6px;color:var(--text);font-size:14px}
+
+    input,select,button{
+
+      width:100%;
+
+      padding:11px 12px;
+
+      margin-top:6px;
+
+      box-sizing:border-box;
+
+      font-size:15px;
+
+      border-radius:12px;
+
+      border:1px solid var(--border);
+
+      background:rgba(255,255,255,0.04);
+
+      color:var(--text);
+
+    }
+
+    input:focus,select:focus{
+
+      outline:none;
+
+      border-color:var(--accent2);
+
+      box-shadow:0 0 0 3px rgba(33,230,193,0.2);
+
+    }
+
+    button{
+
+      background:linear-gradient(120deg,var(--accent),#f37335);
+
+      color:#0b0c10;
+
+      border:none;
+
+      border-radius:12px;
+
+      font-weight:800;
+
+      cursor:pointer;
+
+      margin-top:16px;
+
+      box-shadow:0 12px 30px rgba(243,115,53,0.25);
+
+      transition:transform .18s ease, box-shadow .18s ease;
+
+    }
+
+    button:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(243,115,53,0.32);}
+
+    .card{
+
+      background:rgba(255,255,255,0.03);
+
+      border:1px solid var(--border);
+
+      border-left:6px solid var(--accent2);
+
+      border-radius:14px;
+
+      padding:12px;
+
+      margin-top:12px;
+
+    }
+
+    .warn{background:rgba(247,183,51,0.08);border-left-color:#f59e0b;}
+
+    .mutlak{background:rgba(255,255,255,0.02);border-left-color:#111827;}
+
+    .good{border-left-color:#16a34a;}
+
+    .low{border-left-color:#17a2b8;}
+
+    .mid{border-left-color:#28a745;}
+
+    .high{border-left-color:#dc3545;}
+
+    .muted{font-size:12px;color:var(--muted);margin-top:6px}
+
+    table{width:100%;border-collapse:collapse;margin-top:10px;background:rgba(255,255,255,0.02);border-radius:10px;overflow:hidden}
+
+    th,td{border-bottom:1px solid var(--border);padding:8px;font-size:14px;text-align:left;color:var(--text)}
+
+    th{color:var(--muted);font-weight:700;}
+
+    .charts{display:grid;grid-template-columns:1fr;gap:16px;margin-top:18px}
+
+    @media (min-width: 980px){
+
+      .charts{grid-template-columns:1fr 1fr}
+
+      .charts .fullchart{grid-column:1/-1}
+
+    }
+
+    .chartCard{
+
+      background:var(--card);
+
+      border:1px solid var(--border);
+
+      border-radius:14px;
+
+      padding:12px;
+
+      box-shadow:0 12px 28px rgba(0,0,0,0.25);
+
+    }
+
+    .chartTitle{font-weight:800;margin-bottom:8px;color:var(--text)}
+
+    canvas{width:100%;height:320px;display:block;border-radius:12px;background:#0f172a}
+
+    .legend{font-size:12px;color:var(--muted);margin-top:8px;display:flex;gap:10px;flex-wrap:wrap}
+
+    .tag{display:inline-flex;align-items:center;gap:6px;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,0.05);border:1px solid var(--border)}
+
+    .dot{width:10px;height:10px;border-radius:50%;}
+
+    .checkRow{display:flex;align-items:center;gap:10px;margin-top:10px}
+
+    .extraWrap{margin-top:10px}
+
+    .extraGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+
+    .extraTitle{font-weight:900;margin-bottom:6px}
+
+    @media(max-width:680px){.row{grid-template-columns:1fr;}}
+
+  </style>
+
+</head>
+
+<body>
+
+<div class="shell">
+
+  <nav class="nav">
+
+    <a href="index.html">Ana Sayfa</a>
+
+    <a class="active" href="harf_notu_otomatik_grafikli.html">Harf Notu + Grafik</a>
+
+    <a href="heatmap.html">Heatmap</a>
+
+    <a href="detaylifinal.html">Hedef Final</a>
+
+    <a href="anogano.html">AGNO / GANO</a>
+
+    <a href="hakkinda.html">Hakkında</a>
+
+  </nav>
+
+
+
+<div class="container">
+
+  <div class="bar">
+
+    <div>
+
+      <h2>Harf Notu (Ek Kalem + Grafik)</h2>
+
+      <div class="muted" id="uniNote"></div>
+
+    </div>
+
+  </div>
+
+
+
+      <div class="row">
+
+    <div>
+
+      <label>Vize Notun</label>
+
+      <input id="inpMyMid" type="number" min="0" max="100" placeholder="0-100">
+
+    </div>
+
+    <div>
+
+      <label>Final Notun</label>
+
+      <input id="inpMyFinal" type="number" min="0" max="100" placeholder="0-100">
+
+      <div class="muted" id="finalBarajNote">Final baraj: <b>50</b> (50 alt otomatik FF)</div>
+
+    </div>
+
+
+
+    <div>
+
+      <label>Snf Vize Ortalaması</label>
+
+      <input id="inpClsMid" type="number" min="0" max="100" placeholder="0-100">
+
+    </div>
+
+    <div>
+
+      <label>Snf Final Ortalaması</label>
+
+      <input id="inpClsFinal" type="number" min="0" max="100" placeholder="0-100">
+
+    </div>
+
+
+
+    <div>
+
+      <label>Vize Ağırlığı (%)</label>
+
+      <input id="inpWMid" type="number" min="0" max="100" value="40">
+
+    </div>
+
+    <div>
+
+      <label>Final Ağırlığı (%)</label>
+
+      <input id="inpWFinal" type="number" min="0" max="100" value="60">
+
+      <div class="muted">Ek kalem varsa toplam ağırlık yine 100 olmalı.</div>
+
+    </div>
+
+
+
+    <div>
+
+      <label>Sınıf Düzeyi <span class="muted">(Tablo 1 sütunu)</span></label>
+
+      <select id="inpClassLevel">
+
+        <option value="USTUN">Üstün Başarı</option>
+
+        <option value="MUK">Mükemmel</option>
+
+        <option value="CI">Çok İyi</option>
+
+        <option value="IYI">İyi</option>
+
+        <option value="OU">Ortanın Üstü</option>
+
+        <option value="ORTA" selected>Orta</option>
+
+        <option value="ZAYIF">Zayıf</option>
+
+        <option value="KOTU">Kötü</option>
+
+      </select>
+
+      <div class="muted">Bu bilgi genelde dersin/şubenin düzeyi olarak düşünülür. Emin değilsen Orta bırak.</div>
+
+    </div>
+
+
+
+    <div>
+
+      <label>Bağıl değerlendirmeye katılan öğrenci sayısı <span class="muted">(opsiyonel)</span></label>
+
+      <input id="inpNEligible" type="number" min="1" step="1" placeholder="boş bırak → 30 varsay">
+
+      <div class="muted">Yönergeye göre <b>30'un altı</b> ise Tablo 2 ile (mutlak) dönüşüm yapılır.</div>
+
+    </div>
+
+
+
+    <div class="full">
+
+      <div class="checkRow">
+
+        <input id="chkExtra" type="checkbox" style="width:auto;transform:scale(1.1)">
+
+        <label for="chkExtra" style="margin:0;font-weight:900">Ek değerlendirme var (ödev/quiz/proje/lab...)</label>
+
+      </div>
+
+    </div>
+
+
+
+    <div id="extraArea" class="full" style="display:none">
+
+      <label>Kaç adet ek kalem?</label>
+
+      <select id="inpExtraCount">
+
+        <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+
+        <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+
+      </select>
+
+      <div class="muted">Her ek kalem için: Ad, arğırlık %, senin notun, sınıf ortalaması</div>
+
+      <div id="extraList" class="extraWrap"></div>
+
+    </div>
+
+
+
+    <div class="full">
+
+      <label>Standart Sapma () <span class="muted">(opsiyonel)</span></label>
+
+      <input id="inpSigma" type="number" min="0.1" step="0.1" placeholder="bilmiyorsan bos brak  5.0-25.0 (0.1 adim)">
+
+    </div>
+
+
+
+    <div class="full">
+
+      <button id="btnCalc" type="button" onclick="hesapla()">Hesapla + Grafik Çiz</button>
+
+    </div>
+
+  </div>
+
+  <div id="out"></div>
+
+
+
+      <div id="chartArea" class="charts" style="display:none;">
+
+    <div class="chartCard">
+
+      <div class="chartTitle">Final notu vs Harf notu</div>
+
+      <canvas id="cvFinalVsLetter"></canvas>
+
+      <div class="legend" id="legendFinalVs"></div>
+
+      <div class="muted">Ek kalemler sabit kabul edilip final 50-100 taranr.</div>
+
+    </div>
+
+
+
+    <div class="chartCard">
+
+      <div class="chartTitle"> σ değişince harf nasıl değişiyor?</div>
+
+      <canvas id="cvSigmaVsLetter"></canvas>
+
+      <div class="muted">Final sabit: girdiğin final.  5-30 aralığında simüle edilir.</div>
+
+    </div>
+
+
+
+    <div class="chartCard fullchart">
+
+      <div class="chartTitle">Z-T grafii (T = 50 + 10Z)</div>
+
+      <canvas id="cvZT"></canvas>
+
+      <div class="muted">Seçilen  ile senin noktan (Z,T) işaretlenir.  bosa 15 ile gösterilir.</div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<script>
+
+
+
+
+
+/* ---------- Config ---------- */
+
+const UNIVERSITY_CONFIGS = {
+
+  'Anadolu Üniversitesi': {
+
+    enabled: true,
+
+    notes: 'Anadolu Üniversitesi Başarı Değerlendirme Yönergesi (Senato 2024/23-1) baz alınmıştır. BDKS=30; N<30 ise Tablo 2. Harf alt sınırları öğretim elemanı tarafından 3 puana kadar eksiltilebilir.',
+
+    defaultWeights: { midterm: 40, final: 60 },
+
+    sigmaDefaults: [10,15,20]
+
+  }
+
+};
+
+
+
+let activeUniversityConfig = UNIVERSITY_CONFIGS['Anadolu Üniversitesi'];
+
+
+
+/* ---------- Core grading logic (Anadolu Üniversitesi) ---------- */
+
+function clamp(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
+
+
+
+// Tablo 1 (T skoru aralıklarının alt sınırları)  sınıf düzeyi sütununa göre
+
+// Kaynak: Anadolu Üniversitesi Başarı Değerlendirme Yönergesi Tablo 1.
+
+// Bağıl tablo (T puanı aralıkları)
+
+// --- Anadolu Üniversitesi Tablo 1 (T puanı aralıkları) ---
+
+const T_RANGES = {
+
+  USTUN: {AA:[57,Infinity], AB:[54,56.99], BA:[50,53.99], BB:[47,49.99], BC:[44,46.99], CB:[40,43.99], CC:[37,39.99], CD:[34,36.99], DC:[30,33.99], DD:[27,29.99]},
+
+  MUK:   {AA:[59,Infinity], AB:[56,58.99], BA:[52,55.99], BB:[49,51.99], BC:[46,48.99], CB:[42,45.99], CC:[39,41.99], CD:[36,38.99], DC:[32,35.99], DD:[29,31.99]},
+
+  CI:    {AA:[61,Infinity], AB:[58,60.99], BA:[54,57.99], BB:[51,53.99], BC:[48,50.99], CB:[44,47.99], CC:[41,43.99], CD:[38,40.99], DC:[34,37.99], DD:[31,33.99]},
+
+  IYI:   {AA:[63,Infinity], AB:[60,62.99], BA:[56,59.99], BB:[53,55.99], BC:[50,52.99], CB:[46,49.99], CC:[43,45.99], CD:[40,42.99], DC:[36,39.99], DD:[33,35.99]},
+
+  OU:    {AA:[65,Infinity], AB:[62,64.99], BA:[58,61.99], BB:[55,57.99], BC:[52,54.99], CB:[48,51.99], CC:[45,47.99], CD:[42,44.99], DC:[38,41.99], DD:[35,37.99]},
+
+  ORTA:  {AA:[67,Infinity], AB:[64,66.99], BA:[60,63.99], BB:[57,59.99], BC:[54,56.99], CB:[50,53.99], CC:[47,49.99], CD:[44,46.99], DC:[40,43.99], DD:[37,39.99]},
+
+  ZAYIF: {AA:[69,Infinity], AB:[66,68.99], BA:[62,65.99], BB:[59,61.99], BC:[56,58.99], CB:[52,55.99], CC:[49,51.99], CD:[46,48.99], DC:[42,45.99], DD:[39,41.99]},
+
+  KOTU:  {AA:[71,Infinity], AB:[68,70.99], BA:[64,67.99], BB:[61,63.99], BC:[58,60.99], CB:[54,57.99], CC:[51,53.99], CD:[48,50.99], DC:[44,47.99], DD:[41,43.99]}
+
+};
+
+
+
+const LETTERS = ["FF","DD","DC","CD","CC","CB","BC","BB","BA","AB","AA"]; // düükyüksek
+
+function letterIndex(letter){ return LETTERS.indexOf(letter); }
+
+
+
+// Tablo 2 (N<30 veya baıl salıklı deilse)
+
+function mutlakHarfAnadolu(ogrOrt){
+
+  if (ogrOrt >= 84) return {harf:"AA", aciklama:"Tablo 2"};
+
+  if (ogrOrt >= 77) return {harf:"AB", aciklama:"Tablo 2"};
+
+  if (ogrOrt >= 71) return {harf:"BA", aciklama:"Tablo 2"};
+
+  if (ogrOrt >= 66) return {harf:"BB", aciklama:"Tablo 2"};
+
+  if (ogrOrt >= 61) return {harf:"BC", aciklama:"Tablo 2"};
+
+  if (ogrOrt >= 56) return {harf:"CB", aciklama:"Tablo 2"};
+
+  if (ogrOrt >= 50) return {harf:"CC", aciklama:"Tablo 2"};
+
+  if (ogrOrt >= 47) return {harf:"CD", aciklama:"Tablo 2"};
+
+  if (ogrOrt >= 43) return {harf:"DC", aciklama:"Tablo 2"};
+
+  if (ogrOrt >= 40) return {harf:"DD", aciklama:"Tablo 2"};
+
+  return {harf:"FF", aciklama:"Tablo 2"};
+
+}
+
+
+
+function bagilHarfFromClassLevel(classLevelKey, t){
+
+  const ranges = T_RANGES[classLevelKey] || T_RANGES.ORTA;
+
+  const order = ['AA','AB','BA','BB','BC','CB','CC','CD','DC','DD'];
+
+  for(const L of order){
+
+    const [lo,hi] = ranges[L];
+
+    if(t >= lo && t <= hi) return L;
+
+  }
+
+  return 'FF';
+
+}
+
+
+
+function runBagil({ogrOrt, classAvg, sigma, classLevelKey}){
+
+  const z = (ogrOrt - classAvg) / sigma;
+
+  const t = 50 + 10*z;
+
+  // Basit yüzde tahmini (yaklaık): normal daılımın CDF'ine kaba bir yaklaım.
+
+  const yuzdelik = clamp(50 + z*34.13, 0, 100);
+
+  const harf = bagilHarfFromClassLevel(classLevelKey, t);
+
+  return { z, t, yuzdelik, harf };
+
+}
+
+
+
+/* ---------- UI refs ---------- */
+
+
+
+const chkExtra = document.getElementById("chkExtra");
+
+const extraArea = document.getElementById("extraArea");
+
+const inpExtraCount = document.getElementById("inpExtraCount");
+
+const extraList = document.getElementById("extraList");
+
+const uniNote = document.getElementById("uniNote");
+
+const btnCalc = document.getElementById("btnCalc");
+
+const finalBarajNote = document.getElementById("finalBarajNote");
+
+
+
+/* ---------- University selector (fixed to Samsun) ---------- */
+
+function applyUniversityConfig(cfg){
+
+  uniNote.textContent = cfg.notes || "";
+
+  if(cfg.defaultWeights){
+
+    document.getElementById("inpWMid").value = cfg.defaultWeights.midterm;
+
+    document.getElementById("inpWFinal").value = cfg.defaultWeights.final;
+
+  }
+
+  document.getElementById("inpSigma").placeholder = "bilmiyorsan bo brak  5.0-25.0 (0.1 adm)";
+
+  finalBarajNote.innerHTML = `Not: Anadolu Üniversitesi yönergesinde final barajı geçmiyor. Dersinde baraj varsa bu sayfa onu otomatik uygulamaz.`;
+
+  btnCalc.disabled = !cfg.enabled;
+
+  btnCalc.textContent = cfg.enabled ? "Hesapla + Grafik Çiz" : "Yakında eklenecek";
+
+}
+
+
+
+chkExtra.addEventListener("change", ()=>{
+
+  extraArea.style.display = chkExtra.checked ? "block" : "none";
+
+  renderExtras();
+
+});
+
+inpExtraCount.addEventListener("change", renderExtras);
+
+
+
+function renderExtras(){
+
+  extraList.innerHTML = "";
+
+  if(!chkExtra.checked) return;
+
+  const n = Number(inpExtraCount.value);
+
+  for(let i=1;i<=n;i++){
+
+    const div = document.createElement("div");
+
+    div.className = "card";
+
+    div.innerHTML = `
+
+      <div class="extraTitle">Ek Kalem ${i}</div>
+
+      <div class="extraGrid">
+
+        <div>
+
+          <label>Ad (opsiyonel)</label>
+
+          <input id="exName${i}" placeholder="örn: dev">
+
+        </div>
+
+        <div>
+
+          <label>Aırlık (%)</label>
+
+          <input id="exW${i}" type="number" min="0" max="100" placeholder="örn: 10">
+
+        </div>
+
+        <div>
+
+          <label>Senin Notun</label>
+
+          <input id="exMy${i}" type="number" min="0" max="100" placeholder="0-100">
+
+        </div>
+
+        <div>
+
+          <label>Sınıf Ortalaması</label>
+
+          <input id="exCls${i}" type="number" min="0" max="100" placeholder="0-100">
+
+        </div>
+
+      </div>
+
+    `;
+
+    extraList.appendChild(div);
+
+  }
+
+}
+
+
+
+/* ---------- Data ---------- */
+
+function collectData(){
+
+  return {
+
+    myMid: Number(document.getElementById("inpMyMid").value),
+
+    myFinal: Number(document.getElementById("inpMyFinal").value),
+
+    clsMid: Number(document.getElementById("inpClsMid").value),
+
+    clsFinal: Number(document.getElementById("inpClsFinal").value),
+
+    wMidPct: Number(document.getElementById("inpWMid").value),
+
+    wFinalPct: Number(document.getElementById("inpWFinal").value),
+
+    sigmaStr: document.getElementById("inpSigma").value.trim(),
+
+    extras: readExtras()
+
+  };
+
+}
+
+
+
+function readExtras(){
+
+  if(!chkExtra.checked) return [];
+
+  const n = Number(inpExtraCount.value);
+
+  const arr = [];
+
+  for(let i=1;i<=n;i++){
+
+    arr.push({
+
+      name: (document.getElementById(`exName${i}`).value || `Ek ${i}`).trim(),
+
+      wPct: Number(document.getElementById(`exW${i}`).value),
+
+      my: Number(document.getElementById(`exMy${i}`).value),
+
+      cls: Number(document.getElementById(`exCls${i}`).value)
+
+    });
+
+  }
+
+  return arr;
+
+}
+
+
+
+function validateData(d){
+
+  const nums = [d.myMid, d.myFinal, d.clsMid, d.clsFinal];
+
+  if(nums.some(v => !Number.isFinite(v) || v<0 || v>100)) return "Notlar 0-100 arasnda olmalı.";
+
+  if(!Number.isFinite(d.wMidPct)||!Number.isFinite(d.wFinalPct)||d.wMidPct<0||d.wFinalPct<0) return "Arlklar dzgn gir.";
+
+
+
+  const sigmaStr = d.sigmaStr;
+
+  if(sigmaStr){
+
+    const s = Number(sigmaStr);
+
+    if(!Number.isFinite(s) || s<=0 || s>50) return "Standart sapma 0-50 arasnda olmal.";
+
+  }
+
+
+
+  let total = d.wMidPct + d.wFinalPct;
+
+  for(const ex of d.extras){
+
+    if(!Number.isFinite(ex.wPct)||ex.wPct<0||ex.wPct>100) return `${ex.name}: aırlık 0-100 olmalı.`;
+
+    if(!Number.isFinite(ex.my)||ex.my<0||ex.my>100) return `${ex.name}: senin notun 0-100 olmalı.`;
+
+    if(!Number.isFinite(ex.cls)||ex.cls<0||ex.cls>100) return `${ex.name}: sınıf ortalaması 0-100 olmalı.`;
+
+    total += ex.wPct;
+
+  }
+
+  if(Math.round(total*100)/100 !== 100) return `Aırlıkların toplamı 100 olmalı. Şu an: ${total}`;
+
+  return null;
+
+}
+
+
+
+/* ---------- Totals ---------- */
+
+function computeTotals(d){
+
+  const wMid = d.wMidPct/100;
+
+  const wFinal = d.wFinalPct/100;
+
+  const extrasN = d.extras.map(ex => ({...ex, w: ex.wPct/100}));
+
+
+
+  const ogrOrt =
+
+    d.myMid*wMid +
+
+    d.myFinal*wFinal +
+
+    extrasN.reduce((a,x)=>a + x.my*x.w, 0);
+
+
+
+  const classAvg =
+
+    d.clsMid*wMid +
+
+    d.clsFinal*wFinal +
+
+    extrasN.reduce((a,x)=>a + x.cls*x.w, 0);
+
+
+
+  return {ogrOrt, classAvg, wMid, wFinal, extrasN};
+
+}
+
+
+
+/* ---------- Chart helpers ---------- */
+
+
+
+function letterIndex(L){ return LETTERS.indexOf(L); }
+
+
+
+function setupCanvas(canvas){
+
+  const ctx = canvas.getContext("2d");
+
+  const dpr = window.devicePixelRatio || 1;
+
+  const rect = canvas.getBoundingClientRect();
+
+  canvas.width = rect.width * dpr;
+
+  canvas.height = rect.height * dpr;
+
+  ctx.scale(dpr,dpr);
+
+  return ctx;
+
+}
+
+
+
+function clear(ctx, W, H){
+
+  ctx.clearRect(0,0,W,H);
+
+  ctx.fillStyle="#0f172a";
+
+  ctx.fillRect(0,0,W,H);
+
+}
+
+
+
+function drawAxes(ctx, plot, xlabel, ylabel){
+
+  ctx.strokeStyle="#1f2937"; ctx.lineWidth=1.2;
+
+  ctx.beginPath(); ctx.moveTo(plot.x0, plot.y1); ctx.lineTo(plot.x1, plot.y1); ctx.stroke();
+
+  ctx.beginPath(); ctx.moveTo(plot.x0, plot.y0); ctx.lineTo(plot.x0, plot.y1); ctx.stroke();
+
+  ctx.fillStyle="#cdd7ea"; ctx.font="12px Arial"; ctx.fillText(xlabel, plot.x1-10, plot.y1+22);
+
+  ctx.save(); ctx.translate(plot.x0-26, plot.y0+12); ctx.rotate(-Math.PI/2); ctx.fillText(ylabel, 0,0); ctx.restore();
+
+}
+
+
+
+function drawLine(ctx, pts, color, width){
+
+  ctx.strokeStyle=color; ctx.lineWidth=width;
+
+  ctx.beginPath();
+
+  pts.forEach((p,i)=> i===0 ? ctx.moveTo(p.x,p.y) : ctx.lineTo(p.x,p.y));
+
+  ctx.stroke();
+
+}
+
+
+
+function drawPoints(ctx, pts, color, size){
+
+  ctx.fillStyle=color;
+
+  pts.forEach(p=>{
+
+    ctx.beginPath();
+
+    ctx.arc(p.x,p.y,size,0,Math.PI*2);
+
+    ctx.fill();
+
+  });
+
+}
+
+
+
+function drawXGrid(ctx, plot, xs){
+
+  ctx.strokeStyle="#1f2937";
+
+  xs.forEach(x=>{
+
+    ctx.beginPath(); ctx.moveTo(x, plot.y0); ctx.lineTo(x, plot.y1); ctx.stroke();
+
+  });
+
+}
+
+
+
+function xScale(v, vmin, vmax, plot){
+
+  return plot.x0 + (v - vmin) * (plot.x1 - plot.x0) / (vmax - vmin);
+
+}
+
+function yScale(v, vmin, vmax, plot){
+
+  return plot.y1 - (v - vmin) * (plot.y1 - plot.y0) / (vmax - vmin);
+
+}
+
+
+
+/* ---------- Charts ---------- */
+
+function drawFinalVsLetterWithExtras({d, totals, sigmaStr, sigmasToShow}){
+
+  const canvas = document.getElementById("cvFinalVsLetter");
+
+  const ctx = setupCanvas(canvas);
+
+  const W = canvas.getBoundingClientRect().width;
+
+  const H = canvas.getBoundingClientRect().height;
+
+  clear(ctx, W, H);
+
+
+
+  const plot = {x0:46, y0:18, x1:W-10, y1:H-40};
+
+  drawAxes(ctx, plot, "Final", "Harf");
+
+
+
+  const xmin=50, xmax=100;
+
+  const xt=[50,60,70,80,90,100];
+
+  drawXGrid(ctx, plot, xt.map(v=>xScale(v,xmin,xmax,plot)));
+
+  ctx.fillStyle="#cdd7ea"; ctx.font="12px Arial";
+
+  xt.forEach(v=>ctx.fillText(String(v), xScale(v,xmin,xmax,plot)-6, plot.y1+18));
+
+
+
+  const sigmas = sigmaStr ? [Number(sigmaStr)] : sigmasToShow;
+
+  const colors = ["#16a34a","#f59e0b","#ef4444"];
+
+  sigmas.forEach((s,idx)=>{
+
+    const pts=[];
+
+    for(let f=xmin; f<=xmax; f+=0.5){
+
+      const d2 = {...d, myFinal:f, sigmaStr:String(s)};
+
+      const totals2 = computeTotals(d2);
+
+      const res = runBagil({ogrOrt:totals2.ogrOrt, classAvg:totals2.classAvg, sigma:s, classLevelKey: document.getElementById("inpClassLevel").value});
+
+      const x = xScale(f,xmin,xmax,plot);
+
+      const y = plot.y1 - (letterIndex(res.harf) * (plot.y1-plot.y0)/(LETTERS.length-1));
+
+      pts.push({x,y});
+
+    }
+
+    drawLine(ctx, pts, colors[idx%colors.length], 2);
+
+  });
+
+
+
+  const legend = document.getElementById("legendFinalVs");
+
+  legend.innerHTML = sigmas.map((s,i)=>`<span class="tag"><span class="dot" style="background:${colors[i%colors.length]}"></span>=${s}</span>`).join("");
+
+}
+
+
+
+function drawSigmaVsLetterWithExtras({d, totals}){
+
+  const canvas = document.getElementById("cvSigmaVsLetter");
+
+  const ctx = setupCanvas(canvas);
+
+  const W = canvas.getBoundingClientRect().width;
+
+  const H = canvas.getBoundingClientRect().height;
+
+  clear(ctx, W, H);
+
+
+
+  const plot = {x0:46, y0:18, x1:W-10, y1:H-40};
+
+  drawAxes(ctx, plot, "σ (Standart Sapma)", "Harf");
+
+
+
+  const xmin=5, xmax=30;
+
+  const xt=[5,10,15,20,25,30];
+
+  drawXGrid(ctx, plot, xt.map(v=>xScale(v,xmin,xmax,plot)));
+
+  ctx.fillStyle="#cdd7ea"; ctx.font="12px Arial";
+
+  xt.forEach(v=>ctx.fillText(String(v), xScale(v,xmin,xmax,plot)-6, plot.y1+18));
+
+}
+
+
+
+function hesapla(){
+
+  const out = document.getElementById("out");
+
+  const chartArea = document.getElementById("chartArea");
+
+
+
+  const d = collectData();
+
+  const err = validateData(d);
+
+  if(err){
+
+    out.innerHTML = `<div class="card warn">${err}</div>`;
+
+    chartArea.style.display = "none";
+
+    return;
+
+  }
+
+
+
+  const totals = computeTotals(d);
+
+  let html = "";
+
+
+
+  if(totals.ogrOrt < 30){
+
+    out.innerHTML = `<div class="card warn"><b>SONU: FF</b><br>Baar notun <b>30</b>'un altnda (BDKS) olduu iin FF verilir.</div>`;
+
+    chartArea.style.display = "none";
+
+    return;
+
+  }
+
+
+
+  const nEligible = Number((document.getElementById('inpNEligible')||{}).value || 0);
+
+  const isMutlak = (nEligible>0 && nEligible < 30);
+
+
+
+  if(isMutlak){
+
+    const m = mutlakHarfAnadolu(totals.ogrOrt);
+
+    html += `<div class="card mutlak">N<30  <b>MUTLAK</b> deerlendirme (Tablo 2)</div><div class="card good"><b>Harf:</b> ${m.harf}</div>`;
+
+  } else {
+
+    const sigmaStr = d.sigmaStr;
+
+
+
+    if(sigmaStr){
+
+      const s = Number(sigmaStr);
+
+      const r = {sigma:s, ...runBagil({ogrOrt:totals.ogrOrt, classAvg:totals.classAvg, sigma:s, classLevelKey: document.getElementById("inpClassLevel").value})};
+
+      html += `<div class="card good">
+
+        <b>σ=${r.sigma}</b>  Harf: <b>${r.harf}</b><br>
+
+        Z: ${r.z.toFixed(3)} | T: ${r.t.toFixed(2)} | %: ${r.yuzdelik.toFixed(1)}<br>
+
+        Snf dzeyi (seim): <b>${document.getElementById("inpClassLevel").selectedOptions[0].textContent}</b>
+
+      </div>`;
+
+    } else {
+
+      // standart sapma bilinmiyorsa 5.0 - 25.0 aralnda 0.1 seklinde ile tarayp harf notu olasln hesapla
+
+      const sigmaMin = 5.0, sigmaMax = 25.0, step = 0.1;
+
+      const counts = {};
+
+      let total = 0;
+
+
+
+      for(let s = sigmaMin; s <= sigmaMax + 1e-9; s = Math.round((s + step) * 10) / 10){
+
+        const rr = runBagil({ogrOrt:totals.ogrOrt, classAvg:totals.classAvg, sigma:s, classLevelKey: document.getElementById("inpClassLevel").value});
+
+        counts[rr.harf] = (counts[rr.harf] || 0) + 1;
+
+        total++;
+
+      }
+
+
+
+      // En olas harfi bul
+
+      let bestLetter = null, bestCount = -1;
+
+      Object.keys(counts).forEach(L=>{
+
+        const c = counts[L] || 0;
+
+        if(c > bestCount){ bestCount = c; bestLetter = L; }
+
+      });
+
+
+
+      const letters = Object.keys(counts).sort((a,b)=>letterIndex(a)-letterIndex(b));
+
+
+
+      html += `<div class="card">
+
+        <b>Olaslk ( bilinmiyor)</b>
+
+        <div class="muted">=${sigmaMin.toFixed(1)}${sigmaMax.toFixed(1)} aralıı 0.1 adım ile tarandı (${total} senaryo).</div>
+
+        <div style="margin-top:6px"><b>En olas harf:</b> ${bestLetter} (${(bestCount/total*100).toFixed(1)}%)</div>
+
+        <table>
+
+          <thead><tr><th>Harf</th><th>Yzde</th></tr></thead>
+
+          <tbody>
+
+            ${letters.map(L=>{
+
+              const c = counts[L];
+
+              const p = c/total*100;
+
+              return `<tr><td><b>${L}</b></td><td>${p.toFixed(1)}%</td></tr>`;
+
+            }).join("")}
+
+          </tbody>
+
+        </table>
+
+      </div>`;
+
+    }
+
+  }
+
+
+
+  out.innerHTML = html;
+
+  chartArea.style.display = "grid";
+
+
+
+  const sigmaStr = d.sigmaStr;
+
+  const sigmasToShow = sigmaStr ? [Number(sigmaStr)] : (activeUniversityConfig.sigmaDefaults || [10,15,20]);
+
+  drawFinalVsLetterWithExtras({d, totals, sigmaStr, sigmasToShow});
+
+  drawSigmaVsLetterWithExtras({d, totals});
+
+  const sigmaForPoint = sigmaStr ? Number(sigmaStr) : 15;
+
+  drawZTWithExtras({totals, sigmaForPoint});
+
+}
+
+
+
+window.addEventListener("resize", ()=>{
+
+  const chartArea = document.getElementById("chartArea");
+
+  if(chartArea.style.display !== "none"){
+
+    try{ hesapla(); }catch(e){}
+
+  }
+
+});
+
+
+
+initUniversitySelector();
+
+</script>
+
+</div>
+
+</body>
+
+</html>

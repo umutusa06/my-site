@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anadolu Üniversitesi | Hakkında</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b132b;--bg2:#0f162f;--card:#0f172a;--glass:rgba(255,255,255,0.05);
+      --accent:#f7b733;--accent2:#21e6c1;--text:#e8eefb;--muted:#9fb1d1;--border:#1f2a44;
+      --shadow:0 18px 48px rgba(0,0,0,0.32);
+    }
+    body{
+      margin:0;font-family:"Space Grotesk","Manrope",system-ui,-apple-system,sans-serif;
+      min-height:100vh;
+      background:radial-gradient(circle at 20% 18%, rgba(33,230,193,0.16), transparent 32%),
+                 radial-gradient(circle at 82% 8%, rgba(247,183,51,0.16), transparent 32%),
+                 linear-gradient(145deg, var(--bg), var(--bg2));
+      color:var(--text);
+    }
+    .shell{max-width:900px;margin:0 auto;padding:32px 18px 44px;}
+    .nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
+    .nav a{
+      color:var(--text);text-decoration:none;padding:10px 14px;
+      border:1px solid var(--border);border-radius:12px;
+      background:rgba(255,255,255,0.05);font-weight:800;
+    }
+    .nav a.active{border-color:var(--accent);color:var(--accent);background:rgba(247,183,51,0.12);}
+    .card{
+      background:var(--glass);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:18px;
+      box-shadow:var(--shadow);
+    }
+    h1{margin:0 0 10px;font-size:26px;}
+    p{margin:0 0 10px;line-height:1.6;color:var(--muted);}
+    ul{margin:0 0 0 18px;color:var(--muted);}
+    li{margin:4px 0;}
+    .badge{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(247,183,51,0.12);color:var(--accent);border:1px solid rgba(247,183,51,0.4);font-weight:800;font-size:12px;}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="nav">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="harf_notu_otomatik_grafikli.html">Harf Notu + Grafik</a>
+      <a href="heatmap.html">Heatmap</a>
+      <a href="detaylifinal.html">Hedef Final</a>
+      <a href="anogano.html">AGNO / GANO</a>
+      <a class="active" href="hakkinda.html">Hakkında</a>
+    </nav>
+
+    <div class="card">
+      <span class="badge">Anadolu Üniversitesi</span>
+      <h1>Hakkında</h1>
+      <p>Bu bölüm Anadolu Üniversitesi için hazırlanan not hesaplama araçlarının açıklamalarını ve yönergelerini içerir. Araçlar aktiftir; yönetmelik güncellemeleri geldikçe içerik revize edilir.</p>
+      <p>İçerikler:</p>
+      <ul>
+        <li>Harf notu ve grafik hesaplayıcılarının kullanım yönergeleri</li>
+        <li>Heatmap ve hedef final hesaplama açıklamaları</li>
+        <li>Resmi kaynak ve yönetmelik linkleri</li>
+      </ul>
+      <p style="margin-top:12px">Bilgilendirme: Sonuçlar simülasyon amaçlıdır; resmi sonuçlar için üniversitenin duyuru ve sistemleri esas alınır.</p>
+    </div>
+  </div>
+</body>
+</html>

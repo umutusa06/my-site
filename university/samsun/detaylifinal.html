@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bağıl Final Hesaplayıcı (Düzenli)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b132b;
+  --bg2:#111b33;
+  --card:#0f172a;
+  --glass:rgba(255,255,255,0.04);
+  --accent:#f7b733;
+  --accent2:#21e6c1;
+  --border:#1f2a44;
+  --text:#e8eefb;
+  --muted:#9fb1d1;
+}
+.shell{max-width:900px;margin:auto;padding:24px 18px 30px;}
+nav.nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+nav.nav a{
+  color:var(--text);text-decoration:none;padding:10px 14px;
+  border:1px solid var(--border);border-radius:12px;
+  background:rgba(255,255,255,0.05);font-weight:800;
+  transition:background .15s ease,border-color .15s ease,color .15s ease;
+}
+nav.nav a.active{border-color:var(--accent);color:var(--accent);background:rgba(247,183,51,0.12);}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  padding:28px 18px 34px;
+  font-family:"Space Grotesk","Manrope",system-ui,-apple-system,sans-serif;
+  background:radial-gradient(circle at 18% 20%, rgba(33,230,193,0.16), transparent 32%),
+             radial-gradient(circle at 84% 12%, rgba(247,183,51,0.16), transparent 32%),
+             linear-gradient(145deg, var(--bg), var(--bg2));
+  color:var(--text);
+  line-height:1.6;
+}
+.container{
+  max-width:900px;
+  margin:auto;
+  background:var(--glass);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:22px;
+  box-shadow:0 18px 50px rgba(0,0,0,0.28);
+}
+h2{text-align:center;color:var(--accent);margin:0 0 14px;letter-spacing:-0.3px}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;justify-content:space-between;margin-bottom:10px}
+.selectWrap{display:flex;align-items:center;gap:8px;color:var(--muted);font-weight:700;font-size:14px}
+select.uni{
+  width:auto;
+  min-width:220px;
+  padding:9px 12px;
+  border-radius:10px;
+  background:rgba(255,255,255,0.05);
+  border:1px solid var(--border);
+  color:var(--text);
+}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.full{grid-column:1/-1}
+label{font-weight:700;margin-top:6px;display:block;color:var(--text);font-size:14px}
+input,select,button{
+  width:100%;
+  padding:11px 12px;
+  margin-top:6px;
+  box-sizing:border-box;
+  font-size:15px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,0.04);
+  color:var(--text);
+}
+input:focus,select:focus{
+  outline:none;
+  border-color:var(--accent2);
+  box-shadow:0 0 0 3px rgba(33,230,193,0.2);
+}
+button{
+  background:linear-gradient(120deg,var(--accent),#f37335);
+  color:#0b0c10;
+  border:none;
+  border-radius:12px;
+  font-weight:800;
+  cursor:pointer;
+  box-shadow:0 12px 30px rgba(243,115,53,0.25);
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+button:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(243,115,53,0.32);}
+.muted{font-size:12px;color:var(--muted);margin-top:4px}
+.card{
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  border-left:6px solid var(--accent2);
+  border-radius:12px;
+  padding:12px;
+  margin-top:12px;
+}
+.warn{background:rgba(247,183,51,0.08);border-left-color:#f59e0b}
+.mutlak{background:rgba(255,255,255,0.02);border-left-color:#111827}
+.extraGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.extraTitle{font-weight:800;margin-bottom:6px}
+.checkRow{display:flex;align-items:center;gap:10px;margin-top:8px}
+@media(max-width:700px){.row{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <nav class="nav">
+    <a href="index.html">Ana Sayfa</a>
+    <a href="harf_notu_otomatik_grafikli.html">Harf Notu + Grafik</a>
+    <a href="heatmap.html">Heatmap</a>
+    <a class="active" href="detaylifinal.html">Hedef Final</a>
+    <a href="anogano.html">AGNO / GANO</a>
+    <a href="hakkinda.html">Hakkında</a>
+  </nav>
+
+<div class="container">
+  <div class="bar">
+    <div>
+      <h2>Bağıl Değerlendirme Final Hesaplayıcı</h2>
+      <div class="muted" id="uniNote"></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div>
+      <label>Vize Notun</label>
+      <input id="inpMyMid" type="number" min="0" max="100" placeholder="0-100">
+    </div>
+    <div>
+      <label>Sınıf Vize Ortalaması</label>
+      <input id="inpClsMid" type="number" min="0" max="100" placeholder="0-100">
+    </div>
+
+    <div>
+      <label>Vize Ağırlığı (%)</label>
+      <input id="inpWMid" type="number" min="0" max="100" value="40">
+    </div>
+    <div>
+      <label>Final Ağırlığı (%)</label>
+      <input id="inpWFinal" type="number" min="0" max="100" value="60">
+      <div class="muted">Diğer ek kalemlerle toplam %100 olmalı.</div>
+    </div>
+
+    <div>
+      <label>Sınıf Final Ortalaması</label>
+      <input id="inpClsFinal" type="number" min="0" max="100" placeholder="örn: 45">
+    </div>
+    <div>
+      <label>Hedef Harf Notu</label>
+      <select id="inpTarget">
+        <option value="DC">DC</option>
+        <option value="CC">CC</option>
+        <option value="CB">CB</option>
+        <option value="BB">BB</option>
+        <option value="AA">AA</option>
+      </select>
+    </div>
+
+    <div class="full">
+      <label>Tahmini Standart Sapma (σ) <span class="muted">(opsiyonel)</span></label>
+      <input id="inpSigma" type="number" min="1" max="50" placeholder="boş bırakırsan 10 / 15 / 20">
+    </div>
+
+    <div class="full checkRow">
+      <input id="chkExtra" type="checkbox" style="width:auto;transform:scale(1.1)">
+      <label for="chkExtra" style="margin:0;font-weight:800">Ek değerlendirme var (ödev/quiz/proje/lab...)</label>
+    </div>
+
+    <div id="extraArea" class="full" style="display:none">
+      <label>Kaç adet ek kalem?</label>
+      <select id="inpExtraCount">
+        <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+        <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+      </select>
+      <div class="muted">Her ek kalem için: ad, ağırlık %, senin notun, sınıf ortalaman</div>
+      <div id="extraList"></div>
+    </div>
+
+    <div class="full">
+      <button id="btnCalc" type="button" onclick="calculate()">Hesapla</button>
+    </div>
+  </div>
+
+  <div id="out"></div>
+</div>
+
+<script>
+const TABLE=[
+  {name:"Mükemmel",min:70,max:79.99,t:{AA:59,BB:49,CB:44,CC:39,DC:34}},
+  {name:"Çok iyi",min:62.5,max:69.99,t:{AA:61,BB:51,CB:46,CC:41,DC:36}},
+  {name:"İyi",min:57.5,max:62.49,t:{AA:63,BB:53,CB:48,CC:43,DC:38}},
+  {name:"Orta",min:52.5,max:57.49,t:{AA:65,BB:55,CB:50,CC:45,DC:40}},
+  {name:"Yeterli",min:47.5,max:52.49,t:{AA:67,BB:57,CB:52,CC:47,DC:42}},
+  {name:"Yeterli geçer",min:42.5,max:47.49,t:{AA:69,BB:59,CB:54,CC:49,DC:44}},
+  {name:"Şartlı geçer",min:-1,max:42.49,t:{AA:71,BB:61,CB:56,CC:51,DC:46}}
+];
+
+const chkExtra=document.getElementById("chkExtra");
+const extraArea=document.getElementById("extraArea");
+const inpExtraCount=document.getElementById("inpExtraCount");
+const extraList=document.getElementById("extraList");
+const uniNote=document.getElementById("uniNote");
+const btnCalc=document.getElementById("btnCalc");
+
+const UNIVERSITY_CONFIGS = {
+  "Samsun Üniversitesi": {
+    enabled: true,
+    finalBaraj: 50,
+    mutlakEsik: 80,
+    letterSet: ["FF","DD","DC","CC","CB","BB","BA","AA"],
+    defaultWeights: { midterm: 40, final: 60 },
+    sigmaDefaults: [10,15,20],
+    notes: "Samsun Üniversitesi için aktif."
+  }
+};
+
+let activeUniversityConfig = UNIVERSITY_CONFIGS["Samsun Üniversitesi"];
+
+function applyUniversityConfig(cfg){
+  uniNote.textContent = cfg.notes || "";
+  if(cfg.defaultWeights){
+    document.getElementById("inpWMid").value = cfg.defaultWeights.midterm;
+    document.getElementById("inpWFinal").value = cfg.defaultWeights.final;
+  }
+  document.getElementById("inpSigma").placeholder = cfg.sigmaDefaults ? `boş bırakırsan ${cfg.sigmaDefaults.join(" / ")}` : "boş bırak";
+  btnCalc.disabled = !cfg.enabled;
+  btnCalc.textContent = cfg.enabled ? "Hesapla" : "Yakında eklenecek";
+}
+
+chkExtra.addEventListener("change", ()=>{
+  extraArea.style.display = chkExtra.checked ? "block" : "none";
+  renderExtras();
+});
+inpExtraCount.addEventListener("change", renderExtras);
+
+function renderExtras(){
+  extraList.innerHTML="";
+  if(!chkExtra.checked) return;
+  const n=Number(inpExtraCount.value);
+  for(let i=1;i<=n;i++){
+    const div=document.createElement("div");
+    div.className="card";
+    div.innerHTML=`
+      <div class="extraTitle">Ek Kalem ${i}</div>
+      <div class="extraGrid">
+        <div>
+          <label>Ad (opsiyonel)</label>
+          <input id="exName${i}" placeholder="örn: Ödev">
+        </div>
+        <div>
+          <label>Ağırlık (%)</label>
+          <input id="exW${i}" type="number" min="0" max="100" placeholder="örn: 10">
+        </div>
+        <div>
+          <label>Senin Notun</label>
+          <input id="exMy${i}" type="number" min="0" max="100" placeholder="0-100">
+        </div>
+        <div>
+          <label>Sınıf Ortalaması</label>
+          <input id="exCls${i}" type="number" min="0" max="100" placeholder="0-100">
+        </div>
+      </div>
+    `;
+    extraList.appendChild(div);
+  }
+}
+
+function calculate(){
+  const out=document.getElementById("out");
+  out.innerHTML="";
+
+  const myMid=Number(document.getElementById("inpMyMid").value);
+  const clsMid=Number(document.getElementById("inpClsMid").value);
+  const clsFinal=Number(document.getElementById("inpClsFinal").value);
+
+  const wMidPct=Number(document.getElementById("inpWMid").value);
+  const wFinalPct=Number(document.getElementById("inpWFinal").value);
+  const target=document.getElementById("inpTarget").value;
+
+  const sigmaStr=document.getElementById("inpSigma").value.trim();
+  const sigmas = sigmaStr ? [Number(sigmaStr)] : (activeUniversityConfig.sigmaDefaults || [10,15,20]);
+
+  if([myMid,clsMid,clsFinal].some(v=>!Number.isFinite(v)||v<0||v>100)){
+    out.innerHTML=`<div class="card warn">Uyarı: Vize, sınıf vize ort, sınıf final ort 0-100 arasında olmalı.</div>`;
+    return;
+  }
+  if(!Number.isFinite(wMidPct)||!Number.isFinite(wFinalPct)||wMidPct<0||wFinalPct<0){
+    out.innerHTML=`<div class="card warn">Uyarı: Ağırlıkları düzgün gir.</div>`;
+    return;
+  }
+  if(sigmas.some(s=>!Number.isFinite(s)||s<=0||s>50)){
+    out.innerHTML=`<div class="card warn">Uyarı: σ değeri 1-50 arasında olmalı.</div>`;
+    return;
+  }
+
+  let extras=[];
+  let sumPct=wMidPct+wFinalPct;
+
+  if(chkExtra.checked){
+    const n=Number(inpExtraCount.value);
+    for(let i=1;i<=n;i++){
+      const name=(document.getElementById(`exName${i}`).value || `Ek ${i}`).trim();
+      const w=Number(document.getElementById(`exW${i}`).value);
+      const my=Number(document.getElementById(`exMy${i}`).value);
+      const cls=Number(document.getElementById(`exCls${i}`).value);
+
+      if(!Number.isFinite(w)||w<0||w>100) return out.innerHTML=`<div class="card warn">Uyarı: ${name}: ağırlık 0-100 olmalı.</div>`;
+      if(!Number.isFinite(my)||my<0||my>100) return out.innerHTML=`<div class="card warn">Uyarı: ${name}: senin notun 0-100 olmalı.</div>`;
+      if(!Number.isFinite(cls)||cls<0||cls>100) return out.innerHTML=`<div class="card warn">Uyarı: ${name}: sınıf ort 0-100 olmalı.</div>`;
+
+      sumPct += w;
+      extras.push({name,wPct:w,my,cls});
+    }
+  }
+
+  if(Math.round(sumPct*100)/100 !== 100){
+    out.innerHTML=`<div class="card warn">Uyarı: Ağırlıkların toplamı <b>100</b> olmalı. Şu an: <b>${sumPct}</b></div>`;
+    return;
+  }
+
+  const wMid=wMidPct/100;
+  const wFinal=wFinalPct/100;
+  const extrasN=extras.map(x=>({...x,w:x.wPct/100}));
+
+  const classAvg =
+    clsMid*wMid +
+    clsFinal*wFinal +
+    extrasN.reduce((a,x)=>a + x.cls*x.w, 0);
+
+  const myKnown =
+    myMid*wMid +
+    extrasN.reduce((a,x)=>a + x.my*x.w, 0);
+
+  let table = `
+    <table>
+      <thead><tr><th>Kalem</th><th>Ağırlık</th><th>Sen</th><th>Sınıf Ort</th><th>Katkın</th><th>Sınıf Katkısı</th></tr></thead>
+      <tbody>
+        <tr><td><b>Vize</b></td><td>${wMidPct}%</td><td>${myMid}</td><td>${clsMid}</td><td>${(myMid*wMid).toFixed(2)}</td><td>${(clsMid*wMid).toFixed(2)}</td></tr>
+        <tr><td><b>Final (?)</b></td><td>${wFinalPct}%</td><td>?</td><td>${clsFinal}</td><td>?</td><td>${(clsFinal*wFinal).toFixed(2)}</td></tr>
+  `;
+  extrasN.forEach(x=>{
+    table += `<tr><td><b>${x.name}</b></td><td>${x.wPct}%</td><td>${x.my}</td><td>${x.cls}</td><td>${(x.my*x.w).toFixed(2)}</td><td>${(x.cls*x.w).toFixed(2)}</td></tr>`;
+  });
+  table += `</tbody></table>`;
+
+  let html = `
+    <div class="card">
+      <div><b>Sınıf Genel Ortalaması:</b> ${classAvg.toFixed(2)}</div>
+      <div class="muted">Sınıf genel ortalama = tüm kalemlerin sınıf ortalamalarıyla ağırlıklı toplamı</div>
+      ${table}
+      <div class="muted" style="margin-top:10px"><b>Senin bilinen katkın (final hariç):</b> ${myKnown.toFixed(2)}</div>
+    </div>
+  `;
+
+  if(classAvg >= activeUniversityConfig.mutlakEsik){
+    out.innerHTML = html + `<div class="card mutlak">Ortalama ≥ ${activeUniversityConfig.mutlakEsik} → <b>Mutlak değerlendirme</b></div>`;
+    return;
+  }
+
+  const row = TABLE.find(r => classAvg > r.min && classAvg <= r.max);
+  if(!row){
+    out.innerHTML = html + `<div class="card warn">Uyarı: Sınıf ortalaması tablo aralıklarına uymuyor.</div>`;
+    return;
+  }
+
+  const targetT = row.t[target];
+  const targetZ = (targetT - 50)/10; // T=50+10Z
+
+  html += `<div class="card"><b>Sınıf Düzeyi:</b> ${row.name} • <b>Hedef:</b> ${target} (T ≥ ${targetT})</div>`;
+
+  const sigmasToUse = sigmas;
+  sigmasToUse.forEach(s=>{
+    const targetX = classAvg + targetZ*s;
+    let needFinal = Math.ceil((targetX - myKnown)/wFinal);
+    let show = needFinal > 100 ? "İMKANSIZ" : Math.max(activeUniversityConfig.finalBaraj, needFinal);
+    const cls = !sigmaStr ? (s===10?'low':s===15?'mid':'high') : '';
+    html += `<div class="card ${cls}"><b>σ = ${s}</b> → gereken final (min ${activeUniversityConfig.finalBaraj}): <b>${show}</b></div>`;
+  });
+
+  out.innerHTML = html;
+}
+
+renderExtras();
+initUniversitySelector();
+</script>
+</div>
+</body>
+</html>

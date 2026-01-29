@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KOÜ | ANO & GANO Hesaplayıcı</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0b132b;
+      --bg2:#111b33;
+      --card:#0f172a;
+      --glass:rgba(255,255,255,0.05);
+      --accent:#f7b733;
+      --accent2:#21e6c1;
+      --border:#1f2a44;
+      --text:#e8eefb;
+      --muted:#9fb1d1;
+    }
+    .shell{max-width:900px;margin:0 auto;padding:24px 18px 30px;}
+    nav.nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+    nav.nav a{
+      color:var(--text);text-decoration:none;padding:10px 14px;
+      border:1px solid var(--border);border-radius:12px;
+      background:rgba(255,255,255,0.05);font-weight:800;
+      transition:background .15s ease,border-color .15s ease,color .15s ease;
+    }
+    nav.nav a.active{border-color:var(--accent);color:var(--accent);background:rgba(247,183,51,0.12)}
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      background:radial-gradient(circle at 22% 16%, rgba(33,230,193,0.16), transparent 32%),
+                 radial-gradient(circle at 82% 8%, rgba(247,183,51,0.16), transparent 32%),
+                 linear-gradient(145deg, var(--bg), var(--bg2));
+      min-height:100vh;
+      padding:26px 18px 36px;
+      font-family:"Space Grotesk","Manrope",system-ui,-apple-system,sans-serif;
+      color:var(--text);
+    }
+    .container{
+      background:var(--glass);
+      border:1px solid var(--border);
+      border-radius:20px;
+      box-shadow:0 18px 50px rgba(0,0,0,0.28);
+      max-width:900px;
+      width:100%;
+      padding:26px;
+      margin:0 auto;
+    }
+    h1{color:var(--accent);margin:0 0 6px;font-size:30px;letter-spacing:-0.3px}
+    .bar{display:flex;flex-wrap:wrap;align-items:flex-start;gap:10px;justify-content:space-between;margin-bottom:6px}
+    .subtitle{color:var(--muted);margin:0 0 6px;font-size:15px}
+    .muted{color:var(--muted);font-size:12px;line-height:1.5}
+    label{display:block;margin-bottom:8px;color:var(--text);font-weight:700;font-size:14px}
+    input,select{
+      width:100%;
+      padding:12px 14px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      font-size:15px;
+      transition:all 0.2s ease;
+      background:rgba(255,255,255,0.03);
+      color:var(--text);
+    }
+    input:focus,select:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 3px rgba(33,230,193,0.22);}
+    .btn{
+      width:100%;
+      padding:14px;
+      background:linear-gradient(120deg,var(--accent),#f37335);
+      color:#0b0c10;
+      border:none;
+      border-radius:12px;
+      font-size:16px;
+      font-weight:800;
+      cursor:pointer;
+      transition:all 0.2s ease;
+      box-shadow:0 12px 30px rgba(243,115,53,0.24);
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(243,115,53,0.32);}
+    .step-1-area{margin-bottom:20px;}
+    .course-row{
+      display:grid;
+      grid-template-columns:2fr 1fr 1fr;
+      gap:14px;
+      margin-bottom:14px;
+      padding:12px;
+      background:rgba(255,255,255,0.02);
+      border:1px solid var(--border);
+      border-radius:12px;
+    }
+    .section{
+      margin-top:22px;
+      padding-top:18px;
+      border-top:1px dashed var(--border);
+    }
+    .checkbox-wrapper{display:flex;align-items:center;gap:10px;margin-bottom:12px;cursor:pointer;color:var(--text);}
+    .checkbox-wrapper input[type="checkbox"]{width:18px;height:18px;cursor:pointer;}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;display:none;}
+    .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;display:none;}
+    .result{
+      margin-top:26px;
+      padding:22px;
+      background:linear-gradient(135deg, rgba(33,230,193,0.1), rgba(247,183,51,0.1));
+      border-radius:16px;
+      border:1px solid var(--border);
+      display:none;
+    }
+    .result h2{text-align:center;color:var(--text);margin-bottom:14px;letter-spacing:-0.2px}
+    .result-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;}
+    .score-card{
+      background:var(--card);
+      padding:18px;
+      border-radius:12px;
+      text-align:center;
+      border:1px solid var(--border);
+      box-shadow:0 8px 26px rgba(0,0,0,0.25);
+    }
+    .score-title{font-size:13px;color:var(--muted);margin-bottom:6px;letter-spacing:0.1px}
+    .score-value{font-size:30px;font-weight:800;color:var(--accent);}
+    .pillRow{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+    .pill{
+      display:inline-block;padding:6px 10px;border:1px solid var(--border);
+      border-radius:999px;background:rgba(255,255,255,0.04);font-size:12px;color:var(--text);
+    }
+    .cardNote{
+      margin-top:14px;
+      padding:14px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:rgba(255,255,255,0.03);
+    }
+    .list{
+      margin:8px 0 0;
+      padding-left:18px;
+      color:#dbe6ff;
+      font-size:13px;
+      line-height:1.55;
+    }
+    .warn{color:#ffd58a}
+    @media (max-width:680px){
+      .container{padding:20px;}
+      .course-row{grid-template-columns:1fr;gap:10px;}
+      .grid-2,.grid-3{grid-template-columns:1fr;}
+      .result-grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="shell">
+    <nav class="nav">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="harf_notu_otomatik_grafikli.html">Harf Notu + Grafik</a>
+      <a href="heatmap.html">Heatmap</a>
+      <a href="detaylifinal.html">Hedef Final</a>
+      <a href="anogano.html" class="active">AGNO / GANO</a>
+      <a href="hakkinda.html">Hakkında</a>
+    </nav>
+
+    <div class="container">
+      <div class="bar">
+        <div>
+          <h1>KOÜ Ortalama Hesaplayıcı</h1>
+          <p class="subtitle">ANO (Dönem Ortalaması) ve GANO (Genel Ortalama) Hesaplama</p>
+          <div class="muted" id="uniNote">
+            KOÜ harf notu katsayıları ile hesaplar. KOÜ’de <b>DC/DD</b> dersleri <b>koşullu</b> olup başarı durumu <b>yarıyıl not ortalaması 2.00</b> barajına göre kesinleşebilir.
+          </div>
+        </div>
+      </div>
+
+      <div class="step-1-area">
+        <label>Bu dönemde kaç dersin var?</label>
+        <div style="display:flex; gap:10px;">
+          <input type="number" id="courseCount" placeholder="örn: 5" min="1" max="20">
+          <button class="btn" id="btnGenerate" style="margin-top:0; width:auto; padding:0 30px;" onclick="generateRows()">Getir</button>
+        </div>
+      </div>
+
+      <div id="calculatorBody" style="display:none;">
+        <div id="courseListArea"></div>
+
+        <!-- KOÜ koşullu durum bilgisi (opsiyonel) -->
+        <div class="section">
+          <label class="checkbox-wrapper">
+            <input type="checkbox" id="includeConditionalCheck" onchange="toggleConditionalInputs()">
+            <span>KOÜ koşullu (DC/DD) başarı durumunu da yorumla (opsiyonel)</span>
+          </label>
+
+          <div class="grid-3" id="conditionalArea">
+            <div>
+              <label>Bir önceki yarıyıl ANO</label>
+              <input type="number" id="prevTermAno" step="0.01" placeholder="örn: 2.15">
+              <div class="muted">Bu dönem ANO &lt; 2.00 ise KOÜ kuralı için kullanılır.</div>
+            </div>
+            <div>
+              <label>Bir sonraki yarıyıl ANO</label>
+              <input type="number" id="nextTermAno" step="0.01" placeholder="örn: 1.95">
+              <div class="muted">Koşullu derslerin sonucu “sonraki ANO” ile netleşebilir.</div>
+            </div>
+            <div>
+              <label>İlk yarıyılım</label>
+              <select id="isFirstTerm">
+                <option value="0" selected>Hayır</option>
+                <option value="1">Evet</option>
+              </select>
+              <div class="muted">İlk yarıyılda “bir önceki ANO” yok kabul edilir.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- GANO -->
+        <div class="section">
+          <label class="checkbox-wrapper">
+            <input type="checkbox" id="includeGano" onchange="toggleGanoInputs()">
+            <span>Genel ortalamamı (GANO) da hesapla</span>
+          </label>
+
+          <div class="grid-2" id="prevStatsArea">
+            <div>
+              <label>Önceki Toplam Kredi</label>
+              <input type="number" id="prevCredits" placeholder="örn: 60">
+            </div>
+            <div>
+              <label>Önceki GANO</label>
+              <input type="number" id="prevGano" step="0.01" placeholder="örn: 2.80">
+            </div>
+          </div>
+        </div>
+
+        <button class="btn" id="btnCalc" onclick="calculate()">HESAPLA</button>
+      </div>
+
+      <div id="result" class="result"></div>
+    </div>
+  </div>
+
+<script>
+/* ==========================
+   KOÜ Katsayılar (4'lük)
+   AA 4.00, BA 3.50, BB 3.00, CB 2.50, CC 2.00, DC 1.50, DD 1.00, FD 0.50, FF 0.00
+   Not: DC/DD KOÜ'de "koşullu" geçiş mantığına tabidir.
+   ========================== */
+
+const GRADE_POINTS = {
+  "AA": 4.00,
+  "BA": 3.50,
+  "BB": 3.00,
+  "CB": 2.50,
+  "CC": 2.00,
+  "DC": 1.50,
+  "DD": 1.00,
+  "FD": 0.50,
+  "FF": 0.00,
+  "D":  0.00 // Devamsız/başarısız gibi ele alınır (kredi dahil edilirse 0 puan)
+};
+
+const PASS_ALWAYS = new Set(["AA","BA","BB","CB","CC"]);
+const CONDITIONAL = new Set(["DC","DD"]);
+const FAIL_ALWAYS = new Set(["FD","FF","D"]);
+
+function generateRows(){
+  const count = Number(document.getElementById("courseCount").value);
+  const listArea = document.getElementById("courseListArea");
+  const calcBody = document.getElementById("calculatorBody");
+
+  if(!Number.isFinite(count) || count < 1){
+    alert("Lütfen geçerli bir ders sayısı giriniz.");
+    return;
+  }
+
+  listArea.innerHTML = "";
+
+  for(let i=1;i<=count;i++){
+    const row = document.createElement("div");
+    row.className = "course-row";
+    row.innerHTML = `
+      <div>
+        <input type="text" placeholder="${i}. Ders Adı (opsiyonel)" class="name-input">
+      </div>
+      <div>
+        <input type="number" class="credit-input" placeholder="Kredi/AKTS" min="0" step="0.5">
+      </div>
+      <div>
+        <select class="grade-input">
+          <option value="" disabled selected>Not Seç</option>
+          <option value="AA">AA (4.00)</option>
+          <option value="BA">BA (3.50)</option>
+          <option value="BB">BB (3.00)</option>
+          <option value="CB">CB (2.50)</option>
+          <option value="CC">CC (2.00)</option>
+          <option value="DC">DC (1.50) • Koşullu</option>
+          <option value="DD">DD (1.00) • Koşullu</option>
+          <option value="FD">FD (0.50)</option>
+          <option value="FF">FF (0.00)</option>
+          <option value="D">D (Devamsız/0.00)</option>
+        </select>
+      </div>
+    `;
+    listArea.appendChild(row);
+  }
+
+  calcBody.style.display = "block";
+  setTimeout(()=> calcBody.scrollIntoView({behavior:"smooth", block:"start"}), 100);
+}
+
+function toggleGanoInputs(){
+  const chk = document.getElementById("includeGano").checked;
+  document.getElementById("prevStatsArea").style.display = chk ? "grid" : "none";
+}
+
+function toggleConditionalInputs(){
+  const chk = document.getElementById("includeConditionalCheck").checked;
+  document.getElementById("conditionalArea").style.display = chk ? "grid" : "none";
+}
+
+function fmt(x){
+  return Number.isFinite(x) ? x.toFixed(2) : "—";
+}
+
+function calculate(){
+  const credits = document.querySelectorAll(".credit-input");
+  const grades  = document.querySelectorAll(".grade-input");
+  const names   = document.querySelectorAll(".name-input");
+
+  let semesterPoints = 0;
+  let semesterCredits = 0;
+
+  let conditionalCourses = []; // DC/DD list
+  let failCourses = [];        // FD/FF/D list
+
+  for(let i=0;i<credits.length;i++){
+    const cr = parseFloat(credits[i].value);
+    const gr = grades[i].value;
+
+    if(!Number.isFinite(cr) || cr <= 0 || !gr) continue;
+
+    const p = GRADE_POINTS[gr];
+    if(!Number.isFinite(p)){
+      alert("Not seçimi hatalı.");
+      return;
+    }
+
+    semesterPoints += cr * p;
+    semesterCredits += cr;
+
+    const title = (names[i].value || `${i+1}. Ders`).trim();
+
+    if(CONDITIONAL.has(gr)){
+      conditionalCourses.push({title, grade:gr, credit:cr});
+    }
+    if(FAIL_ALWAYS.has(gr)){
+      failCourses.push({title, grade:gr, credit:cr});
+    }
+  }
+
+  if(semesterCredits === 0){
+    alert("Lütfen en az bir dersin kredisini ve notunu giriniz.");
+    return;
+  }
+
+  const ano = semesterPoints / semesterCredits;
+
+  // GANO (opsiyonel)
+  let ganoHtml = "";
+  const includeGano = document.getElementById("includeGano").checked;
+  let newGano = null, totalCreditsAll = null;
+
+  if(includeGano){
+    const prevCr = parseFloat(document.getElementById("prevCredits").value);
+    const prevGano = parseFloat(document.getElementById("prevGano").value);
+
+    if(!Number.isFinite(prevCr) || prevCr < 0 || !Number.isFinite(prevGano) || prevGano < 0 || prevGano > 4){
+      alert("GANO hesaplamak için eski toplam kredi ve eski GANO'yu doğru gir.");
+      return;
+    }
+
+    const totalPoints = (prevGano * prevCr) + semesterPoints;
+    totalCreditsAll = prevCr + semesterCredits;
+    newGano = totalPoints / totalCreditsAll;
+
+    ganoHtml = `
+      <div class="score-card" style="border:2px solid rgba(102,126,234,0.65);">
+        <div class="score-title">YENİ GENEL ORTALAMA (GANO)</div>
+        <div class="score-value">${fmt(newGano)}</div>
+      </div>
+    `;
+  }
+
+  // KOÜ koşullu yorum (opsiyonel)
+  let conditionalHtml = "";
+  const includeCond = document.getElementById("includeConditionalCheck").checked;
+
+  if(includeCond){
+    const isFirst = document.getElementById("isFirstTerm").value === "1";
+    const prevTermAno = parseFloat(document.getElementById("prevTermAno").value);
+    const nextTermAno = parseFloat(document.getElementById("nextTermAno").value);
+
+    const anoOK = ano >= 2.00;
+
+    let statusText = "";
+    let detailList = "";
+
+    if(conditionalCourses.length === 0){
+      statusText = "Bu dönemde DC/DD (koşullu) ders yok.";
+    } else {
+      // Basit ve açıklayıcı yorum:
+      // - Bu dönem ANO >= 2.00 ise DC/DD kesin başarılı
+      // - Bu dönem ANO < 2.00 ise: önceki ANO >=2 ise "koşullu (bir sonraki ANO ile netleşir)"
+      // - Önceki de <2 ise: DC/DD başarısız sayılabilir (kuralın özet yorumu)
+      // - Sonraki ANO verilmişse: >=2 ise başarılı, <2 ise başarısız diye netle
+      const prevKnown = isFirst ? null : (Number.isFinite(prevTermAno) ? prevTermAno : null);
+      const nextKnown = (Number.isFinite(nextTermAno) ? nextTermAno : null);
+
+      if(anoOK){
+        statusText = "Bu dönem ANO ≥ 2.00: DC/DD dersler bu dönem için başarılı sayılır.";
+      } else {
+        if(nextKnown !== null){
+          statusText = (nextKnown >= 2.00)
+            ? "Bu dönem ANO < 2.00 ancak izleyen yarıyıl ANO ≥ 2.00: DC/DD dersler başarılıya döner."
+            : "Bu dönem ANO < 2.00 ve izleyen yarıyıl ANO < 2.00: DC/DD dersler başarısız sayılıp tekrar zorunlu olabilir.";
+        } else {
+          if(prevKnown === null){
+            statusText = "Bu dönem ANO < 2.00: DC/DD derslerin kesin durumu izleyen yarıyıl ANO ile netleşebilir (önceki ANO bilgisi yok/ilk yarıyıl).";
+          } else if(prevKnown >= 2.00){
+            statusText = "Bu dönem ANO < 2.00, önceki ANO ≥ 2.00: DC/DD derslerin durumu izleyen yarıyıl ANO ile netleşebilir.";
+          } else {
+            statusText = "Bu dönem ANO < 2.00 ve önceki ANO < 2.00: DC/DD dersler başarısız sayılıp tekrar zorunlu olabilir.";
+          }
+        }
+      }
+
+      detailList = `<ul class="list">
+        ${conditionalCourses.map(x=>`<li><b>${x.title}</b> — ${x.grade} (${x.credit} kredi)</li>`).join("")}
+      </ul>`;
+    }
+
+    conditionalHtml = `
+      <div class="cardNote">
+        <div style="font-weight:800;margin-bottom:6px;">KOÜ Koşullu (DC/DD) Yorumu</div>
+        <div class="muted">
+          Bu bölüm KOÜ yönetmeliğindeki DC/DD koşullu geçiş mantığını <b>yorumlamak</b> için eklenmiştir.
+          Resmî değerlendirme nihai olarak öğrenci bilgi sistemi/transkript hükümlerine göre yapılır.
+        </div>
+        <div style="margin-top:10px;color:#eaf2ff">${statusText}</div>
+        ${detailList}
+      </div>
+    `;
+  }
+
+  // Başarısız ders listesi
+  let failHtml = "";
+  if(failCourses.length > 0){
+    failHtml = `
+      <div class="cardNote">
+        <div style="font-weight:800;margin-bottom:6px;" class="warn">Başarısız Görünen Dersler (FD/FF/D)</div>
+        <ul class="list">
+          ${failCourses.map(x=>`<li><b>${x.title}</b> — ${x.grade} (${x.credit} kredi)</li>`).join("")}
+        </ul>
+      </div>
+    `;
+  }
+
+  // Sonuç UI
+  const resultDiv = document.getElementById("result");
+  resultDiv.innerHTML = `
+    <h2>Hesaplama Sonucu</h2>
+
+    <div class="result-grid">
+      <div class="score-card">
+        <div class="score-title">DÖNEM ORTALAMASI (ANO)</div>
+        <div class="score-value">${fmt(ano)}</div>
+      </div>
+      ${ganoHtml || `
+        <div class="score-card">
+          <div class="score-title">GANO</div>
+          <div class="score-value" style="opacity:.55">—</div>
+        </div>
+      `}
+    </div>
+
+    <div class="pillRow">
+      <span class="pill"><b>Dönem Kredisi:</b> ${semesterCredits}</span>
+      <span class="pill"><b>Dönem Puanı:</b> ${fmt(semesterPoints)}</span>
+      ${includeGano ? `<span class="pill"><b>Toplam Kredi:</b> ${totalCreditsAll}</span>` : ``}
+    </div>
+
+    ${conditionalHtml}
+    ${failHtml}
+
+    <div class="cardNote">
+      <div style="font-weight:800;margin-bottom:6px;">Notlar</div>
+      <ul class="list">
+        <li>ANO/GANO: <b>Σ(kredi × katsayı) / Σ(kredi)</b>.</li>
+        <li>KOÜ katsayı tablosu: AA 4.00 … FF 0.00 (DC/DD koşullu). </li>
+        <li>Bu sayfa “unofficial” hesaplayıcıdır; kesin sonuç için transkript/OBS esas alınır.</li>
+      </ul>
+    </div>
+  `;
+
+  resultDiv.style.display = "block";
+  resultDiv.scrollIntoView({behavior:"smooth", block:"nearest"});
+}
+</script>
+</body>
+</html>

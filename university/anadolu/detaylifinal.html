@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bağıl Değerlendirme Final Hesaplayıcı</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b132b;
+  --bg2:#111b33;
+  --card:#0f172a;
+  --glass:rgba(255,255,255,0.04);
+  --accent:#f7b733;
+  --accent2:#21e6c1;
+  --border:#1f2a44;
+  --text:#e8eefb;
+  --muted:#9fb1d1;
+}
+.shell{max-width:900px;margin:auto;padding:24px 18px 30px;}
+nav.nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+nav.nav a{
+  color:var(--text);text-decoration:none;padding:10px 14px;
+  border:1px solid var(--border);border-radius:12px;
+  background:rgba(255,255,255,0.05);font-weight:800;
+  transition:background .15s ease,border-color .15s ease,color .15s ease;
+}
+nav.nav a.active{border-color:var(--accent);color:var(--accent);background:rgba(247,183,51,0.12);}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  padding:28px 18px 34px;
+  font-family:"Space Grotesk","Manrope",system-ui,-apple-system,sans-serif;
+  background:radial-gradient(circle at 18% 20%, rgba(33,230,193,0.16), transparent 32%),
+             radial-gradient(circle at 84% 12%, rgba(247,183,51,0.16), transparent 32%),
+             linear-gradient(145deg, var(--bg), var(--bg2));
+  color:var(--text);
+  line-height:1.6;
+}
+.container{
+  max-width:900px;
+  margin:auto;
+  background:var(--glass);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:22px;
+  box-shadow:0 18px 50px rgba(0,0,0,0.28);
+}
+h2{text-align:center;color:var(--accent);margin:0 0 14px;letter-spacing:-0.3px}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;justify-content:space-between;margin-bottom:10px}
+.selectWrap{display:flex;align-items:center;gap:8px;color:var(--muted);font-weight:700;font-size:14px}
+select.uni{
+  width:auto;
+  min-width:220px;
+  padding:9px 12px;
+  border-radius:10px;
+  background:rgba(255,255,255,0.05);
+  border:1px solid var(--border);
+  color:var(--text);
+}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.full{grid-column:1/-1}
+label{font-weight:700;margin-top:6px;display:block;color:var(--text);font-size:14px}
+input,select,button{
+  width:100%;
+  padding:11px 12px;
+  margin-top:6px;
+  box-sizing:border-box;
+  font-size:15px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,0.04);
+  color:var(--text);
+}
+input:focus,select:focus{
+  outline:none;
+  border-color:var(--accent2);
+  box-shadow:0 0 0 3px rgba(33,230,193,0.2);
+}
+button{
+  background:linear-gradient(120deg,var(--accent),#f37335);
+  color:#0b0c10;
+  border:none;
+  border-radius:12px;
+  font-weight:800;
+  cursor:pointer;
+  box-shadow:0 12px 30px rgba(243,115,53,0.25);
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+button:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(243,115,53,0.32);}
+.muted{font-size:12px;color:var(--muted);margin-top:4px}
+.card{
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  border-left:6px solid var(--accent2);
+  border-radius:12px;
+  padding:12px;
+  margin-top:12px;
+}
+.warn{background:rgba(247,183,51,0.08);border-left-color:#f59e0b}
+.mutlak{background:rgba(255,255,255,0.02);border-left-color:#111827}
+.extraGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.extraTitle{font-weight:800;margin-bottom:6px}
+.checkRow{display:flex;align-items:center;gap:10px;margin-top:8px}
+@media(max-width:700px){.row{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <nav class="nav">
+    <a href="index.html">Ana Sayfa</a>
+    <a href="harf_notu_otomatik_grafikli.html">Harf Notu + Grafik</a>
+    <a href="heatmap.html">Heatmap</a>
+    <a class="active" href="detaylifinal.html">Hedef Final</a>
+    <a href="anogano.html">AGNO / GANO</a>
+    <a href="hakkinda.html">Hakkında</a>
+  </nav>
+
+<div class="container">
+  <div class="bar">
+    <div>
+      <h2>Bağıl Değerlendirme Final Hesaplayıcı</h2>
+      <div class="muted" id="uniNote"></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div>
+      <label>Vize Notun</label>
+      <input id="inpMyMid" type="number" min="0" max="100" placeholder="0-100">
+    </div>
+    <div>
+      <label>Sınıf Vize Ortalaması</label>
+      <input id="inpClsMid" type="number" min="0" max="100" placeholder="0-100">
+    </div>
+
+    <div>
+      <label>Vize Ağırlığı (%)</label>
+      <input id="inpWMid" type="number" min="0" max="100" value="40">
+    </div>
+    <div>
+      <label>Final Ağırlığı (%)</label>
+      <input id="inpWFinal" type="number" min="0" max="100" value="60">
+      <div class="muted">Diğer ek kalemlerle toplam %100 olmalı.</div>
+    </div>
+    <div>
+      <label>Sınıf Final Ortalaması</label>
+      <input id="inpClsFinal" type="number" min="0" max="100" placeholder="örn: 45">
+    </div>
+    <div>
+      <label>Hedef Harf Notu</label>
+      <select id="inpTarget">
+        <option value="DD">DD</option>
+        <option value="DC">DC</option>
+        <option value="CD">CD</option>
+        <option value="CC">CC</option>
+        <option value="CB">CB</option>
+        <option value="BC">BC</option>
+        <option value="BB">BB</option>
+        <option value="BA">BA</option>
+        <option value="AB">AB</option>
+        <option value="AA">AA</option>
+      </select>
+    </div>
+
+    <div>
+      <label>Sınıf Düzeyi <span class="muted">(Tablo 1 sütunu)</span></label>
+      <select id="inpClassLevel">
+        <option value="USTUN">Üstün Başarılı</option>
+        <option value="MUK">Mükemmel</option>
+        <option value="CI">Çok İyi</option>
+        <option value="IYI">İyi</option>
+        <option value="OU">Ortanın Üstü</option>
+        <option value="ORTA" selected>Orta</option>
+        <option value="ZAYIF">Zayıf</option>
+        <option value="KOTU">Kötü</option>
+      </select>
+      <div class="muted">Emin değilsen “Orta” bırak.</div>
+    </div>
+    <div>
+      <label>Bağıl değerlendirmeye katılan öğrenci sayısı <span class="muted">(opsiyonel)</span></label>
+      <input id="inpNEligible" type="number" min="1" step="1" placeholder="boş bırak → ≥30 varsay">
+      <div class="muted">30’un altı ise Tablo 2 (mutlak) uygulanır.</div>
+    </div>
+
+    <div class="full">
+      <label>Tahmini Standart Sapma (σ) <span class="muted">(opsiyonel)</span></label>
+      <input id="inpSigma" type="number" min="1" max="50" placeholder="boş bırakırsan 10 / 15 / 20">
+    </div>
+
+    <div class="full checkRow">
+      <input id="chkExtra" type="checkbox" style="width:auto;transform:scale(1.1)">
+      <label for="chkExtra" style="margin:0;font-weight:800">Ek değerlendirme var (ödev/quiz/proje/lab...)</label>
+    </div>
+
+    <div id="extraArea" class="full" style="display:none">
+      <label>Kaç adet ek kalem?</label>
+      <select id="inpExtraCount">
+        <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+        <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+      </select>
+      <div class="muted">Her ek kalem için: ad, ağırlık %, senin notun, sınıf ortalaman</div>
+      <div id="extraList"></div>
+    </div>
+
+    <div class="full">
+      <button id="btnCalc" type="button" onclick="calculate()">Hesapla</button>
+    </div>
+  </div>
+
+  <div id="out"></div>
+</div>
+
+<script>
+function clamp(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
+
+// --- Anadolu Üniversitesi Tablo 1 (T puanı aralıkları) ---
+const T_RANGES = {
+  USTUN: {AA:[57,Infinity], AB:[54,56.99], BA:[50,53.99], BB:[47,49.99], BC:[44,46.99], CB:[40,43.99], CC:[37,39.99], CD:[34,36.99], DC:[30,33.99], DD:[27,29.99]},
+  MUK:   {AA:[59,Infinity], AB:[56,58.99], BA:[52,55.99], BB:[49,51.99], BC:[46,48.99], CB:[42,45.99], CC:[39,41.99], CD:[36,38.99], DC:[32,35.99], DD:[29,31.99]},
+  CI:    {AA:[61,Infinity], AB:[58,60.99], BA:[54,57.99], BB:[51,53.99], BC:[48,50.99], CB:[44,47.99], CC:[41,43.99], CD:[38,40.99], DC:[34,37.99], DD:[31,33.99]},
+  IYI:   {AA:[63,Infinity], AB:[60,62.99], BA:[56,59.99], BB:[53,55.99], BC:[50,52.99], CB:[46,49.99], CC:[43,45.99], CD:[40,42.99], DC:[36,39.99], DD:[33,35.99]},
+  OU:    {AA:[65,Infinity], AB:[62,64.99], BA:[58,61.99], BB:[55,57.99], BC:[52,54.99], CB:[48,51.99], CC:[45,47.99], CD:[42,44.99], DC:[38,41.99], DD:[35,37.99]},
+  ORTA:  {AA:[67,Infinity], AB:[64,66.99], BA:[60,63.99], BB:[57,59.99], BC:[54,56.99], CB:[50,53.99], CC:[47,49.99], CD:[44,46.99], DC:[40,43.99], DD:[37,39.99]},
+  ZAYIF: {AA:[69,Infinity], AB:[66,68.99], BA:[62,65.99], BB:[59,61.99], BC:[56,58.99], CB:[52,55.99], CC:[49,51.99], CD:[46,48.99], DC:[42,45.99], DD:[39,41.99]},
+  KOTU:  {AA:[71,Infinity], AB:[68,70.99], BA:[64,67.99], BB:[61,63.99], BC:[58,60.99], CB:[54,57.99], CC:[51,53.99], CD:[48,50.99], DC:[44,47.99], DD:[41,43.99]}
+};
+
+function mutlakHarfAnadolu(ogrOrt){
+  if (ogrOrt >= 84) return 'AA';
+  if (ogrOrt >= 77) return 'AB';
+  if (ogrOrt >= 71) return 'BA';
+  if (ogrOrt >= 66) return 'BB';
+  if (ogrOrt >= 61) return 'BC';
+  if (ogrOrt >= 56) return 'CB';
+  if (ogrOrt >= 50) return 'CC';
+  if (ogrOrt >= 47) return 'CD';
+  if (ogrOrt >= 43) return 'DC';
+  if (ogrOrt >= 40) return 'DD';
+  return 'FF';
+}
+
+function bagilHarfFromClassLevel(classLevelKey, t){
+  const ranges = T_RANGES[classLevelKey] || T_RANGES.ORTA;
+  const order = ['AA','AB','BA','BB','BC','CB','CC','CD','DC','DD'];
+  for(const L of order){
+    const [lo,hi]=ranges[L];
+    if(t>=lo && t<=hi) return L;
+  }
+  return 'FF';
+}
+
+function runBagil({ogrOrt, classAvg, sigma, classLevelKey}){
+  const z = (ogrOrt - classAvg) / sigma;
+  const t = 50 + 10*z;
+  const yuzdelik = clamp(50 + z*34.13, 0, 100);
+  const harf = bagilHarfFromClassLevel(classLevelKey, t);
+  return {z,t,yuzdelik,harf};
+}
+
+const chkExtra=document.getElementById("chkExtra");
+const extraArea=document.getElementById("extraArea");
+const inpExtraCount=document.getElementById("inpExtraCount");
+const extraList=document.getElementById("extraList");
+const uniNote=document.getElementById("uniNote");
+const btnCalc=document.getElementById("btnCalc");
+
+const UNIVERSITY_CONFIGS = {
+  'Anadolu Üniversitesi': {
+    enabled: true,
+    letterSet: ['FF','DD','DC','CD','CC','CB','BC','BB','BA','AB','AA'],
+    defaultWeights: { midterm: 40, final: 60 },
+    sigmaDefaults: [10,15,20],
+    notes: 'Anadolu Üniversitesi Başarı Değerlendirme Yönergesi (Senato 2024/23-1) baz alınmıştır. BDKS=30; N<30 ise Tablo 2.'
+  }
+};
+
+let activeUniversityConfig = UNIVERSITY_CONFIGS['Anadolu Üniversitesi'];
+
+function applyUniversityConfig(cfg){
+  uniNote.textContent = cfg.notes || "";
+  if(cfg.defaultWeights){
+    document.getElementById("inpWMid").value = cfg.defaultWeights.midterm;
+    document.getElementById("inpWFinal").value = cfg.defaultWeights.final;
+  }
+  document.getElementById("inpSigma").placeholder = cfg.sigmaDefaults ? `boş bırakırsan ${cfg.sigmaDefaults.join(" / ")}` : "boş bırak";
+  btnCalc.disabled = !cfg.enabled;
+  btnCalc.textContent = cfg.enabled ? "Hesapla" : "Yakında eklenecek";
+}
+
+chkExtra.addEventListener("change", ()=>{
+  extraArea.style.display = chkExtra.checked ? "block" : "none";
+  renderExtras();
+});
+inpExtraCount.addEventListener("change", renderExtras);
+
+function renderExtras(){
+  extraList.innerHTML="";
+  if(!chkExtra.checked) return;
+  const n=Number(inpExtraCount.value);
+  for(let i=1;i<=n;i++){
+    const div=document.createElement("div");
+    div.className="card";
+    div.innerHTML=`
+      <div class="extraTitle">Ek Kalem ${i}</div>
+      <div class="extraGrid">
+        <div>
+          <label>Ad (opsiyonel)</label>
+          <input id="exName${i}" placeholder="örn: ödev">
+        </div>
+        <div>
+          <label>Ağırlık (%)</label>
+          <input id="exW${i}" type="number" min="0" max="100" placeholder="örn: 10">
+        </div>
+        <div>
+          <label>Senin Notun</label>
+          <input id="exMy${i}" type="number" min="0" max="100" placeholder="0-100">
+        </div>
+        <div>
+          <label>Sınıf Ortalaması</label>
+          <input id="exCls${i}" type="number" min="0" max="100" placeholder="0-100">
+        </div>
+      </div>
+    `;
+    extraList.appendChild(div);
+  }
+}
+
+function calculate(){
+  const out=document.getElementById("out");
+  out.innerHTML="";
+
+  const myMid=Number(document.getElementById("inpMyMid").value);
+  const clsMid=Number(document.getElementById("inpClsMid").value);
+  const clsFinal=Number(document.getElementById("inpClsFinal").value);
+
+  const wMidPct=Number(document.getElementById("inpWMid").value);
+  const wFinalPct=Number(document.getElementById("inpWFinal").value);
+  const target=document.getElementById("inpTarget").value;
+
+  const sigmaStr=document.getElementById("inpSigma").value.trim();
+  const sigmas = sigmaStr ? [Number(sigmaStr)] : (activeUniversityConfig.sigmaDefaults || [10,15,20]);
+
+  if([myMid,clsMid,clsFinal].some(v=>!Number.isFinite(v)||v<0||v>100)){
+    out.innerHTML=`<div class="card warn">Uyarı: Vize, sınıf vize ort, sınıf final ort 0-100 arasında olmalı.</div>`;
+    return;
+  }
+  if(!Number.isFinite(wMidPct)||!Number.isFinite(wFinalPct)||wMidPct<0||wFinalPct<0){
+    out.innerHTML=`<div class="card warn">Uyarı: Ağırlıkları düzgün gir.</div>`;
+    return;
+  }
+  if(sigmas.some(s=>!Number.isFinite(s)||s<=0||s>50)){
+    out.innerHTML=`<div class="card warn">Uyarı: σ değeri 1-50 arasında olmalı.</div>`;
+    return;
+  }
+
+  let extras=[];
+  let sumPct=wMidPct+wFinalPct;
+
+  if(chkExtra.checked){
+    const n=Number(inpExtraCount.value);
+    for(let i=1;i<=n;i++){
+      const name=(document.getElementById(`exName${i}`).value || `Ek ${i}`).trim();
+      const w=Number(document.getElementById(`exW${i}`).value);
+      const my=Number(document.getElementById(`exMy${i}`).value);
+      const cls=Number(document.getElementById(`exCls${i}`).value);
+
+      if(!Number.isFinite(w)||w<0||w>100) return out.innerHTML=`<div class="card warn">Uyarı: ${name}: ağırlık 0-100 olmalı.</div>`;
+      if(!Number.isFinite(my)||my<0||my>100) return out.innerHTML=`<div class="card warn">Uyarı: ${name}: senin notun 0-100 olmalı.</div>`;
+      if(!Number.isFinite(cls)||cls<0||cls>100) return out.innerHTML=`<div class="card warn">Uyarı: ${name}: sınıf ort 0-100 olmalı.</div>`;
+
+      sumPct += w;
+      extras.push({name,wPct:w,my,cls});
+    }
+  }
+
+  if(Math.round(sumPct*100)/100 !== 100){
+    out.innerHTML=`<div class="card warn">Uyarı: Ağırlıkların toplamı <b>100</b> olmalı. Şu an: <b>${sumPct}</b></div>`;
+    return;
+  }
+
+  const wMid=wMidPct/100;
+  const wFinal=wFinalPct/100;
+  const extrasN=extras.map(x=>({...x,w:x.wPct/100}));
+
+  const classAvg =
+    clsMid*wMid +
+    clsFinal*wFinal +
+    extrasN.reduce((a,x)=>a + x.cls*x.w, 0);
+
+  const myKnown =
+    myMid*wMid +
+    extrasN.reduce((a,x)=>a + x.my*x.w, 0);
+
+  let table = `
+    <table>
+      <thead><tr><th>Kalem</th><th>Ağırlık</th><th>Sen</th><th>Sınıf Ort</th><th>Katkın</th><th>Sınıf Katkısı</th></tr></thead>
+      <tbody>
+        <tr><td><b>Vize</b></td><td>${wMidPct}%</td><td>${myMid}</td><td>${clsMid}</td><td>${(myMid*wMid).toFixed(2)}</td><td>${(clsMid*wMid).toFixed(2)}</td></tr>
+        <tr><td><b>Final (?)</b></td><td>${wFinalPct}%</td><td>?</td><td>${clsFinal}</td><td>?</td><td>${(clsFinal*wFinal).toFixed(2)}</td></tr>
+  `;
+  extrasN.forEach(x=>{
+    table += `<tr><td><b>${x.name}</b></td><td>${x.wPct}%</td><td>${x.my}</td><td>${x.cls}</td><td>${(x.my*x.w).toFixed(2)}</td><td>${(x.cls*x.w).toFixed(2)}</td></tr>`;
+  });
+  table += `</tbody></table>`;
+
+  let html = `
+    <div class="card">
+      <div><b>Sınıf Genel Ortalaması:</b> ${classAvg.toFixed(2)}</div>
+      <div class="muted">Sınıf genel ortalama = tüm kalemlerin sınıf ortalamalarıyla ağırlıklı toplamı</div>
+      ${table}
+      <div class="muted" style="margin-top:10px"><b>Senin bilinen katkın (final hariç):</b> ${myKnown.toFixed(2)}</div>
+    </div>
+  `;
+
+  const classLevelKey = document.getElementById('inpClassLevel').value;
+  const nEligibleRaw = document.getElementById('inpNEligible')?.value.trim();
+  const nEligible = nEligibleRaw === '' ? 30 : Number(nEligibleRaw);
+  const isMutlak = (Number.isFinite(nEligible) && nEligible > 0 && nEligible < 30);
+
+  const LETTER_ORDER = activeUniversityConfig.letterSet || ['FF','DD','DC','CD','CC','CB','BC','BB','BA','AB','AA'];
+  const idx = (L)=>LETTER_ORDER.indexOf(L);
+  const targetIdx = idx(target);
+
+  html += `<div class="card"><b>Sistem:</b> ${isMutlak ? 'MUTLAK (Tablo 2)' : 'BAĞIL (Tablo 1)'}${Number.isFinite(nEligible) ? ` • <b>Katılan:</b> ${nEligible}` : ''}<br><b>Sınıf düzeyi:</b> ${document.getElementById('inpClassLevel').selectedOptions[0].textContent}</div>`;
+
+  function meetsTarget(letter){
+    const i = idx(letter);
+    if(i===-1) return false;
+    return i >= targetIdx;
+  }
+
+  function solveFinalForSigma(sigma){
+    for(let f=0; f<=100; f++){
+      const ogrOrt = myKnown + f*wFinal;
+      if(ogrOrt < 30) continue;
+      let harf = 'FF';
+      if(isMutlak){
+        harf = mutlakHarfAnadolu(ogrOrt);
+      } else {
+        harf = runBagil({ogrOrt, classAvg, sigma, classLevelKey}).harf;
+      }
+      if(meetsTarget(harf)) return {final:f, harf};
+    }
+    return null;
+  }
+
+  const sigmasToUse = sigmas;
+  sigmasToUse.forEach(s=>{
+    const sol = solveFinalForSigma(s);
+    const cls = !sigmaStr ? (s===10?'low':s===15?'mid':'high') : '';
+    if(!sol){
+      html += `<div class="card ${cls}"><b>σ = ${s}</b> → gereken final: <b>İMKANSIZ</b></div>`;
+    } else {
+      html += `<div class="card ${cls}"><b>σ = ${s}</b> → gereken final: <b>${sol.final}</b> <span class="muted">(bu final ile harf ≈ ${sol.harf})</span></div>`;
+    }
+  });
+
+  out.innerHTML = html;
+}
+
+renderExtras();
+applyUniversityConfig(activeUniversityConfig);
+</script>
+</div>
+</body>
+</html>

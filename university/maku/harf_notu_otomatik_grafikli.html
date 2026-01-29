@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mehmet Akif Ersoy Üniversitesi - Harf Notu (Bağıl Değerlendirme)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b132b;
+      --bg2:#111b33;
+      --card:#0f172a;
+      --glass:rgba(255,255,255,0.03);
+      --accent:#f7b733;
+      --accent2:#21e6c1;
+      --border:#1f2a44;
+      --text:#e8eefb;
+      --muted:#9fb1d1;
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      padding:28px 18px 34px;
+      font-family:"Space Grotesk","Manrope",system-ui,-apple-system,sans-serif;
+      background:radial-gradient(circle at 20% 18%, rgba(33,230,193,0.16), transparent 32%),
+                 radial-gradient(circle at 82% 8%, rgba(247,183,51,0.16), transparent 32%),
+                 linear-gradient(145deg, var(--bg), var(--bg2));
+      color:var(--text);
+      line-height:1.6;
+    }
+    .shell{max-width:1100px;margin:0 auto;padding:24px 18px 30px;}
+    nav.nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+    nav.nav a{color:var(--text);text-decoration:none;padding:10px 14px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,0.05);font-weight:800;transition:background .15s ease,border-color .15s ease,color .15s ease}
+    nav.nav a.active{border-color:var(--accent);color:var(--accent);background:rgba(247,183,51,0.12);}
+    .container{
+      max-width:1100px;
+      margin:auto;
+      background:var(--glass);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:22px;
+      box-shadow:0 18px 50px rgba(0,0,0,0.28);
+    }
+    h2{
+      text-align:center;
+      color:var(--accent);
+      margin:0 0 6px;
+      letter-spacing:-0.4px;
+    }
+    .bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;justify-content:space-between;margin-bottom:10px}
+    .selectWrap{display:flex;align-items:center;gap:10px;color:var(--muted);font-weight:800;font-size:14px;flex-wrap:wrap}
+    select{
+      width:auto;
+      min-width:220px;
+      padding:9px 12px;
+      border-radius:10px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid var(--border);
+      color:var(--text);
+    }
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .full{grid-column:1/-1}
+    label{font-weight:800;display:block;margin-top:6px;color:var(--text);font-size:14px}
+    input,button{
+      width:100%;
+      padding:11px 12px;
+      margin-top:6px;
+      font-size:15px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.04);
+      color:var(--text);
+    }
+    input:focus,select:focus{
+      outline:none;
+      border-color:var(--accent2);
+      box-shadow:0 0 0 3px rgba(33,230,193,0.2);
+    }
+    button{
+      background:linear-gradient(120deg,var(--accent),#f37335);
+      color:#0b0c10;
+      border:none;
+      border-radius:12px;
+      font-weight:900;
+      cursor:pointer;
+      margin-top:16px;
+      box-shadow:0 12px 30px rgba(243,115,53,0.25);
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+    button:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(243,115,53,0.32);}
+    .card{
+      background:rgba(255,255,255,0.03);
+      border:1px solid var(--border);
+      border-left:6px solid var(--accent2);
+      border-radius:14px;
+      padding:12px;
+      margin-top:12px;
+    }
+    .warn{background:rgba(247,183,51,0.08);border-left-color:#f59e0b;}
+    .good{border-left-color:#16a34a;}
+    .muted{font-size:12px;color:var(--muted);margin-top:6px}
+    table{width:100%;border-collapse:collapse;margin-top:10px;background:rgba(255,255,255,0.02);border-radius:10px;overflow:hidden}
+    th,td{border-bottom:1px solid var(--border);padding:8px;font-size:14px;text-align:left;color:var(--text)}
+    th{color:var(--muted);font-weight:800;}
+    .pill{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,0.05);font-weight:900;color:var(--text)}
+    .pill b{color:var(--accent)}
+    .charts{display:grid;grid-template-columns:1fr;gap:16px;margin-top:18px}
+    @media (min-width: 980px){
+      .charts{grid-template-columns:1fr 1fr}
+      .charts .fullchart{grid-column:1/-1}
+    }
+    .chartCard{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px;
+      box-shadow:0 12px 28px rgba(0,0,0,0.25);
+    }
+    .chartTitle{font-weight:900;margin-bottom:8px;color:var(--text)}
+    canvas{width:100%;height:320px;display:block;border-radius:12px;background:#0f172a}
+    .legend{font-size:12px;color:var(--muted);margin-top:8px;display:flex;gap:10px;flex-wrap:wrap}
+    .tag{display:inline-flex;align-items:center;gap:6px;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,0.05);border:1px solid var(--border)}
+    .dot{width:10px;height:10px;border-radius:50%;}
+    @media(max-width:680px){.row{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+<div class="shell">
+  <nav class="nav">
+    <a href="index.html">Ana Sayfa</a>
+    <a class="active" href="harf_notu_otomatik_grafikli.html">Harf Notu + Grafik</a>
+    <a href="heatmap.html">Heatmap</a>
+    <a href="detaylifinal.html">Hedef Final</a>
+    <a href="anogano.html">AGNO / GANO</a>
+    <a href="hakkinda.html">Hakkında</a>
+  </nav>
+
+  <div class="container">
+    <div class="bar">
+      <div>
+        <h2>Mehmet Akif Ersoy Üniversitesi • Harf Notu</h2>
+        <div class="muted" id="ruleNote"></div>
+      </div>
+
+      <div class="selectWrap">
+        <span class="pill">Program: <b id="pillProgram">—</b></span>
+        <label style="margin:0">
+          <select id="selProgram">
+            <option value="" selected disabled>Seçiniz…</option>
+            <option value="lisans">Lisans</option>
+            <option value="onlisans">Önlisans</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <div id="formArea" style="display:none;">
+      <div class="row">
+        <div>
+          <label>Vize Notun</label>
+          <input id="inpMyMid" type="number" min="0" max="100" placeholder="0-100">
+        </div>
+        <div>
+          <label>Final (Yarıyıl Sonu) Notun</label>
+          <input id="inpMyFinal" type="number" min="0" max="100" placeholder="0-100">
+          <div class="muted" id="finalBarajNote"></div>
+        </div>
+
+        <div>
+          <label>Sınıf Vize Ortalaması</label>
+          <input id="inpClsMid" type="number" min="0" max="100" placeholder="0-100">
+        </div>
+        <div>
+          <label>Sınıf Final Ortalaması</label>
+          <input id="inpClsFinal" type="number" min="0" max="100" placeholder="0-100">
+        </div>
+
+        <div>
+          <label>Katılan Öğrenci Sayısı (N)</label>
+          <input id="inpN" type="number" min="1" step="1" placeholder="örn: 72">
+          <div class="muted">N ≥ 20 ise Bağıl; N &lt; 20 ise Yarı Bağıl uygulanır.</div>
+        </div>
+        <div>
+          <label>Standart Sapma (S)</label>
+          <input id="inpS" type="number" min="0.1" step="0.1" placeholder="örn: 19">
+          <div class="muted">N &lt; 20 ise T hesabında kullanılmaz (istersen yine girebilirsin).</div>
+        </div>
+
+        <div>
+          <label>Vize Ağırlığı (%)</label>
+          <input id="inpWMid" type="number" min="0" max="100" value="40">
+        </div>
+        <div>
+          <label>Final Ağırlığı (%)</label>
+          <input id="inpWFinal" type="number" min="0" max="100" value="60">
+          <div class="muted">Toplam ağırlık 100 olmalı.</div>
+        </div>
+
+        <div class="full">
+          <button id="btnCalc" type="button" onclick="hesapla()">Hesapla + Grafik Çiz</button>
+        </div>
+      </div>
+
+      <div id="out"></div>
+
+      <div id="chartArea" class="charts" style="display:none;">
+        <div class="chartCard">
+          <div class="chartTitle">Final notu değişince harf nasıl değişiyor?</div>
+          <canvas id="cvFinalVsLetter"></canvas>
+          <div class="legend" id="legendFinalVs"></div>
+          <div class="muted">Vize sabit: girdiğin vize. Sınıf ortalamaları sabit. Final 0-100 taranır.</div>
+        </div>
+
+        <div class="chartCard">
+          <div class="chartTitle">T skoru hesap özeti</div>
+          <div class="muted" id="tFormulaNote"></div>
+          <div id="tSummary" class="card" style="margin-top:10px;"></div>
+        </div>
+
+        <div class="chartCard fullchart">
+          <div class="chartTitle">T skoru konumu (0–100)</div>
+          <canvas id="cvTBar"></canvas>
+          <div class="muted">T değeri 0-100 ölçeğinde gösterilir (taşan değerler kırpılır).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ------------------- KURALLAR (MAKÜ yönerge mantığı) -------------------
+  - Program seçimi: Lisans / Önlisans
+  - YSSL: Lisans 50, Önlisans 45  (Final barajı)
+    Final < YSSL => FD (doğrudan)
+  - Ham başarı notu: X = wVize*vize + wFinal*final (ağırlıklı)
+  - BDKAL = 15, BDKÜL = 95, HBAL = 35, HBÜL = 90
+    X < 15 => FF
+    X >= 95 => AA
+    15 <= X < 35 => FD
+    90 <= X < 95 => AA
+  - Diğer öğrenciler:
+    X̄ = wVize*vize_ort + wFinal*final_ort
+    N >= 20 => T = ((X - X̄)/S)*10 + 70
+    N < 20  => T = (X - X̄) + 70
+  - Sonra Tablo II (Lisans) / Tablo III (Önlisans):
+    X̄ seviyesine göre satır seçilir ve T aralığından harf notu bulunur.
+----------------------------------------------------------------------- */
+
+const CONFIG = {
+  lisans: {
+    programLabel: "Lisans",
+    yssl: 50,
+    table: [
+      {name:"Mükemmel 1", xbarLow:85.00, xbarHigh:95.00, ranges:{FD:[0.00,28.99], DD:[29.00,43.49], DC:[43.50,49.99], CC:[50.00,55.49], CB:[55.50,60.49], BB:[60.50,66.64], BA:[66.65,69.99], AA:[70.00,100.00]}},
+      {name:"Mükemmel 2", xbarLow:80.00, xbarHigh:84.99, ranges:{FD:[0.00,33.49], DD:[33.50,45.99], DC:[46.00,52.49], CC:[52.50,57.99], CB:[58.00,62.99], BB:[63.00,67.99], BA:[68.00,70.99], AA:[71.00,100.00]}},
+      {name:"Mükemmel 3", xbarLow:75.00, xbarHigh:79.99, ranges:{FD:[0.00,37.99], DD:[38.00,48.99], DC:[49.00,54.99], CC:[55.00,60.49], CB:[60.50,65.49], BB:[65.50,70.49], BA:[70.50,72.99], AA:[73.00,100.00]}},
+      {name:"Mükemmel 4", xbarLow:70.00, xbarHigh:74.99, ranges:{FD:[0.00,39.99], DD:[40.00,50.99], DC:[51.00,56.99], CC:[57.00,61.99], CB:[62.00,67.49], BB:[67.50,72.49], BA:[72.50,77.99], AA:[78.00,100.00]}},
+      {name:"Çok İyi",     xbarLow:62.50, xbarHigh:69.99, ranges:{FD:[0.00,50.99], DD:[51.00,55.99], DC:[56.00,60.49], CC:[60.50,65.49], CB:[65.50,70.49], BB:[70.50,76.99], BA:[77.00,79.99], AA:[80.00,100.00]}},
+      {name:"İyi",         xbarLow:57.50, xbarHigh:62.49, ranges:{FD:[0.00,52.49], DD:[52.50,57.99], DC:[58.00,62.49], CC:[62.50,67.99], CB:[68.00,72.99], BB:[73.00,77.99], BA:[78.00,82.49], AA:[82.50,100.00]}},
+      {name:"Orta Üstü",   xbarLow:52.50, xbarHigh:57.49, ranges:{FD:[0.00,54.99], DD:[55.00,58.99], DC:[59.00,64.99], CC:[65.00,69.99], CB:[70.00,74.99], BB:[75.00,79.99], BA:[80.00,84.49], AA:[84.50,100.00]}},
+      {name:"Orta",        xbarLow:47.50, xbarHigh:52.49, ranges:{FD:[0.00,56.99], DD:[57.00,61.99], DC:[62.00,66.99], CC:[67.00,71.99], CB:[72.00,76.99], BB:[77.00,81.49], BA:[81.50,87.49], AA:[87.50,100.00]}},
+      {name:"Zayıf",       xbarLow:42.50, xbarHigh:47.49, ranges:{FD:[0.00,58.99], DD:[59.00,63.99], DC:[64.00,68.99], CC:[69.00,73.99], CB:[74.00,78.99], BB:[79.00,83.99], BA:[84.00,88.49], AA:[88.50,100.00]}},
+      {name:"Kötü",        xbarLow:15.00, xbarHigh:42.49, ranges:{FD:[0.00,60.49], DD:[60.50,66.49], DC:[66.50,70.99], CC:[71.00,75.99], CB:[76.00,80.49], BB:[80.50,85.99], BA:[86.00,90.49], AA:[90.50,100.00]}},
+    ]
+  },
+  onlisans: {
+    programLabel: "Önlisans",
+    yssl: 45,
+    table: [
+      {name:"Mükemmel 1", xbarLow:80.00, xbarHigh:95.00, ranges:{FD:[0.00,28.99], DD:[29.00,43.49], DC:[43.50,49.99], CC:[50.00,55.49], CB:[55.50,60.49], BB:[60.50,66.64], BA:[66.65,69.99], AA:[70.00,100.00]}},
+      {name:"Mükemmel 2", xbarLow:70.00, xbarHigh:79.99, ranges:{FD:[0.00,33.49], DD:[33.50,45.99], DC:[46.00,52.49], CC:[52.50,57.99], CB:[58.00,62.99], BB:[63.00,67.99], BA:[68.00,70.99], AA:[71.00,100.00]}},
+      {name:"Mükemmel 3", xbarLow:65.00, xbarHigh:69.99, ranges:{FD:[0.00,37.99], DD:[38.00,48.99], DC:[49.00,54.99], CC:[55.00,60.49], CB:[60.50,65.49], BB:[65.50,70.49], BA:[70.50,72.99], AA:[73.00,100.00]}},
+      {name:"Mükemmel 4", xbarLow:60.00, xbarHigh:64.99, ranges:{FD:[0.00,39.99], DD:[40.00,50.99], DC:[51.00,56.99], CC:[57.00,61.99], CB:[62.00,67.49], BB:[67.50,72.49], BA:[72.50,77.99], AA:[78.00,100.00]}},
+      {name:"Çok İyi",     xbarLow:55.00, xbarHigh:59.99, ranges:{FD:[0.00,50.99], DD:[51.00,55.99], DC:[56.00,60.49], CC:[60.50,65.49], CB:[65.50,70.49], BB:[70.50,76.99], BA:[77.00,79.99], AA:[80.00,100.00]}},
+      {name:"İyi",         xbarLow:50.00, xbarHigh:54.99, ranges:{FD:[0.00,52.49], DD:[52.50,57.99], DC:[58.00,62.49], CC:[62.50,67.99], CB:[68.00,72.99], BB:[73.00,77.99], BA:[78.00,82.49], AA:[82.50,100.00]}},
+      {name:"Orta Üstü",   xbarLow:45.00, xbarHigh:49.99, ranges:{FD:[0.00,54.99], DD:[55.00,58.99], DC:[59.00,64.99], CC:[65.00,69.99], CB:[70.00,74.99], BB:[75.00,79.99], BA:[80.00,84.49], AA:[84.50,100.00]}},
+      {name:"Orta",        xbarLow:35.00, xbarHigh:44.99, ranges:{FD:[0.00,56.99], DD:[57.00,61.99], DC:[62.00,66.99], CC:[67.00,71.99], CB:[72.00,76.99], BB:[77.00,81.49], BA:[81.50,87.49], AA:[87.50,100.00]}},
+      {name:"Zayıf",       xbarLow:25.00, xbarHigh:34.99, ranges:{FD:[0.00,58.99], DD:[59.00,63.99], DC:[64.00,68.99], CC:[69.00,73.99], CB:[74.00,78.99], BB:[79.00,83.99], BA:[84.00,88.49], AA:[88.50,100.00]}},
+      {name:"Kötü",        xbarLow:15.00, xbarHigh:24.99, ranges:{FD:[0.00,60.49], DD:[60.50,66.49], DC:[66.50,70.99], CC:[71.00,75.99], CB:[76.00,80.49], BB:[80.50,85.99], BA:[86.00,90.49], AA:[90.50,100.00]}},
+    ]
+  }
+};
+
+// Sabit eşikler (yönerge mantığı)
+const THRESH = { BDKAL:15, BDKUL:95, HBAL:35, HBUL:90 };
+
+let activeKey = null;
+
+function clamp(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
+
+function pickRow(table, xbar){
+  for(const row of table){
+    if(xbar >= row.xbarLow && xbar <= row.xbarHigh) return row;
+  }
+  return null;
+}
+
+function letterFromT(ranges, t){
+  for(const [L, [lo, hi]] of Object.entries(ranges)){
+    if(t >= lo && t <= hi) return L;
+  }
+  if(t < 0) return "FD";
+  if(t > 100) return "AA";
+  return "FD";
+}
+
+function validateInputs(d){
+  const nums = [d.myMid, d.myFinal, d.clsMid, d.clsFinal, d.wMidPct, d.wFinalPct, d.N, d.S];
+  if([d.myMid, d.myFinal, d.clsMid, d.clsFinal].some(v => !Number.isFinite(v) || v<0 || v>100))
+    return "Tüm notlar 0-100 arasında olmalı.";
+  if(!Number.isFinite(d.wMidPct) || !Number.isFinite(d.wFinalPct) || d.wMidPct<0 || d.wFinalPct<0)
+    return "Ağırlıkları düzgün gir.";
+  if(Math.round((d.wMidPct + d.wFinalPct)*100)/100 !== 100)
+    return "Vize + Final ağırlıkları toplamı 100 olmalı.";
+  if(!Number.isFinite(d.N) || d.N < 1) return "N (öğrenci sayısı) en az 1 olmalı.";
+  if(!Number.isFinite(d.S) || d.S <= 0) return "Standart sapma (S) 0'dan büyük olmalı.";
+  return null;
+}
+
+function computeX(vize, fin, wMidPct, wFinalPct){
+  const wM = wMidPct/100, wF = wFinalPct/100;
+  return vize*wM + fin*wF;
+}
+
+function gradeMAKU({myMid,myFinal,clsMid,clsFinal,wMidPct,wFinalPct,N,S, programKey}){
+  const cfg = CONFIG[programKey];
+  const yssl = cfg.yssl;
+
+  // 1) Final barajı (YSSL) => FD
+  if(myFinal < yssl){
+    return { result:"FD", reason:`Final < YSSL (${yssl}) → FD`, system:"Baraj", X:null, Xbar:null, T:null, level:null };
+  }
+
+  // 2) Ham başarı notu
+  const X = computeX(myMid, myFinal, wMidPct, wFinalPct);
+
+  // 3) Mutlak eşikler (istatistiğe katılmayanlar / doğrudan not)
+  if(X < THRESH.BDKAL){
+    return { result:"FF", reason:`X < BDKAL (${THRESH.BDKAL}) → FF`, system:"Doğrudan", X, Xbar:null, T:null, level:null };
+  }
+  if(X >= THRESH.BDKUL){
+    return { result:"AA", reason:`X ≥ BDKÜL (${THRESH.BDKUL}) → AA`, system:"Doğrudan", X, Xbar:null, T:null, level:null };
+  }
+  if(X < THRESH.HBAL){
+    return { result:"FD", reason:`BDKAL ≤ X < HBAL (${THRESH.HBAL}) → FD`, system:"Doğrudan", X, Xbar:null, T:null, level:null };
+  }
+  if(X >= THRESH.HBUL){
+    return { result:"AA", reason:`HBÜL (${THRESH.HBUL}) ≤ X < BDKÜL (${THRESH.BDKUL}) → AA`, system:"Doğrudan", X, Xbar:null, T:null, level:null };
+  }
+
+  // 4) Sınıf ortalaması ve T
+  const Xbar = computeX(clsMid, clsFinal, wMidPct, wFinalPct);
+
+  let T = null;
+  let system = null;
+  if(N >= 20){
+    T = ((X - Xbar) / S) * 10 + 70;
+    system = "Bağıl (N ≥ 20)";
+  } else {
+    T = (X - Xbar) + 70;
+    system = "Yarı Bağıl (N < 20)";
+  }
+
+  const row = pickRow(cfg.table, Xbar);
+  if(!row){
+    return { result:"—", reason:`X̄=${Xbar.toFixed(2)} tablo aralığı dışında`, system, X, Xbar, T, level:null };
+  }
+
+  const L = letterFromT(row.ranges, T);
+  return { result:L, reason:`Tablo: ${row.name} (X̄ aralığı) → T=${T.toFixed(2)}`, system, X, Xbar, T, level:row.name };
+}
+
+/* ------------------- UI ------------------- */
+const selProgram = document.getElementById("selProgram");
+const formArea = document.getElementById("formArea");
+const pillProgram = document.getElementById("pillProgram");
+const finalBarajNote = document.getElementById("finalBarajNote");
+const ruleNote = document.getElementById("ruleNote");
+const tFormulaNote = document.getElementById("tFormulaNote");
+const out = document.getElementById("out");
+const chartArea = document.getElementById("chartArea");
+const tSummary = document.getElementById("tSummary");
+
+function applyProgram(key){
+  activeKey = key;
+  const cfg = CONFIG[key];
+  pillProgram.textContent = cfg.programLabel;
+  formArea.style.display = "block";
+  finalBarajNote.innerHTML = `Final baraj (YSSL): <b>${cfg.yssl}</b> (altı → <b>FD</b>)`;
+  ruleNote.innerHTML = `Kurallar: Final barajı (YSSL), BDKAL/BDKÜL ve HBAL/HBÜL eşikleri, N≥20 bağıl (T=((X−X̄)/S)×10+70), N<20 yarı bağıl (T=(X−X̄)+70).`;
+  tFormulaNote.innerHTML = `N≥20: <b>T=((X−X̄)/S)×10+70</b> • N<20: <b>T=(X−X̄)+70</b>`;
+}
+
+selProgram.addEventListener("change", (e)=>{
+  applyProgram(e.target.value);
+  out.innerHTML = "";
+  chartArea.style.display = "none";
+});
+
+function collect(){
+  return {
+    myMid: Number(document.getElementById("inpMyMid").value),
+    myFinal: Number(document.getElementById("inpMyFinal").value),
+    clsMid: Number(document.getElementById("inpClsMid").value),
+    clsFinal: Number(document.getElementById("inpClsFinal").value),
+    N: Number(document.getElementById("inpN").value),
+    S: Number(document.getElementById("inpS").value),
+    wMidPct: Number(document.getElementById("inpWMid").value),
+    wFinalPct: Number(document.getElementById("inpWFinal").value),
+    programKey: activeKey
+  };
+}
+
+/* ------------------- Canvas helpers ------------------- */
+const LETTER_ORDER = ["AA","BA","BB","CB","CC","DC","DD","FD","FF"];
+function letterIndex(L){
+  const idx = LETTER_ORDER.indexOf(L);
+  return idx >= 0 ? idx : LETTER_ORDER.length-1;
+}
+
+function setupCanvas(canvas){
+  const ctx = canvas.getContext("2d");
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, W: rect.width, H: rect.height};
+}
+function clear(ctx, W, H){
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle="#0f172a";
+  ctx.fillRect(0,0,W,H);
+}
+
+function drawAxes(ctx, plot, xlabel, ylabel){
+  ctx.strokeStyle="#1f2937"; ctx.lineWidth=1.2;
+  ctx.beginPath(); ctx.moveTo(plot.x0, plot.y1); ctx.lineTo(plot.x1, plot.y1); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(plot.x0, plot.y0); ctx.lineTo(plot.x0, plot.y1); ctx.stroke();
+  ctx.fillStyle="#cdd7ea"; ctx.font="12px Arial";
+  ctx.fillText(xlabel, plot.x1-22, plot.y1+22);
+  ctx.save(); ctx.translate(plot.x0-28, plot.y0+12); ctx.rotate(-Math.PI/2); ctx.fillText(ylabel, 0,0); ctx.restore();
+}
+
+function xScale(v, vmin, vmax, plot){ return plot.x0 + (v - vmin) * (plot.x1 - plot.x0) / (vmax - vmin); }
+function yLetterScale(letter, plot){
+  const i = letterIndex(letter);
+  const max = LETTER_ORDER.length-1;
+  return plot.y1 - (i * (plot.y1-plot.y0) / max);
+}
+
+function drawLine(ctx, pts, color, width){
+  ctx.strokeStyle=color; ctx.lineWidth=width;
+  ctx.beginPath();
+  pts.forEach((p,i)=> i===0 ? ctx.moveTo(p.x,p.y) : ctx.lineTo(p.x,p.y));
+  ctx.stroke();
+}
+function drawPoint(ctx, x, y, color, size){
+  ctx.fillStyle=color;
+  ctx.beginPath(); ctx.arc(x,y,size,0,Math.PI*2); ctx.fill();
+}
+
+/* ------------------- Charts ------------------- */
+function drawFinalVsLetter(d){
+  const canvas = document.getElementById("cvFinalVsLetter");
+  const {ctx, W, H} = setupCanvas(canvas);
+  clear(ctx, W, H);
+
+  const plot = {x0:46, y0:18, x1:W-10, y1:H-40};
+  drawAxes(ctx, plot, "Final", "Harf");
+
+  const xmin=0, xmax=100;
+  const ticks=[0,20,40,60,80,100];
+  ctx.fillStyle="#cdd7ea"; ctx.font="12px Arial";
+  ticks.forEach(v=>{
+    const x = xScale(v,xmin,xmax,plot);
+    ctx.strokeStyle="#1f2937";
+    ctx.beginPath(); ctx.moveTo(x,plot.y0); ctx.lineTo(x,plot.y1); ctx.stroke();
+    ctx.fillText(String(v), x-6, plot.y1+18);
+  });
+
+  // çizgi: final değişsin
+  const pts = [];
+  for(let f=0; f<=100; f+=0.5){
+    const d2 = {...d, myFinal:f};
+    const r = gradeMAKU(d2);
+    const x = xScale(f,xmin,xmax,plot);
+    const y = yLetterScale(r.result, plot);
+    pts.push({x,y});
+  }
+  drawLine(ctx, pts, "#16a34a", 2);
+
+  // kullanıcının noktası
+  const r0 = gradeMAKU(d);
+  const px = xScale(d.myFinal,xmin,xmax,plot);
+  const py = yLetterScale(r0.result, plot);
+  drawPoint(ctx, px, py, "#ef4444", 4);
+  ctx.fillStyle="#cdd7ea"; ctx.font="12px Arial";
+  ctx.fillText(`Sen (${d.myFinal}) → ${r0.result}`, px+8, py-8);
+
+  const legend = document.getElementById("legendFinalVs");
+  legend.innerHTML = `<span class="tag"><span class="dot" style="background:#16a34a"></span>Final taraması</span>
+                      <span class="tag"><span class="dot" style="background:#ef4444"></span>Senin noktan</span>`;
+}
+
+function drawTBar(T){
+  const canvas = document.getElementById("cvTBar");
+  const {ctx, W, H} = setupCanvas(canvas);
+  clear(ctx, W, H);
+
+  const plot = {x0:40, y0:30, x1:W-20, y1:H-60};
+
+  // bar
+  const tClamped = clamp(T, 0, 100);
+  const x0 = plot.x0, x1 = plot.x1;
+  const barY = (plot.y0+plot.y1)/2;
+  const barH = 26;
+
+  ctx.fillStyle="rgba(255,255,255,0.06)";
+  ctx.fillRect(x0, barY-barH/2, x1-x0, barH);
+
+  ctx.fillStyle="rgba(33,230,193,0.28)";
+  ctx.fillRect(x0, barY-barH/2, (x1-x0)*(tClamped/100), barH);
+
+  // ticks
+  ctx.fillStyle="#cdd7ea"; ctx.font="12px Arial";
+  for(let t=0; t<=100; t+=10){
+    const x = x0 + (x1-x0)*(t/100);
+    ctx.strokeStyle="#1f2937";
+    ctx.beginPath(); ctx.moveTo(x, barY-barH/2-10); ctx.lineTo(x, barY+barH/2+10); ctx.stroke();
+    ctx.fillText(String(t), x-7, barY+barH/2+28);
+  }
+
+  // marker
+  const mx = x0 + (x1-x0)*(tClamped/100);
+  ctx.strokeStyle="#ef4444"; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(mx, barY-barH/2-14); ctx.lineTo(mx, barY+barH/2+14); ctx.stroke();
+  ctx.fillStyle="#ef4444";
+  ctx.fillText(`T=${T.toFixed(2)} (kırpılmış: ${tClamped.toFixed(2)})`, x0, plot.y0-8);
+}
+
+/* ------------------- Main ------------------- */
+function hesapla(){
+  out.innerHTML = "";
+  chartArea.style.display = "none";
+
+  if(!activeKey){
+    out.innerHTML = `<div class="card warn">Önce <b>Lisans / Önlisans</b> seç.</div>`;
+    return;
+  }
+
+  const d = collect();
+  const err = validateInputs(d);
+  if(err){
+    out.innerHTML = `<div class="card warn">Uyarı: ${err}</div>`;
+    return;
+  }
+
+  const r = gradeMAKU(d);
+
+  // Özet tablo
+  const XbarText = (r.Xbar===null) ? "—" : r.Xbar.toFixed(2);
+  const XText = (r.X===null) ? "—" : r.X.toFixed(2);
+  const TText = (r.T===null) ? "—" : r.T.toFixed(2);
+
+  out.innerHTML = `
+    <div class="card good">
+      <b>SONUÇ:</b> Harf Notu = <b style="color:var(--accent)">${r.result}</b><br>
+      <span class="muted">${r.reason}</span>
+      <div class="muted">Sistem: <b>${r.system}</b>${r.level ? ` • Seviye: <b>${r.level}</b>` : ""}</div>
+    </div>
+
+    <div class="card">
+      <table>
+        <thead><tr><th>Değer</th><th>Sonuç</th></tr></thead>
+        <tbody>
+          <tr><td>Program</td><td>${CONFIG[activeKey].programLabel}</td></tr>
+          <tr><td>YSSL (Final Baraj)</td><td>${CONFIG[activeKey].yssl}</td></tr>
+          <tr><td>Ham Başarı Notu (X)</td><td>${XText}</td></tr>
+          <tr><td>Sınıf Ham Ortalaması (X̄)</td><td>${XbarText}</td></tr>
+          <tr><td>N</td><td>${d.N}</td></tr>
+          <tr><td>Standart Sapma (S)</td><td>${d.S.toFixed(2)}</td></tr>
+          <tr><td>T Skoru</td><td>${TText}</td></tr>
+        </tbody>
+      </table>
+      <div class="muted">X ve X̄: ağırlıklı (Vize %${d.wMidPct} + Final %${d.wFinalPct})</div>
+    </div>
+  `;
+
+  // T özeti + grafik
+  chartArea.style.display = "grid";
+
+  // T özet kutusu
+  const formula = (d.N >= 20)
+    ? `T = ((X − X̄) / S) × 10 + 70`
+    : `T = (X − X̄) + 70`;
+
+  tSummary.innerHTML = `
+    <div><b>Formül:</b> ${formula}</div>
+    <div class="muted">X=${XText} • X̄=${XbarText} • S=${d.S.toFixed(2)} • N=${d.N}</div>
+  `;
+
+  drawFinalVsLetter(d);
+
+  if(r.T !== null){
+    drawTBar(r.T);
+  } else {
+    drawTBar(0);
+  }
+}
+
+window.addEventListener("resize", ()=>{
+  if(chartArea.style.display !== "none"){
+    try{ hesapla(); }catch(e){}
+  }
+});
+</script>
+
+</body>
+</html>

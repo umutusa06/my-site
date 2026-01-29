@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ege Üniversitesi | AGNO / GANO Hesaplayıcı</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b132b;
+      --bg2:#111b33;
+      --card:#0f172a;
+      --glass:rgba(255,255,255,0.05);
+      --accent:#f7b733;
+      --accent2:#21e6c1;
+      --border:#1f2a44;
+      --text:#e8eefb;
+      --muted:#9fb1d1;
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      background:radial-gradient(circle at 22% 16%, rgba(33,230,193,0.16), transparent 32%),
+                 radial-gradient(circle at 82% 8%, rgba(247,183,51,0.16), transparent 32%),
+                 linear-gradient(145deg, var(--bg), var(--bg2));
+      min-height:100vh;
+      padding:26px 18px 36px;
+      font-family:"Space Grotesk","Manrope",system-ui,-apple-system,sans-serif;
+      color:var(--text);
+    }
+    .shell{max-width:900px;margin:0 auto;padding:24px 18px 30px;}
+    nav.nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+    nav.nav a{
+      color:var(--text);text-decoration:none;padding:10px 14px;
+      border:1px solid var(--border);border-radius:12px;
+      background:rgba(255,255,255,0.05);font-weight:800;
+      transition:background .15s ease,border-color .15s ease,color .15s ease;
+    }
+    nav.nav a.active{border-color:var(--accent);color:var(--accent);background:rgba(247,183,51,0.12)}
+    .container{
+      background:var(--glass);
+      border:1px solid var(--border);
+      border-radius:20px;
+      box-shadow:0 18px 50px rgba(0,0,0,0.28);
+      max-width:900px;
+      width:100%;
+      padding:26px;
+      margin:0 auto;
+    }
+    h1{color:var(--accent);margin:0 0 6px;font-size:30px;letter-spacing:-0.3px}
+    .subtitle{color:var(--muted);margin:0 0 6px;font-size:15px}
+    .muted{color:var(--muted);font-size:13.5px;line-height:1.4}
+    label{display:block;margin-bottom:8px;color:var(--text);font-weight:700;font-size:14px}
+    input,select{
+      width:100%;
+      padding:12px 14px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      font-size:15px;
+      transition:all 0.2s ease;
+      background:rgba(255,255,255,0.03);
+      color:var(--text);
+    }
+    input:focus,select:focus{outline:none;border-color:var(--accent2);box-shadow:0 0 0 3px rgba(33,230,193,0.22);}
+    .btn{
+      width:100%;
+      padding:14px;
+      background:linear-gradient(120deg,var(--accent),#f37335);
+      color:#0b0c10;
+      border:none;
+      border-radius:12px;
+      font-size:16px;
+      font-weight:800;
+      cursor:pointer;
+      transition:all 0.2s ease;
+      box-shadow:0 12px 30px rgba(243,115,53,0.24);
+    }
+    .btn:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(243,115,53,0.32);}
+    .step-1-area{margin-bottom:20px;}
+    .course-row{
+      display:grid;
+      grid-template-columns:2fr 1fr 1fr;
+      gap:14px;
+      margin-bottom:14px;
+      padding:12px;
+      background:rgba(255,255,255,0.02);
+      border:1px solid var(--border);
+      border-radius:12px;
+    }
+    .gano-section{margin-top:28px;padding-top:18px;border-top:1px dashed var(--border);}
+    .checkbox-wrapper{display:flex;align-items:center;gap:10px;margin-bottom:15px;cursor:pointer;color:var(--text);}
+    .checkbox-wrapper input[type="checkbox"]{width:18px;height:18px;cursor:pointer;}
+    .previous-stats{display:grid;grid-template-columns:1fr 1fr;gap:14px;display:none;}
+    .result{
+      margin-top:26px;
+      padding:22px;
+      background:linear-gradient(135deg, rgba(33,230,193,0.1), rgba(247,183,51,0.1));
+      border-radius:16px;
+      border:1px solid var(--border);
+      display:none;
+    }
+    .result h2{text-align:center;color:var(--text);margin-bottom:14px;letter-spacing:-0.2px}
+    .result-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;}
+    .score-card{
+      background:var(--card);
+      padding:18px;
+      border-radius:12px;
+      text-align:center;
+      border:1px solid var(--border);
+      box-shadow:0 8px 26px rgba(0,0,0,0.25);
+    }
+    .score-title{font-size:13px;color:var(--muted);margin-bottom:6px;letter-spacing:0.1px}
+    .score-value{font-size:30px;font-weight:800;color:var(--accent);}
+    @media (max-width:680px){
+      .container{padding:20px;}
+      .course-row{grid-template-columns:1fr;gap:10px;}
+      .previous-stats{grid-template-columns:1fr;}
+      .result-grid{grid-template-columns:1fr;}
+    }
+  </style>
+</head>
+<body>
+<div class="shell">
+  <nav class="nav">
+    <a href="index.html">Ana Sayfa</a>
+    <a href="ege_harf_notu_otomatik_grafikli.html">Harf Notu + Grafik</a>
+    <a href="ege_heatmap.html">Heatmap</a>
+    <a href="ege_detaylifinal.html">Hedef Final</a>
+    <a href="ege_anogano.html" class="active">AGNO / GANO</a>
+    <a href="hakkinda.html">Hakkında</a>
+  </nav>
+
+  <div class="container">
+    <div>
+      <h1>Ortalama Hesaplayıcı</h1>
+      <p class="subtitle">Ege Üniversitesi | Dönem (ANO) ve Genel Ortalama (GANO)</p>
+      <div class="muted" id="uniNote">
+        Bu sayfa ANO/GANO hesaplar. Ders bazlı kredi (Kredi/AKTS) ve harf notunu girerek dönem ortalamanı bulursun.
+        GANO için önceki toplam kredini ve önceki GANO’nu ekleyebilirsin.
+      </div>
+    </div>
+
+    <div class="step-1-area" style="margin-top:18px;">
+      <label>Bu dönemde kaç dersin var?</label>
+      <div style="display:flex; gap:10px;">
+        <input type="number" id="courseCount" placeholder="örn: 5" min="1" max="15">
+        <button class="btn" id="btnGenerate" style="margin-top:0; width:auto; padding:0 30px;" onclick="generateRows()">Getir</button>
+      </div>
+    </div>
+
+    <div id="calculatorBody" style="display:none;">
+      <div id="courseListArea"></div>
+
+      <div class="gano-section">
+        <label class="checkbox-wrapper">
+          <input type="checkbox" id="includeGano" onchange="toggleGanoInputs()">
+          <span>Genel ortalamamı (GANO) da hesapla</span>
+        </label>
+
+        <div class="previous-stats" id="prevStatsArea">
+          <div>
+            <label>Önceki Toplam Kredi</label>
+            <input type="number" id="prevCredits" placeholder="örn: 60" min="0">
+          </div>
+          <div>
+            <label>Önceki GANO</label>
+            <input type="number" id="prevGano" step="0.01" placeholder="örn: 2.80" min="0" max="4">
+          </div>
+        </div>
+      </div>
+
+      <button class="btn" id="btnCalc" onclick="calculate()">HESAPLA</button>
+    </div>
+
+    <div id="result" class="result"></div>
+  </div>
+</div>
+
+<script>
+/**
+ * Not katsayıları (standart 4.00 sistem):
+ * AA 4.00, BA 3.50, BB 3.00, CB 2.50, CC 2.00, DC 1.50, DD 1.00, FD 0.50, FF 0.00
+ * Eğer Ege Üniversitesi'nde farklı harf/katsayı tablosu kullanılıyorsa yalnızca GRADE_SCALE güncellenir.
+ */
+const GRADE_SCALE = [
+  { label: "AA (4.00)", value: 4.00 },
+  { label: "BA (3.50)", value: 3.50 },
+  { label: "BB (3.00)", value: 3.00 },
+  { label: "CB (2.50)", value: 2.50 },
+  { label: "CC (2.00)", value: 2.00 },
+  { label: "DC (1.50)", value: 1.50 },
+  { label: "DD (1.00)", value: 1.00 },
+  { label: "FD (0.50)", value: 0.50 },
+  { label: "FF (0.00)", value: 0.00 }
+];
+
+function generateRows() {
+  const count = parseInt(document.getElementById('courseCount').value, 10);
+  const listArea = document.getElementById('courseListArea');
+  const calcBody = document.getElementById('calculatorBody');
+
+  if (!Number.isFinite(count) || count < 1) {
+    alert("Lütfen geçerli bir ders sayısı giriniz.");
+    return;
+  }
+
+  listArea.innerHTML = "";
+
+  for (let i = 1; i <= count; i++) {
+    const row = document.createElement('div');
+    row.className = 'course-row';
+
+    const gradeOptions = ['<option value="" disabled selected>Not Seç</option>']
+      .concat(GRADE_SCALE.map(g => `<option value="${g.value}">${g.label}</option>`))
+      .join("");
+
+    row.innerHTML = `
+      <div>
+        <input type="text" placeholder="${i}. Ders Adı (opsiyonel)">
+      </div>
+      <div>
+        <input type="number" class="credit-input" placeholder="Kredi/AKTS" min="0" step="0.5">
+      </div>
+      <div>
+        <select class="grade-input">
+          ${gradeOptions}
+        </select>
+      </div>
+    `;
+    listArea.appendChild(row);
+  }
+
+  calcBody.style.display = 'block';
+  setTimeout(() => {
+    calcBody.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+function toggleGanoInputs() {
+  const checkbox = document.getElementById('includeGano');
+  const area = document.getElementById('prevStatsArea');
+  area.style.display = checkbox.checked ? 'grid' : 'none';
+  if (checkbox.checked) document.getElementById('prevCredits').focus();
+}
+
+function calculate() {
+  const credits = document.querySelectorAll('.credit-input');
+  const grades = document.querySelectorAll('.grade-input');
+
+  let semesterPoints = 0;
+  let semesterCredits = 0;
+
+  for (let i = 0; i < credits.length; i++) {
+    const cr = parseFloat(credits[i].value);
+    const gr = parseFloat(grades[i].value);
+
+    if (Number.isFinite(cr) && Number.isFinite(gr) && cr > 0) {
+      semesterPoints += (cr * gr);
+      semesterCredits += cr;
+    }
+  }
+
+  if (semesterCredits === 0) {
+    alert("Lütfen en az bir dersin kredisini ve notunu giriniz.");
+    return;
+  }
+
+  const ano = semesterPoints / semesterCredits;
+
+  let ganoHtml = '';
+  const includeGano = document.getElementById('includeGano').checked;
+
+  if (includeGano) {
+    const prevCr = parseFloat(document.getElementById('prevCredits').value);
+    const prevGano = parseFloat(document.getElementById('prevGano').value);
+
+    if (!(Number.isFinite(prevCr) && prevCr >= 0 && Number.isFinite(prevGano) && prevGano >= 0 && prevGano <= 4)) {
+      alert("GANO hesaplamak için önceki toplam kredi ve önceki GANO değerini doğru gir.");
+      return;
+    }
+
+    const totalPoints = (prevGano * prevCr) + semesterPoints;
+    const totalCredits = prevCr + semesterCredits;
+
+    const newGano = totalCredits > 0 ? (totalPoints / totalCredits) : 0;
+
+    ganoHtml = `
+      <div class="score-card" style="border: 2px solid rgba(33,230,193,0.55);">
+        <div class="score-title">YENİ GENEL ORTALAMA (GANO)</div>
+        <div class="score-value">${newGano.toFixed(2)}</div>
+      </div>
+    `;
+  }
+
+  const resultDiv = document.getElementById('result');
+  resultDiv.innerHTML = `
+    <h2>Hesaplama Sonucu</h2>
+    <div class="result-grid">
+      <div class="score-card">
+        <div class="score-title">DÖNEM ORTALAMASI (ANO)</div>
+        <div class="score-value">${ano.toFixed(2)}</div>
+      </div>
+      ${ganoHtml}
+    </div>
+    <div style="text-align:center; margin-top:20px; color:#cfd8ea;">
+      Toplam Dönem Kredisi: <strong>${semesterCredits.toFixed(2)}</strong>
+      <span style="opacity:.8;"> | </span>
+      Dönem Toplam Puan: <strong>${semesterPoints.toFixed(2)}</strong>
+    </div>
+  `;
+
+  resultDiv.style.display = 'block';
+  resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+</script>
+</body>
+</html>

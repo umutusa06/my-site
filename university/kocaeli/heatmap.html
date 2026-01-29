@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KOÜ | Final–σ Heatmap (Harf Notu)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b132b;
+      --bg2:#0f162f;
+      --card:#0f172a;
+      --glass:rgba(255,255,255,0.05);
+      --accent:#f7b733;
+      --accent2:#21e6c1;
+      --text:#e8eefb;
+      --muted:#9fb1d1;
+      --border:#1f2a44;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:"Space Grotesk","Manrope",system-ui,-apple-system,sans-serif;
+      min-height:100vh;
+      background:radial-gradient(circle at 20% 18%, rgba(33,230,193,0.16), transparent 32%),
+                 radial-gradient(circle at 82% 8%, rgba(247,183,51,0.16), transparent 32%),
+                 linear-gradient(145deg, var(--bg), var(--bg2));
+      color:var(--text);
+    }
+    .shell{max-width:1100px;margin:0 auto;padding:26px 18px 34px;}
+    nav.nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+    nav.nav a{
+      color:var(--text);text-decoration:none;padding:10px 14px;
+      border:1px solid var(--border);border-radius:12px;
+      background:rgba(255,255,255,0.05);font-weight:800;
+      transition:background .15s ease,border-color .15s ease,color .15s ease;
+    }
+    nav.nav a.active{border-color:var(--accent);color:var(--accent);background:rgba(247,183,51,0.12);}
+    .panel{
+      background:var(--glass);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:16px;
+      box-shadow:0 18px 50px rgba(0,0,0,0.28);
+      margin-bottom:14px;
+    }
+    h1,h2{margin:0 0 10px;}
+    h1{font-size:26px;letter-spacing:-0.3px;}
+    h2{font-size:20px;}
+    .lead{margin:0 0 12px;color:var(--muted);line-height:1.6;}
+    label{font-weight:700;display:block;margin-top:8px;font-size:14px}
+    input,select,button{
+      width:100%;
+      padding:11px 12px;
+      margin-top:6px;
+      box-sizing:border-box;
+      font-size:15px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.06);
+      color:var(--text);
+    }
+    input:focus,select:focus{
+      outline:none;
+      border-color:var(--accent2);
+      box-shadow:0 0 0 3px rgba(33,230,193,0.2);
+    }
+    button{
+      background:linear-gradient(120deg,var(--accent),#f37335);
+      color:#0b0c10;
+      border:none;
+      border-radius:12px;
+      font-weight:800;
+      cursor:pointer;
+      margin-top:12px;
+      box-shadow:0 12px 30px rgba(243,115,53,0.25);
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+    button:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(243,115,53,0.32);}
+    .muted{font-size:12px;color:var(--muted);margin-top:4px}
+    .card{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;padding:12px;margin-top:10px;}
+    .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+    .full{grid-column:1/-1}
+    .checkRow{display:flex;align-items:center;gap:10px;margin-top:10px}
+    .extraWrap{margin-top:10px}
+    .extraGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+    .extraTitle{font-weight:900;margin-bottom:6px}
+    .layout{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;margin-top:14px}
+    @media (max-width: 980px){ .layout{grid-template-columns:1fr} }
+    canvas{width:100%;height:520px;display:block;border-radius:12px;background:#0f172a}
+    .legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    .pill{padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.06);font-size:12px;color:var(--text);display:inline-flex;gap:8px;align-items:center;border:1px solid var(--border)}
+    .sw{width:14px;height:14px;border-radius:4px;border:1px solid rgba(0,0,0,.12)}
+    .tooltip{
+      position:fixed; pointer-events:none; z-index:99;
+      background:#0f172a; color:#fff; padding:10px 12px; border-radius:10px;
+      font-size:12px; max-width:320px; line-height:1.35; display:none;
+      box-shadow:0 10px 25px rgba(0,0,0,.35); border:1px solid var(--border);
+    }
+    .tipTitle{font-weight:900;margin-bottom:6px}
+    .gridSmall{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav class="nav">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="harf_notu_otomatik_grafikli.html">Harf Notu + Grafik</a>
+      <a class="active" href="heatmap.html">Heatmap</a>
+      <a href="detaylifinal.html">Hedef Final</a>
+      <a href="anogano.html">AGNO / GANO</a>
+      <a href="hakkinda.html">Hakkında</a>
+    </nav>
+
+    <div class="panel">
+      <h1>KOÜ | Final–σ Heatmap</h1>
+      <p class="lead">
+        Final/Bütünleme notu ve standart sapma (σ) değiştikçe <b>KOÜ Bağıl/Mutlak değerlendirme</b> mantığında harf notunun nasıl değiştiğini görselleştirir.
+        <br>
+        <span class="muted">
+          KOÜ özeti: <b>Final/Büt &lt; 40 ⇒ FF</b>. <b>N &lt; 25</b> veya <b>X̄ ≥ 80 ⇒ MDS (Tablo-1)</b>. Diğer durumlarda <b>BDS</b> (T-skoru &amp; Tablo-2).
+          Ayrıca <b>BDS sonucu, DSN’in Tablo-1 karşılığından daha düşük olamaz</b>.
+        </span>
+      </p>
+
+      <div class="row">
+        <div>
+          <label>Vize Notun</label>
+          <input id="inpMyMid" type="number" min="0" max="100" placeholder="0-100">
+        </div>
+        <div>
+          <label>Final / Bütünleme Notun (mevcut)</label>
+          <input id="inpMyFinal" type="number" min="0" max="100" placeholder="0-100">
+          <div class="muted">Heatmap final/büt aralığını tarar; burası mevcut durum için.</div>
+        </div>
+        <div>
+          <label>Sınıf Vize Ortalaması</label>
+          <input id="inpClsMid" type="number" min="0" max="100" placeholder="0-100">
+        </div>
+        <div>
+          <label>Sınıf Final Ortalaması</label>
+          <input id="inpClsFinal" type="number" min="0" max="100" placeholder="0-100">
+        </div>
+
+        <div>
+          <label>Vize Ağırlığı (%)</label>
+          <input id="inpWMid" type="number" min="0" max="100" value="40">
+        </div>
+        <div>
+          <label>Final Ağırlığı (%)</label>
+          <input id="inpWFinal" type="number" min="0" max="100" value="60">
+        </div>
+
+        <div>
+          <label>Bağıl değerlendirmeye katılan öğrenci sayısı (N)</label>
+          <input id="inpN" type="number" min="1" step="1" value="30">
+          <div class="muted">KOÜ: N &lt; 25 ise <b>MDS</b> uygulanır.</div>
+        </div>
+
+        <div>
+          <label>Bütünleme sonrası mı?</label>
+          <select id="inpIsMakeup">
+            <option value="0" selected>Hayır (Final)</option>
+            <option value="1">Evet (Bütünleme)</option>
+          </select>
+          <div class="muted">KOÜ: Bütünleme sonrası harf notu <b>Tablo-1 (MDS)</b> ile verilir.</div>
+        </div>
+
+        <div class="full">
+          <div class="checkRow">
+            <input id="chkExtra" type="checkbox" style="width:auto;transform:scale(1.1)">
+            <label for="chkExtra" style="margin:0;font-weight:900">Ek değerlendirme var (ödev/quiz/proje...)</label>
+          </div>
+        </div>
+
+        <div id="extraArea" class="full" style="display:none">
+          <label>Kaç adet ek kalem?</label>
+          <select id="inpExtraCount">
+            <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+            <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+          </select>
+          <div class="muted">Her ek kalem için: Ad, ağırlık %, senin notun, sınıf ortalaması</div>
+          <div id="extraList" class="extraWrap"></div>
+        </div>
+
+        <div class="full panel" style="margin-top:8px;">
+          <div class="gridSmall">
+            <div>
+              <label>Final/Büt Aralığı</label>
+              <div class="gridSmall">
+                <input id="inpFinalMin" type="number" min="0" max="100" value="40" placeholder="min">
+                <input id="inpFinalMax" type="number" min="0" max="100" value="100" placeholder="max">
+              </div>
+              <div class="muted">Baraj: <b>40</b>. Örn: 40–100</div>
+            </div>
+            <div>
+              <label>σ Aralığı</label>
+              <div class="gridSmall">
+                <input id="inpSigmaMin" type="number" min="1" max="50" value="5" placeholder="min">
+                <input id="inpSigmaMax" type="number" min="1" max="50" value="30" placeholder="max">
+              </div>
+              <div class="muted">Örn: 5–30</div>
+            </div>
+          </div>
+
+          <div class="gridSmall">
+            <div>
+              <label>Hücre Yoğunluğu</label>
+              <select id="inpRes">
+                <option value="40">Normal (40x40)</option>
+                <option value="55" selected>Detaylı (55x55)</option>
+                <option value="70">Çok detay (70x70)</option>
+              </select>
+              <div class="muted">Daha detay = daha ağır çizim.</div>
+            </div>
+            <div>
+              <label>Harf seti</label>
+              <select id="inpLetterSet">
+                <option value="9" selected>FF-FD-DD-DC-CC-CB-BB-BA-AA</option>
+                <option value="6">FF-DC-CC-CB-BB-AA (basit)</option>
+              </select>
+              <div class="muted">KOÜ Tablo-1/2’de <b>FD</b> var; 9’lu set önerilir.</div>
+            </div>
+          </div>
+
+          <button type="button" onclick="drawAll()">Heatmap Çiz</button>
+          <div id="status" class="muted"></div>
+        </div>
+      </div>
+
+      <div class="layout">
+        <div class="panel">
+          <div style="font-weight:900;margin-bottom:8px;">Heatmap</div>
+          <canvas id="cv"></canvas>
+          <div class="legend" id="legend"></div>
+          <div class="muted">X: Final/Büt — Y: σ. Hücre rengi = harf notu.</div>
+        </div>
+
+        <div class="panel">
+          <div style="font-weight:900;margin-bottom:8px;">Mevcut Durum Özeti</div>
+          <div id="summary" class="muted">Henüz hesaplanmadı.</div>
+          <div class="card" style="margin-top:12px;">
+            <b>Notlar</b>
+            <div class="muted">
+              1) Final/Büt &lt; 40 ise DSN’e bakılmadan <b>FF</b>. <br>
+              2) BDS’de <b>DSN &lt; 15</b> olanlar bağıl değerlendirmeye girmez (heatmap’te FF rengi). <br>
+              3) BDS sonucu, DSN’in Tablo-1 karşılığından düşükse <b>koruma</b> ile yukarı çekilir.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tooltip" id="tip"></div>
+
+<script>
+/* ===========================
+   KOÜ HEATMAP — core rules
+   - Exam (final/makeup) < 40 => FF
+   - MDS if: makeup OR N < 25 OR class DSN mean >= 80
+   - Else BDS: T = 50 + 10*((DSN - Xbar)/sigma), Table-2 mapping
+   - Protection: BDS letter cannot be lower than Table-1 letter for DSN
+   - DSN < 15 => cannot apply BDS (treated as "BDS dışı / büt gerekir" in tooltip)
+   =========================== */
+
+function clamp(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
+function round2(x){ return Math.round(x*100)/100; }
+
+const EXAM_MIN = 40;       // KOÜ baraj
+const MDS_MEAN_LIMIT = 80; // KOÜ: Xbar >= 80 => MDS
+const MDS_N_LIMIT = 25;    // KOÜ: N < 25 => MDS
+const BDS_DSN_MIN = 15;    // KOÜ: DSN < 15 => BDS dışı
+
+/* ---------- KOÜ Tablo-1 (MDS) ---------- */
+function table1Letter(dsn){
+  const x = Number(dsn);
+  if(!Number.isFinite(x)) return "FF";
+  if(x >= 90) return "AA";
+  if(x >= 80) return "BA";
+  if(x >= 75) return "BB";
+  if(x >= 70) return "CB";
+  if(x >= 60) return "CC";
+  if(x >= 50) return "DC";
+  if(x >= 40) return "DD";
+  if(x >= 30) return "FD";
+  return "FF";
+}
+
+/* Harf sıralaması (düşük -> yüksek) */
+const LETTER_ORDER_9 = ["FF","FD","DD","DC","CC","CB","BB","BA","AA"];
+function letterIndex9(L){ return LETTER_ORDER_9.indexOf(L); }
+function maxLetter9(a,b){
+  const ia = letterIndex9(a), ib = letterIndex9(b);
+  if(ia === -1) return b;
+  if(ib === -1) return a;
+  return ia >= ib ? a : b;
+}
+
+/* ---------- KOÜ Tablo-2 (BDS) ----------
+   Bandlar: Her seviyede T aralıklarına göre harf.
+*/
+const TABLE2 = [
+  {
+    name:"Mükemmel",
+    check: (xbar)=> xbar > 70 && xbar < 80,
+    bands: [
+      {L:"FF", lo:-Infinity, hi:23.99},
+      {L:"FD", lo:24, hi:28.99},
+      {L:"DD", lo:29, hi:33.99},
+      {L:"DC", lo:34, hi:38.99},
+      {L:"CC", lo:39, hi:43.99},
+      {L:"CB", lo:44, hi:48.99},
+      {L:"BB", lo:49, hi:53.99},
+      {L:"BA", lo:54, hi:58.99},
+      {L:"AA", lo:59, hi:Infinity},
+    ]
+  },
+  {
+    name:"Çok İyi",
+    check: (xbar)=> xbar > 62.5 && xbar <= 70,
+    bands: [
+      {L:"FF", lo:-Infinity, hi:25.99},
+      {L:"FD", lo:26, hi:30.99},
+      {L:"DD", lo:31, hi:35.99},
+      {L:"DC", lo:36, hi:40.99},
+      {L:"CC", lo:41, hi:45.99},
+      {L:"CB", lo:46, hi:50.99},
+      {L:"BB", lo:51, hi:55.99},
+      {L:"BA", lo:56, hi:60.99},
+      {L:"AA", lo:61, hi:Infinity},
+    ]
+  },
+  {
+    name:"İyi",
+    check: (xbar)=> xbar > 57.5 && xbar <= 62.5,
+    bands: [
+      {L:"FF", lo:-Infinity, hi:27.99},
+      {L:"FD", lo:28, hi:32.99},
+      {L:"DD", lo:33, hi:37.99},
+      {L:"DC", lo:38, hi:42.99},
+      {L:"CC", lo:43, hi:47.99},
+      {L:"CB", lo:48, hi:52.99},
+      {L:"BB", lo:53, hi:57.99},
+      {L:"BA", lo:58, hi:62.99},
+      {L:"AA", lo:63, hi:Infinity},
+    ]
+  },
+  {
+    name:"Ortanın Üstü",
+    check: (xbar)=> xbar > 52.5 && xbar <= 57.5,
+    bands: [
+      {L:"FF", lo:-Infinity, hi:29.99},
+      {L:"FD", lo:30, hi:34.99},
+      {L:"DD", lo:35, hi:39.99},
+      {L:"DC", lo:40, hi:44.99},
+      {L:"CC", lo:45, hi:49.99},
+      {L:"CB", lo:50, hi:54.99},
+      {L:"BB", lo:55, hi:59.99},
+      {L:"BA", lo:60, hi:64.99},
+      {L:"AA", lo:65, hi:Infinity},
+    ]
+  },
+  {
+    name:"Orta",
+    check: (xbar)=> xbar > 47.5 && xbar <= 52.5,
+    bands: [
+      {L:"FF", lo:-Infinity, hi:31.99},
+      {L:"FD", lo:32, hi:36.99},
+      {L:"DD", lo:37, hi:41.99},
+      {L:"DC", lo:42, hi:46.99},
+      {L:"CC", lo:47, hi:51.99},
+      {L:"CB", lo:52, hi:56.99},
+      {L:"BB", lo:57, hi:61.99},
+      {L:"BA", lo:62, hi:66.99},
+      {L:"AA", lo:67, hi:Infinity},
+    ]
+  },
+  {
+    name:"Zayıf",
+    check: (xbar)=> xbar > 42.5 && xbar <= 47.5,
+    bands: [
+      {L:"FF", lo:-Infinity, hi:33.99},
+      {L:"FD", lo:34, hi:38.99},
+      {L:"DD", lo:39, hi:43.99},
+      {L:"DC", lo:44, hi:48.99},
+      {L:"CC", lo:49, hi:53.99},
+      {L:"CB", lo:54, hi:58.99},
+      {L:"BB", lo:59, hi:63.99},
+      {L:"BA", lo:64, hi:68.99},
+      {L:"AA", lo:69, hi:Infinity},
+    ]
+  },
+  {
+    name:"Kötü",
+    check: (xbar)=> xbar <= 42.5,
+    bands: [
+      {L:"FF", lo:-Infinity, hi:35.99},
+      {L:"FD", lo:36, hi:40.99},
+      {L:"DD", lo:41, hi:45.99},
+      {L:"DC", lo:46, hi:50.99},
+      {L:"CC", lo:51, hi:55.99},
+      {L:"CB", lo:56, hi:60.99},
+      {L:"BB", lo:61, hi:65.99},
+      {L:"BA", lo:66, hi:70.99},
+      {L:"AA", lo:71, hi:Infinity},
+    ]
+  }
+];
+
+function pickTable2Row(xbar){
+  for(const r of TABLE2){
+    if(r.check(xbar)) return r;
+  }
+  return TABLE2[TABLE2.length-1];
+}
+
+function letterFromTable2(xbar, t){
+  const row = pickTable2Row(xbar);
+  for(const b of row.bands){
+    if(t >= b.lo && t <= b.hi) return { letter:b.L, rowName: row.name };
+  }
+  return { letter:"FF", rowName: row.name };
+}
+
+/* ---------- UI: extras ---------- */
+const chkExtra = document.getElementById("chkExtra");
+const extraArea = document.getElementById("extraArea");
+const inpExtraCount = document.getElementById("inpExtraCount");
+const extraList = document.getElementById("extraList");
+
+chkExtra.addEventListener("change", ()=>{
+  extraArea.style.display = chkExtra.checked ? "block" : "none";
+  renderExtras();
+});
+inpExtraCount.addEventListener("change", renderExtras);
+
+function renderExtras(){
+  extraList.innerHTML = "";
+  if(!chkExtra.checked) return;
+  const n = Number(inpExtraCount.value);
+  for(let i=1;i<=n;i++){
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `
+      <div class="extraTitle">Ek Kalem ${i}</div>
+      <div class="extraGrid">
+        <div>
+          <label>Ad</label>
+          <input id="exName${i}" placeholder="örn: Quiz">
+        </div>
+        <div>
+          <label>Ağırlık (%)</label>
+          <input id="exW${i}" type="number" min="0" max="100" placeholder="örn: 10">
+        </div>
+        <div>
+          <label>Senin Notun</label>
+          <input id="exMy${i}" type="number" min="0" max="100" placeholder="0-100">
+        </div>
+        <div>
+          <label>Sınıf Ortalaması</label>
+          <input id="exCls${i}" type="number" min="0" max="100" placeholder="0-100">
+        </div>
+      </div>
+    `;
+    extraList.appendChild(div);
+  }
+}
+renderExtras();
+
+/* ---------- data collection / validation ---------- */
+function collect(){
+  const myMid = Number(document.getElementById("inpMyMid").value);
+  const myFinal = Number(document.getElementById("inpMyFinal").value);
+  const clsMid = Number(document.getElementById("inpClsMid").value);
+  const clsFinal = Number(document.getElementById("inpClsFinal").value);
+
+  const wMidPct = Number(document.getElementById("inpWMid").value);
+  const wFinalPct = Number(document.getElementById("inpWFinal").value);
+
+  const N = Number(document.getElementById("inpN").value);
+  const isMakeup = document.getElementById("inpIsMakeup").value === "1";
+
+  const finalMin = Number(document.getElementById("inpFinalMin").value);
+  const finalMax = Number(document.getElementById("inpFinalMax").value);
+  const sigmaMin = Number(document.getElementById("inpSigmaMin").value);
+  const sigmaMax = Number(document.getElementById("inpSigmaMax").value);
+
+  const res = Number(document.getElementById("inpRes").value);
+  const letterSet = document.getElementById("inpLetterSet").value;
+
+  let extras = [];
+  if(chkExtra.checked){
+    const n = Number(inpExtraCount.value);
+    for(let i=1;i<=n;i++){
+      const name = (document.getElementById(`exName${i}`).value || `Ek ${i}`).trim();
+      const wPct = Number(document.getElementById(`exW${i}`).value);
+      const my = Number(document.getElementById(`exMy${i}`).value);
+      const cls = Number(document.getElementById(`exCls${i}`).value);
+      extras.push({name, wPct, my, cls});
+    }
+  }
+  return { myMid,myFinal,clsMid,clsFinal,wMidPct,wFinalPct,extras, N, isMakeup, finalMin,finalMax,sigmaMin,sigmaMax, res, letterSet };
+}
+
+function validate(d){
+  const in01 = x => Number.isFinite(x) && x>=0 && x<=100;
+  if(!in01(d.myMid) || !in01(d.myFinal) || !in01(d.clsMid) || !in01(d.clsFinal)) return "Vize/Final ve sınıf ortalamaları 0–100 olmalı.";
+  if(!Number.isFinite(d.wMidPct) || !Number.isFinite(d.wFinalPct) || d.wMidPct<0 || d.wFinalPct<0) return "Ağırlıklar geçerli değil.";
+  if(!Number.isFinite(d.N) || d.N < 1) return "N en az 1 olmalı.";
+
+  for(const ex of d.extras){
+    if(!Number.isFinite(ex.wPct) || ex.wPct<0 || ex.wPct>100) return `${ex.name}: ağırlık 0–100 olmalı.`;
+    if(!in01(ex.my)) return `${ex.name}: senin notun 0–100 olmalı.`;
+    if(!in01(ex.cls)) return `${ex.name}: sınıf ort 0–100 olmalı.`;
+  }
+  const sum = d.wMidPct + d.wFinalPct + d.extras.reduce((a,x)=>a + x.wPct,0);
+  if(Math.round(sum*100)/100 !== 100) return `Ağırlıkların toplamı 100 olmalı. Şu an: ${sum}`;
+
+  if(!Number.isFinite(d.finalMin) || !Number.isFinite(d.finalMax) || d.finalMin<0 || d.finalMax>100 || d.finalMin>=d.finalMax) return "Final aralığı hatalı (min<max, 0–100).";
+  if(!Number.isFinite(d.sigmaMin) || !Number.isFinite(d.sigmaMax) || d.sigmaMin<=0 || d.sigmaMax>50 || d.sigmaMin>=d.sigmaMax) return "σ aralığı hatalı (min<max, 0–50).";
+
+  return null;
+}
+
+function computeBase(d){
+  const wMid = d.wMidPct/100;
+  const wFinal = d.wFinalPct/100;
+  const extrasN = d.extras.map(x=>({...x, w: x.wPct/100}));
+
+  const userConst = d.myMid*wMid + extrasN.reduce((a,x)=>a + x.my*x.w,0);
+  const classConst = d.clsMid*wMid + extrasN.reduce((a,x)=>a + x.cls*x.w,0);
+
+  const classAvg = classConst + d.clsFinal*wFinal; // Xbar (DSN ortalaması)
+  const ogrOrt = userConst + d.myFinal*wFinal;     // DSN (öğrenci)
+  return {wMid,wFinal,extrasN,userConst,classConst,classAvg,ogrOrt};
+}
+
+/* ---------- KOÜ sistem seçimi ---------- */
+function decideSystem({isMakeup, N, classAvg}){
+  if(isMakeup) return "MDS"; // KOÜ: büt sonrası Tablo-1
+  if(N < MDS_N_LIMIT) return "MDS";
+  if(classAvg >= MDS_MEAN_LIMIT) return "MDS";
+  return "BDS";
+}
+
+function computeLetterKO({dsn, classAvg, sigma, examScore, system}){
+  // 1) Exam baraj
+  if(examScore < EXAM_MIN){
+    return { sys: system, letter:"FF", reason:`Final/Büt < ${EXAM_MIN} ⇒ FF`, z:null, t:null, rowName:null, protected:false, mdsBase: table1Letter(dsn) };
+  }
+
+  // 2) MDS
+  if(system === "MDS"){
+    const L = table1Letter(dsn);
+    return { sys:"MDS", letter:L, reason:"MDS (Tablo-1)", z:null, t:null, rowName:null, protected:false, mdsBase: L };
+  }
+
+  // 3) BDS: DSN < 15 -> BDS dışı
+  if(dsn < BDS_DSN_MIN){
+    return { sys:"BDS", letter:"FF", reason:`DSN < ${BDS_DSN_MIN} ⇒ BDS dışı (büt gerekir)`, z:null, t:null, rowName: pickTable2Row(classAvg).name, protected:false, mdsBase: table1Letter(dsn) };
+  }
+
+  // 4) BDS normal
+  const z = (dsn - classAvg) / sigma;
+  const t = 50 + 10*z;
+  const t2 = letterFromTable2(classAvg, t);
+  const mdsBase = table1Letter(dsn);
+
+  const finalL = maxLetter9(t2.letter, mdsBase);
+  const protectedFlag = finalL !== t2.letter;
+
+  return {
+    sys:"BDS",
+    letter: finalL,
+    reason: protectedFlag ? `BDS + Koruma (Tablo-1 altına düşemez)` : `BDS (Tablo-2)`,
+    z, t, rowName: t2.rowName,
+    protected: protectedFlag,
+    mdsBase,
+    rawBds: t2.letter
+  };
+}
+
+/* ---------- palette / legend ---------- */
+function letterPalette(letterSet){
+  const pal9 = {
+    "FF":"#7f1d1d",
+    "FD":"#991b1b",
+    "DD":"#dc2626",
+    "DC":"#f97316",
+    "CC":"#f59e0b",
+    "CB":"#84cc16",
+    "BB":"#22c55e",
+    "BA":"#06b6d4",
+    "AA":"#2563eb"
+  };
+  const pal6 = {
+    "FF":"#7f1d1d",
+    "DC":"#f97316",
+    "CC":"#f59e0b",
+    "CB":"#84cc16",
+    "BB":"#22c55e",
+    "AA":"#2563eb"
+  };
+  return letterSet === "6" ? pal6 : pal9;
+}
+
+function allowedLetters(letterSet){
+  return letterSet === "6"
+    ? ["FF","DC","CC","CB","BB","AA"]
+    : ["FF","FD","DD","DC","CC","CB","BB","BA","AA"];
+}
+
+function mapToSet(L, letterSet){
+  if(letterSet === "9") return L;
+  // 6'lı set için sadeleştirme:
+  if(L==="FF" || L==="FD" || L==="DD") return "FF";
+  if(L==="DC") return "DC";
+  if(L==="CC") return "CC";
+  if(L==="CB") return "CB";
+  if(L==="BB") return "BB";
+  return "AA"; // BA/AA -> AA
+}
+
+function legendRender(pal, letterSet){
+  const legend = document.getElementById("legend");
+  legend.innerHTML = "";
+  const letters = allowedLetters(letterSet);
+  letters.forEach(L=>{
+    const pill = document.createElement("span");
+    pill.className="pill";
+    const sw = document.createElement("span");
+    sw.className="sw";
+    sw.style.background = pal[L] || "#9ca3af";
+    pill.appendChild(sw);
+    pill.appendChild(document.createTextNode(L));
+    legend.appendChild(pill);
+  });
+}
+
+/* ---------- canvas drawing ---------- */
+const tip = document.getElementById("tip");
+const canvas = document.getElementById("cv");
+const statusEl = document.getElementById("status");
+const summaryEl = document.getElementById("summary");
+let heat = null;
+
+function setupCanvas(){
+  const ctx = canvas.getContext("2d");
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = Math.floor(rect.width * dpr);
+  canvas.height = Math.floor(rect.height * dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return ctx;
+}
+
+function drawAll(){
+  const d = collect();
+  const err = validate(d);
+  if(err){
+    statusEl.textContent = "⚠️ " + err;
+    return;
+  }
+  statusEl.textContent = "";
+
+  const base = computeBase(d);
+  const system = decideSystem({isMakeup:d.isMakeup, N:d.N, classAvg: base.classAvg});
+
+  // Mevcut durum özeti: sigma=15 varsayımıyla (BDS ise)
+  const sigmaPreview = 15;
+  const current = computeLetterKO({
+    dsn: base.ogrOrt,
+    classAvg: base.classAvg,
+    sigma: sigmaPreview,
+    examScore: d.myFinal,
+    system
+  });
+
+  const sysText = system === "MDS" ? "MDS (Tablo-1)" : "BDS (Tablo-2)";
+  let summary = `<b>Sınıf DSN Ort (X̄):</b> ${round2(base.classAvg).toFixed(2)}<br>
+                 <b>Senin DSN (mevcut):</b> ${round2(base.ogrOrt).toFixed(2)}<br>
+                 <b>N:</b> ${d.N} &nbsp;|&nbsp; <b>Bütünleme:</b> ${d.isMakeup ? "Evet" : "Hayır"}<br>
+                 <b>Sistem:</b> ${sysText}<br>
+                 <b>Harf (mevcut):</b> ${mapToSet(current.letter, d.letterSet)}
+                 <span style="opacity:.85">${(system==="BDS") ? "(σ=15 varsayımı)" : ""}</span>`;
+  summaryEl.innerHTML = summary;
+
+  const ctx = setupCanvas();
+  const W = canvas.getBoundingClientRect().width;
+  const H = canvas.getBoundingClientRect().height;
+
+  const padL = 54, padR = 14, padT = 18, padB = 44;
+  const plot = { x0: padL, y0: padT, x1: W-padR, y1: H-padB };
+
+  const pal = letterPalette(d.letterSet);
+  legendRender(pal, d.letterSet);
+
+  const n = d.res;
+  const cols = n, rows = n;
+
+  const fmin = d.finalMin;
+  const fmax = d.finalMax;
+  const smin = d.sigmaMin;
+  const smax = d.sigmaMax;
+
+  const cw = (plot.x1 - plot.x0) / cols;
+  const ch = (plot.y1 - plot.y0) / rows;
+
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = "#0f172a";
+  ctx.fillRect(0,0,W,H);
+
+  const data = new Array(rows);
+  for(let r=0;r<rows;r++){
+    data[r] = new Array(cols);
+    const sigma = smax - (r + 0.5) * (smax - smin) / rows;
+    for(let c=0;c<cols;c++){
+      const exam = fmin + (c + 0.5) * (fmax - fmin) / cols;
+      const dsn = base.userConst + exam * base.wFinal;
+
+      const res = computeLetterKO({
+        dsn,
+        classAvg: base.classAvg,
+        sigma,
+        examScore: exam,
+        system
+      });
+
+      const shown = mapToSet(res.letter, d.letterSet);
+      const color = pal[shown] || "#9ca3af";
+
+      const x = plot.x0 + c*cw;
+      const y = plot.y0 + r*ch;
+
+      ctx.fillStyle = color;
+      ctx.fillRect(x, y, cw+0.2, ch+0.2);
+
+      data[r][c] = {
+        exam, sigma,
+        dsn,
+        shownLetter: shown,
+        rawLetter: res.letter,
+        sys: res.sys,
+        reason: res.reason,
+        z: res.z,
+        t: res.t,
+        rowName: res.rowName,
+        protected: res.protected,
+        rawBds: res.rawBds || null,
+        mdsBase: res.mdsBase
+      };
+    }
+  }
+
+  // Axes
+  ctx.strokeStyle = "#1f2937";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(plot.x0, plot.y0);
+  ctx.lineTo(plot.x0, plot.y1);
+  ctx.lineTo(plot.x1, plot.y1);
+  ctx.stroke();
+
+  ctx.fillStyle="#9ca3af";
+  ctx.font="12px Arial";
+  const xlab="Final/Büt";
+  ctx.fillText(xlab, (plot.x0+plot.x1)/2 - ctx.measureText(xlab).width/2, plot.y1+32);
+  ctx.save();
+  ctx.translate(plot.x0-34, (plot.y0+plot.y1)/2);
+  ctx.rotate(-Math.PI/2);
+  const ylab="σ";
+  ctx.fillText(ylab, -ctx.measureText(ylab).width/2, 0);
+  ctx.restore();
+
+  // Ticks/grid
+  const xt = 5;
+  for(let i=0;i<=xt;i++){
+    const f = fmin + i*(fmax-fmin)/xt;
+    const x = plot.x0 + i*(plot.x1-plot.x0)/xt;
+    ctx.strokeStyle="#1f2937";
+    ctx.beginPath(); ctx.moveTo(x,plot.y0); ctx.lineTo(x,plot.y1); ctx.stroke();
+    ctx.fillStyle="#cdd7ea";
+    ctx.fillText(f.toFixed(0), x-6, plot.y1+18);
+  }
+  const yt = 5;
+  for(let i=0;i<=yt;i++){
+    const s = smax - i*(smax-smin)/yt;
+    const y = plot.y0 + i*(plot.y1-plot.y0)/yt;
+    ctx.strokeStyle="#1f2937";
+    ctx.beginPath(); ctx.moveTo(plot.x0,y); ctx.lineTo(plot.x1,y); ctx.stroke();
+    ctx.fillStyle="#cdd7ea";
+    ctx.fillText(s.toFixed(0), plot.x0-28, y+4);
+  }
+
+  heat = { plot, cols, rows, cw, ch, data };
+  statusEl.textContent = `✅ KOÜ Heatmap hazır. Sistem: ${system} | Final ${fmin}-${fmax}, σ ${smin}-${smax}, ${cols}x${rows}`;
+}
+
+/* ---------- tooltip interactions ---------- */
+canvas.addEventListener("mousemove", (e)=>{
+  if(!heat) return;
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  const {plot, cw, ch, data} = heat;
+  if(x < plot.x0 || x > plot.x1 || y < plot.y0 || y > plot.y1){
+    tip.style.display="none";
+    return;
+  }
+  const c = Math.floor((x - plot.x0)/cw);
+  const r = Math.floor((y - plot.y0)/ch);
+  const cell = data?.[r]?.[c];
+  if(!cell){ tip.style.display="none"; return; }
+
+  const lines = [];
+  lines.push(`<div class="tipTitle">${cell.shownLetter} <span style="opacity:.8">(${cell.sys})</span></div>`);
+  lines.push(`<b>Final/Büt:</b> ${cell.exam.toFixed(1)}`);
+  lines.push(`<b>σ:</b> ${cell.sigma.toFixed(2)}`);
+  lines.push(`<b>DSN:</b> ${round2(cell.dsn).toFixed(2)}`);
+  lines.push(`<b>Kural:</b> ${cell.reason}`);
+
+  if(cell.sys === "BDS"){
+    lines.push(`<b>Sınıf düzeyi:</b> ${cell.rowName || "—"}`);
+    if(Number.isFinite(cell.z) && Number.isFinite(cell.t)){
+      lines.push(`<b>Z:</b> ${cell.z.toFixed(3)} | <b>T:</b> ${cell.t.toFixed(2)}`);
+      lines.push(`<b>Tablo-2:</b> ${cell.rawBds || cell.rawLetter} <span style="opacity:.8">(ham)</span>`);
+    }
+    lines.push(`<b>Tablo-1 alt sınır:</b> ${cell.mdsBase} <span style="opacity:.8">(DSN karşılığı)</span>`);
+    if(cell.protected){
+      lines.push(`<b>Koruma:</b> Tablo-2 sonucu Tablo-1’den düşük olduğu için yukarı çekildi.`);
+    }
+  } else if(cell.sys === "MDS"){
+    lines.push(`<span style="opacity:.85">MDS’de σ etkisizdir.</span>`);
+  }
+
+  if(cell.rawLetter !== cell.shownLetter){
+    lines.push(`<span style="opacity:.75">Not: Seçili “harf seti” sadeleştirmesi nedeniyle ham: ${cell.rawLetter}</span>`);
+  }
+
+  tip.innerHTML = lines.join("<br>");
+  tip.style.display="block";
+
+  const pad = 14;
+  let tx = e.clientX + 14;
+  let ty = e.clientY + 14;
+  const w = 320;
+  const h = 170;
+  if(tx + w > window.innerWidth - pad) tx = e.clientX - w - 14;
+  if(ty + h > window.innerHeight - pad) ty = e.clientY - h - 14;
+
+  tip.style.left = tx + "px";
+  tip.style.top = ty + "px";
+});
+
+canvas.addEventListener("mouseleave", ()=> tip.style.display="none");
+
+window.addEventListener("resize", ()=>{
+  if(heat){
+    try{ drawAll(); }catch(e){}
+  }
+});
+</script>
+
+</body>
+</html>

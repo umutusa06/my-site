@@ -1,0 +1,755 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sivas CÜ | Harf Notu + Grafik (Bağıl/Mutlak)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b132b;--bg2:#0f162f;--card:#0f172a;--glass:rgba(255,255,255,0.05);
+      --accent:#f7b733;--accent2:#21e6c1;--text:#e8eefb;--muted:#9fb1d1;--border:#1f2a44;
+      --line:rgba(255,255,255,.10);
+      --shadow:0 18px 48px rgba(0,0,0,0.32);
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      font-family:"Space Grotesk","Manrope",system-ui,-apple-system,sans-serif;
+      min-height:100vh;
+      background:radial-gradient(circle at 20% 18%, rgba(33,230,193,0.16), transparent 32%),
+                 radial-gradient(circle at 82% 8%, rgba(247,183,51,0.16), transparent 32%),
+                 linear-gradient(145deg, var(--bg), var(--bg2));
+      color:var(--text);
+    }
+    .wrap{max-width:1100px;margin:0 auto;padding:28px 18px 44px;}
+    nav.nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+    nav.nav a{
+      color:var(--text);text-decoration:none;padding:10px 14px;
+      border:1px solid var(--border);border-radius:12px;
+      background:rgba(255,255,255,0.05);font-weight:800;
+      transition:background .15s ease,border-color .15s ease,color .15s ease;
+    }
+    nav.nav a.active{border-color:var(--accent);color:var(--accent);background:rgba(247,183,51,0.12);}
+    .panel{
+      background:var(--glass);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:18px;
+      box-shadow:var(--shadow);
+      margin-bottom:14px;
+    }
+    h1{margin:0 0 8px;font-size:26px;letter-spacing:-0.3px;}
+    .muted{color:var(--muted);font-size:13px;line-height:1.55;}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+    label{display:block;font-weight:800;font-size:14px;margin-top:6px}
+    input,select,button,textarea{
+      width:100%;padding:11px 12px;border-radius:12px;border:1px solid var(--border);
+      background:rgba(255,255,255,0.05);color:var(--text);font-size:14px;box-sizing:border-box;
+    }
+    textarea{min-height:120px;resize:vertical;}
+    input::placeholder,textarea::placeholder{color:rgba(232,236,255,0.55);}
+    button{
+      cursor:pointer;font-weight:900;
+      background:linear-gradient(120deg,var(--accent),#f37335);
+      border:none;color:#0b0c10;box-shadow:0 12px 30px rgba(243,115,53,0.25);
+      transition:transform .12s ease,box-shadow .12s ease;
+    }
+    button:hover{transform:translateY(-1px);box-shadow:0 16px 36px rgba(243,115,53,0.32);}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .small{font-size:12px;color:var(--muted);}
+    .divider{height:1px;background:var(--line);margin:12px 0}
+    .toggleRow{display:flex;align-items:center;gap:8px;margin-top:10px}
+    .toggleRow input{width:auto}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--muted);font-size:12px}
+    .charts{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .chartCard{background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:12px;box-shadow:var(--shadow);}
+    .chartTitle{font-weight:700;margin:0 0 8px}
+    canvas{width:100%;height:240px;background:#0f172a;border:1px solid var(--border);border-radius:12px}
+    .full{grid-column:1 / -1}
+    .out{margin-top:12px;white-space:pre-wrap}
+    .warn{color:#ffd37a}
+    .bad{color:#ff9aa2}
+    .ok{color:#b7f7e8}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="nav">
+    <a href="index.html">Ana Sayfa</a>
+    <a class="active" href="harf_notu_otomatik_grafikli.html">Harf Notu + Grafik</a>
+    <a href="heatmap.html">Heatmap</a>
+    <a href="detaylifinal.html">Hedef Final</a>
+    <a href="anogano.html">AGNO / GANO</a>
+    <a href="hakkinda.html">Hakkında</a>
+  </nav>
+
+  <div class="panel">
+    <h1>Sivas Cumhuriyet Üniversitesi | Harf Notu + Grafik</h1>
+    <p class="muted">
+      Bu sayfa <b>unofficial</b> bir simülasyondur. CÜ (Mühendislik) için varsayılan sınırlar:
+      <b>BDKS=15</b>, <b>HBAS=45</b>, <b>YSSS=45</b>.
+      <br>
+      <b>N ≥ 30</b> → Z/T + Tablo-3 | <b>11–29</b> → (Tablo-2 gerçek liste ister) bu sayfa <b>hesaplamaz</b>, sadece uyarı verir | <b>N ≤ 10</b> → öğretim elemanı inisiyatifi (otomatik yok).
+    </p>
+  </div>
+
+  <div class="panel">
+    <div class="grid">
+      <div>
+        <label>Yarıyıl içi (vize) notu</label>
+        <input id="midScore" type="number" min="0" max="100" step="0.01" value="60" />
+      </div>
+      <div>
+        <label>Yarıyıl içi ağırlığı (%)</label>
+        <input id="midW" type="number" min="0" max="100" step="0.01" value="40" />
+      </div>
+      <div>
+        <label>Yarıyıl sonu (final) notu</label>
+        <input id="finalScore" type="number" min="0" max="100" step="0.01" value="50" />
+        <div class="small">YSSS (varsayılan 45) altında ise doğrudan FF.</div>
+      </div>
+      <div>
+        <label>Yarıyıl sonu ağırlığı (%)</label>
+        <input id="finalW" type="number" min="0" max="100" step="0.01" value="60" />
+      </div>
+
+      <div>
+        <label>Bağıl değerlendirmeye giren öğrenci sayısı (N)</label>
+        <input id="n" type="number" min="1" step="1" value="30" />
+        <div class="small">N≤10: otomatik yok | 11–29: uyarı | N≥30: Z/T + Tablo-3</div>
+      </div>
+
+      <div>
+        <label>Sınıf HBP ortalaması (μ) (N≥30 için gerekli)</label>
+        <input id="classMean" type="number" min="0" max="100" step="0.01" value="55" />
+        <div class="small">Sınıf düzeyi bu ortalamaya göre seçilir.</div>
+      </div>
+
+      <div>
+        <label>Standart sapma (σ) (opsiyonel)</label>
+        <input id="sigma" type="number" min="0.01" step="0.01" placeholder="Boş bırak → 5.0–25.0 aralığı 0.1 adımlı senaryo" />
+        <div class="small">σ girmezsen S=5.0’dan 25.0’e 0.1 artımlı tüm senaryolar (N≥30) hesaplanır ve dağılım gösterilir.</div>
+      </div>
+
+      <div>
+        <label>BDKS / HBAS / YSSS (CÜ Mühendislik varsayılan)</label>
+        <div class="row">
+          <input id="bdks" type="number" min="0" max="100" step="1" value="15" />
+          <input id="hbas" type="number" min="0" max="100" step="1" value="45" />
+        </div>
+        <div class="row" style="margin-top:8px">
+          <input id="ysss" type="number" min="0" max="100" step="1" value="45" />
+          <select id="nle10Mode" title="N≤10 modu">
+            <option value="warn" selected>N≤10: Uyarı (takdir)</option>
+            <option value="mutlak_ek">N≤10: Ek sınav mutlak dönüşüm</option>
+          </select>
+        </div>
+        <div class="small">Soldan sağa: BDKS, HBAS, YSSS ve N≤10 modu.</div>
+      </div>
+    </div>
+
+    <div class="toggleRow">
+      <input id="hasExtras" type="checkbox" />
+      <label for="hasExtras" style="margin:0;color:var(--text);font-size:13px;cursor:pointer;">
+        Ek değerlendirme var (ödev/quiz/proje/lab…)
+      </label>
+    </div>
+
+    <div id="extrasBox" class="panel" style="display:none;padding:12px;margin-top:10px">
+      <div class="grid">
+        <div>
+          <label>Kaç adet ek kalem?</label>
+          <select id="extraCount">
+            <option>1</option><option>2</option><option>3</option><option>4</option>
+          </select>
+        </div>
+        <div>
+          <label>Not: ağırlıkların toplamı 100 olmalı</label>
+          <div class="pill">Vize + Final + Ek kalemler = 100%</div>
+        </div>
+      </div>
+      <div id="extraFields"></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div style="margin-top:12px">
+      <button id="btnCalc" type="button" onclick="hesapla()">Hesapla + Grafik Çiz</button>
+    </div>
+
+    <div class="muted" style="margin-top:10px">
+      <span class="pill">N≥30: Z=(X-μ)/σ, T=50+10Z</span>
+      <span class="pill">HBP≥60 ve sonuç FF/DD/DC çıkarsa → CC</span>
+      <span class="pill">BDKS altında: havuza girmez, doğrudan FF</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2 style="margin:0 0 8px;font-size:16px">Sonuç</h2>
+    <div id="out" class="out muted">Henüz hesaplama yapılmadı.</div>
+  </div>
+
+  <div id="chartArea" class="charts" style="display:none;">
+    <div class="chartCard">
+      <div class="chartTitle">Final notu vs Harf notu</div>
+      <canvas id="cvFinalVsLetter"></canvas>
+      <div class="muted small">Ek kalemler sabit kabul edilir, final 0–100 taranır (N≥30 veya N≤10 mutlak mod).</div>
+    </div>
+
+    <div class="chartCard">
+      <div class="chartTitle">σ değişince harf nasıl değişiyor?</div>
+      <canvas id="cvSigmaVsLetter"></canvas>
+      <div class="muted small">Final sabit: girdiğin final. σ 5–30 aralığında simüle edilir (yalnız N≥30).</div>
+    </div>
+
+    <div class="chartCard full">
+      <div class="chartTitle">Z–T grafiği (T = 50 + 10Z)</div>
+      <canvas id="cvZT"></canvas>
+      <div class="muted small">Seçilen σ ile senin noktan (Z,T) işaretlenir. σ boşsa 15 ile gösterilir (yalnız N≥30).</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================
+   Sivas Cumhuriyet Uni (CÜ) — Bağıl Değerlendirme (Tablo-2 KALDIRILDI)
+   - 11–29 aralığında: UYARI verilir, hesap yapılmaz.
+   ========================= */
+
+function clamp(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
+function num(id){ return Number(document.getElementById(id).value); }
+function txt(id){ return String(document.getElementById(id).value || ""); }
+function fmt(v, d=2){ return (Number.isFinite(v) ? v.toFixed(d) : ""); }
+
+const hasExtras = document.getElementById("hasExtras");
+const extrasBox = document.getElementById("extrasBox");
+const extraCount = document.getElementById("extraCount");
+const extraFields = document.getElementById("extraFields");
+
+hasExtras.addEventListener("change", () => {
+  extrasBox.style.display = hasExtras.checked ? "block" : "none";
+  renderExtras();
+});
+extraCount.addEventListener("change", renderExtras);
+
+function renderExtras(){
+  extraFields.innerHTML = "";
+  if(!hasExtras.checked) return;
+
+  const k = Number(extraCount.value);
+  for(let i=1;i<=k;i++){
+    const row = document.createElement("div");
+    row.className = "row";
+    row.style.marginTop = "10px";
+    row.innerHTML = `
+      <div>
+        <label>Ek Kalem ${i} Ağırlık (%)</label>
+        <input id="exW${i}" type="number" min="0" max="100" step="0.01" value="10" />
+      </div>
+      <div>
+        <label>Senin Notun</label>
+        <input id="exS${i}" type="number" min="0" max="100" step="0.01" value="70" />
+      </div>
+    `;
+    extraFields.appendChild(row);
+  }
+}
+function getExtras(){
+  if(!hasExtras.checked) return [];
+  const k = Number(extraCount.value);
+  const arr = [];
+  for(let i=1;i<=k;i++){
+    const w = Number(document.getElementById(`exW${i}`).value);
+    const s = Number(document.getElementById(`exS${i}`).value);
+    if(Number.isFinite(w) && w > 0){
+      arr.push({ w, s: Number.isFinite(s) ? s : 0 });
+    }
+  }
+  return arr;
+}
+
+function calcHBP(mid, fin, midW, finW, extras){
+  let totalW = midW + finW;
+  let score = (mid * midW + fin * finW) / 100.0;
+  for(const ex of extras){
+    totalW += ex.w;
+    score += (ex.s * ex.w) / 100.0;
+  }
+  return { hbp: score, totalW };
+}
+
+/* --- N modları --- */
+function modeByN(N){
+  if(!Number.isFinite(N) || N <= 0) return "UNKNOWN";
+  if(N <= 10) return "NLE10";
+  if(N >= 30) return "T3";
+  return "T2"; // 11–29 (bu sürümde hesap yok)
+}
+
+/* --- CÜ: Ek sınav mutlak dönüşüm --- */
+function cuEkSinavMutlak(x){
+  if(x >= 90) return "AA";
+  if(x >= 80) return "BA";
+  if(x >= 70) return "BB";
+  if(x >= 60) return "CB";
+  return "FF";
+}
+
+/* --- Tablo-3 (N>=30) — sınıf düzeyi + T aralıkları --- */
+const T3 = [
+  { name:"Üstün Başarı", min:80.00, max:100.00, bands:{AA:[57,Infinity], BA:[52,56.99], BB:[47,51.99], CB:[42,46.99], CC:[37,41.99], DC:[32,36.99], DD:[27,31.99], FF:[-Infinity,26.99]} },
+  { name:"Mükemmel",     min:70.00, max:79.99,  bands:{AA:[59,Infinity], BA:[54,58.99], BB:[49,53.99], CB:[44,48.99], CC:[39,43.99], DC:[34,38.99], DD:[29,33.99], FF:[-Infinity,28.99]} },
+  { name:"Çok İyi",      min:62.50, max:69.99,  bands:{AA:[61,Infinity], BA:[56,60.99], BB:[51,55.99], CB:[46,50.99], CC:[41,45.99], DC:[36,40.99], DD:[31,35.99], FF:[-Infinity,30.99]} },
+  { name:"İyi",          min:57.50, max:62.49,  bands:{AA:[63,Infinity], BA:[58,62.99], BB:[53,57.99], CB:[48,52.99], CC:[43,47.99], DC:[38,42.99], DD:[33,37.99], FF:[-Infinity,32.99]} },
+  { name:"Ortanın üstü", min:52.50, max:57.49,  bands:{AA:[65,Infinity], BA:[60,64.99], BB:[55,59.99], CB:[50,54.99], CC:[45,49.99], DC:[40,44.99], DD:[35,39.99], FF:[-Infinity,34.99]} },
+  { name:"Orta",         min:47.50, max:52.49,  bands:{AA:[67,Infinity], BA:[62,66.99], BB:[57,61.99], CB:[52,56.99], CC:[47,51.99], DC:[42,46.99], DD:[37,41.99], FF:[-Infinity,36.99]} },
+  { name:"Zayıf",        min:42.50, max:47.49,  bands:{AA:[69,Infinity], BA:[64,68.99], BB:[59,63.99], CB:[54,58.99], CC:[49,53.99], DC:[44,48.99], DD:[39,43.99], FF:[-Infinity,38.99]} },
+  { name:"Kötü",         min:-Infinity, max:42.49, bands:{AA:[71,Infinity], BA:[66,70.99], BB:[61,65.99], CB:[56,60.99], CC:[51,55.99], DC:[46,50.99], DD:[41,45.99], FF:[-Infinity,40.99]} },
+];
+
+function pickT3Level(mean){
+  const m = Number(mean);
+  for(const r of T3){
+    if(m >= r.min && m <= r.max) return r;
+  }
+  return T3[T3.length-1];
+}
+function letterFromT3(mean, x, sigma){
+  const level = pickT3Level(mean);
+  const z = (x - mean) / sigma;
+  const t = 50 + 10*z;
+  const order = ["AA","BA","BB","CB","CC","DC","DD","FF"];
+  for(const g of order){
+    const [lo, hi] = level.bands[g];
+    if(t >= lo && t <= hi) return {letter:g, z, t, level:level.name};
+  }
+  return {letter:"FF", z, t, level:level.name};
+}
+
+/* --- CÜ sınırları + CC düzeltme --- */
+function applyCUEngineeringRules({letter, hbp, finalScore, bdks, hbas, ysss}){
+  if(Number.isFinite(ysss) && finalScore < ysss){
+    return {letter:"FF", forced:true, note:`YSSS: Final < ${ysss} → FF`};
+  }
+  if(Number.isFinite(bdks) && hbp < bdks){
+    return {letter:"FF", forced:true, note:`BDKS: HBP < ${bdks} → havuza girmez, FF`};
+  }
+  if(Number.isFinite(hbas) && hbp < hbas){
+    return {letter:"FF", forced:true, note:`HBAS: HBP < ${hbas} → FF (havuzda ortalamaya katılabilir)`};
+  }
+  if(hbp >= 60 && (letter === "FF" || letter === "DD" || letter === "DC")){
+    return {letter:"CC", forced:true, note:"HBP ≥ 60 iken sonuç FF/DD/DC çıktı → CC’ye çekildi"};
+  }
+  return {letter, forced:false, note:""};
+}
+
+/* --- Main --- */
+function hesapla(){
+  const out = document.getElementById("out");
+
+  const mid = num("midScore");
+  const fin = num("finalScore");
+  const midW = num("midW");
+  const finW = num("finalW");
+  const N = num("n");
+
+  const bdks = num("bdks");
+  const hbas = num("hbas");
+  const ysss = num("ysss");
+
+  const extras = getExtras();
+  const {hbp, totalW} = calcHBP(mid, fin, midW, finW, extras);
+
+  if(Math.abs(totalW - 100) > 0.01){
+    out.innerHTML =
+      `<span class="warn"><b>Hata:</b> Ağırlıkların toplamı 100 olmalı.</span>\n` +
+      `Şu an toplam: ${fmt(totalW,2)}\n` +
+      `Vize(%${fmt(midW,2)}) + Final(%${fmt(finW,2)}) + Ek kalemler = %${fmt(totalW,2)}`;
+    document.getElementById("chartArea").style.display = "none";
+    return;
+  }
+
+  const mode = modeByN(N);
+
+  // 11–29 (Tablo-2) KALDIRILDI: sadece uyarı
+  if(mode === "T2"){
+    out.innerHTML =
+      `<span class="warn"><b>Uyarı:</b> 11–29 öğrenci aralığında (Tablo-2) doğru sonuç için sınıfın ham başarı (HBP) listesi gerekir.</span>\n` +
+      `Bu site <b>unofficial</b> olduğu için ve liste olmadan sonuç <b>yanlış</b> olacağından harf notu hesaplaması yapılmadı.\n\n` +
+      `<b>Ne yapabilirsin?</b>\n` +
+      `• N gerçekten 30 ve üstüyse Tablo-3 (σ ile) çalışır.\n` +
+      `• Resmi dağılım/duyuru varsa onu kullan.\n\n` +
+      `Senin HBP (tahmini): ${fmt(hbp)}\n` +
+      `Not: Bu sadece HBP’dir; harf notu üretmez.`;
+    document.getElementById("chartArea").style.display = "none";
+    return;
+  }
+
+  // Ön kontrol: YSSS/BDKS/HBAS gibi zorlayıcı FF durumları
+  const pre = applyCUEngineeringRules({letter:"__", hbp, finalScore:fin, bdks, hbas, ysss});
+  if(pre.forced && pre.letter === "FF"){
+    out.innerHTML =
+      `<span class="bad"><b>Sonuç: FF</b></span>\n` +
+      `HBP: ${fmt(hbp)}\n` +
+      `${pre.note}`;
+    document.getElementById("chartArea").style.display = "none";
+    return;
+  }
+
+  if(mode === "NLE10"){
+    const nMode = document.getElementById("nle10Mode").value;
+    if(nMode === "mutlak_ek"){
+      const base = cuEkSinavMutlak(hbp);
+      const adj = applyCUEngineeringRules({letter:base, hbp, finalScore:fin, bdks, hbas, ysss});
+      out.innerHTML =
+        `<span class="warn"><b>Mod:</b> N ≤ 10 → (Seçilen) Ek sınav mutlak dönüşüm</span>\n` +
+        `HBP: ${fmt(hbp)}\n` +
+        `Harf (mutlak): <b>${adj.letter}</b>\n` +
+        (adj.note ? `Not: ${adj.note}\n` : "");
+      drawCharts();
+      return;
+    }
+
+    out.innerHTML =
+      `<span class="warn"><b>Mod:</b> N ≤ 10 → Öğretim elemanı inisiyatifi</span>\n` +
+      `Bu aralıkta otomatik dağıtım bu sayfada yapılmıyor.\n` +
+      `HBP: ${fmt(hbp)}\n` +
+      `İstersen “N≤10: Ek sınav mutlak dönüşüm” seçeneğiyle yaklaşık gösterebilirsin.`;
+    document.getElementById("chartArea").style.display = "none";
+    return;
+  }
+
+  if(mode === "T3"){
+    const mean = num("classMean");
+    const sigmaStr = txt("sigma").trim();
+    const sigma = sigmaStr === "" ? null : Number(sigmaStr);
+
+    if(sigma !== null && (!Number.isFinite(sigma) || sigma <= 0)){
+      out.innerHTML = `<span class="warn"><b>Hata:</b> σ pozitif bir sayı olmalı.</span>`;
+      document.getElementById("chartArea").style.display = "none";
+      return;
+    }
+
+    const level = pickT3Level(mean);
+
+    if(sigma === null){
+      // σ yoksa 5.0-25.0 aralığını 0.1 adımla simüle et ve dağılımı göster
+      const counts = {};
+      const sigmas = [];
+      for(let s=5; s<=25.0001; s+=0.1){
+        const ss = Number(s.toFixed(1));
+        sigmas.push(ss);
+        const rel = letterFromT3(mean, hbp, ss);
+        const adj = applyCUEngineeringRules({letter:rel.letter, hbp, finalScore:fin, bdks, hbas, ysss});
+        counts[adj.letter] = (counts[adj.letter] || 0) + 1;
+      }
+
+      const total = sigmas.length;
+      const order = ["AA","BA","BB","CB","CC","DC","DD","FF"];
+      let bestLetter = null, bestCount = -1;
+      for(const l of order){
+        const c = counts[l] || 0;
+        if(c > bestCount){ bestCount = c; bestLetter = l; }
+      }
+
+      let msg =
+        `<span class="ok"><b>Mod:</b> N ≥ 30 → Z/T + Tablo-3</span>\n` +
+        `Sınıf ortalaması (μ): ${fmt(mean)} → <b>${level.name}</b>\n` +
+        `HBP: ${fmt(hbp)}\n` +
+        `σ bilinmiyor → 5.0’dan 25.0’e 0.1 adımlı senaryo:\n` +
+        `Toplam ${total} senaryo değerlendirildi.\n`;
+
+      if(bestLetter){
+        msg += `En yüksek olasılık: ${bestLetter} (%${(bestCount*100/total).toFixed(2)})\n`;
+      }
+      msg += `Dağılım (%):\n`;
+      for(const l of order){
+        const c = counts[l] || 0;
+        if(c === 0) continue;
+        msg += `${l}: %${(c*100/total).toFixed(2)}\n`;
+      }
+      out.innerHTML = msg;
+    }else{
+      const rel = letterFromT3(mean, hbp, sigma);
+      const adj = applyCUEngineeringRules({letter:rel.letter, hbp, finalScore:fin, bdks, hbas, ysss});
+
+      out.innerHTML =
+        `<span class="ok"><b>Mod:</b> N ≥ 30 → Z/T + Tablo-3</span>\n` +
+        `Sınıf ortalaması (μ): ${fmt(mean)} → <b>${rel.level}</b>\n` +
+        `σ: ${fmt(sigma)}\n` +
+        `HBP: ${fmt(hbp)}\n` +
+        `Z: ${fmt(rel.z)}\n` +
+        `T: ${fmt(rel.t)}\n` +
+        `Harf Notu: <b>${adj.letter}</b>\n` +
+        (adj.note ? `Not: ${adj.note}\n` : "");
+    }
+
+    drawCharts();
+    return;
+  }
+
+  out.textContent = "Geçersiz giriş.";
+  document.getElementById("chartArea").style.display = "none";
+}
+
+/* ----------------- Charts (Canvas) ----------------- */
+const LETTER_ORDER = ["FF","DD","DC","CC","CB","BB","BA","AA"];
+function letterToY(letter){
+  const idx = LETTER_ORDER.indexOf(letter);
+  return idx === -1 ? 0 : idx;
+}
+function drawAxes(ctx, w, h, pad=36){
+  ctx.clearRect(0,0,w,h);
+  ctx.strokeStyle = "rgba(255,255,255,.18)";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(pad, 12);
+  ctx.lineTo(pad, h-pad);
+  ctx.lineTo(w-12, h-pad);
+  ctx.stroke();
+
+  ctx.fillStyle = "rgba(255,255,255,.55)";
+  ctx.font = "12px system-ui";
+  ctx.fillText("Harf", 8, 18);
+
+  const usableH = (h - pad) - 12;
+  for(let i=0;i<LETTER_ORDER.length;i++){
+    const y = (h-pad) - (usableH * (i/(LETTER_ORDER.length-1)));
+    ctx.strokeStyle = "rgba(255,255,255,.08)";
+    ctx.beginPath(); ctx.moveTo(pad, y); ctx.lineTo(w-12, y); ctx.stroke();
+    ctx.fillStyle = "rgba(255,255,255,.55)";
+    ctx.fillText(LETTER_ORDER[i], 10, y+4);
+  }
+}
+
+function scenarioLetter(mid, fin){
+  const midW = num("midW"), finW = num("finalW");
+  const extras = getExtras();
+  const {hbp} = calcHBP(mid, fin, midW, finW, extras);
+
+  const bdks = num("bdks"), hbas = num("hbas"), ysss = num("ysss");
+  const N = num("n");
+  const mode = modeByN(N);
+
+  // Tablo-2 yok: grafik de yok
+  if(mode === "T2") return "";
+
+  const pre = applyCUEngineeringRules({letter:"__", hbp, finalScore:fin, bdks, hbas, ysss});
+  if(pre.forced && pre.letter === "FF") return "FF";
+
+  if(mode === "NLE10"){
+    const nMode = document.getElementById("nle10Mode").value;
+    if(nMode === "mutlak_ek"){
+      const base = cuEkSinavMutlak(hbp);
+      return applyCUEngineeringRules({letter:base, hbp, finalScore:fin, bdks, hbas, ysss}).letter;
+    }
+    return ""; // uyarı modu
+  }
+
+  if(mode === "T3"){
+    const mean = num("classMean");
+    const sStr = txt("sigma").trim();
+    const sigma = (sStr === "" ? 15 : Number(sStr));
+    if(!Number.isFinite(sigma) || sigma <= 0) return "FF";
+    const rel = letterFromT3(mean, hbp, sigma);
+    return applyCUEngineeringRules({letter:rel.letter, hbp, finalScore:fin, bdks, hbas, ysss}).letter;
+  }
+
+  return "";
+}
+
+function drawCharts(){
+  const area = document.getElementById("chartArea");
+  const N = num("n");
+  const mode = modeByN(N);
+
+  // Tablo-2 uyarı: grafik yok
+  if(mode === "T2"){
+    area.style.display = "none";
+    return;
+  }
+
+  // N≤10 uyarı modunda grafik kapat
+  if(mode === "NLE10" && document.getElementById("nle10Mode").value === "warn"){
+    area.style.display = "none";
+    return;
+  }
+
+  area.style.display = "grid";
+  drawFinalVsLetter();
+  drawSigmaVsLetter();
+  drawZT();
+}
+
+function drawFinalVsLetter(){
+  const cv = document.getElementById("cvFinalVsLetter");
+  const ctx = cv.getContext("2d");
+  const w = cv.width = cv.clientWidth * devicePixelRatio;
+  const h = cv.height = cv.clientHeight * devicePixelRatio;
+
+  const pad = 42*devicePixelRatio;
+  drawAxes(ctx, w, h, pad);
+
+  const mid = num("midScore");
+
+  const usableW = (w-12) - pad;
+  const usableH = (h-pad) - 12;
+
+  ctx.strokeStyle = "rgba(109,124,255,.95)";
+  ctx.lineWidth = 2*devicePixelRatio;
+  ctx.beginPath();
+
+  let started = false;
+  for(let f=0; f<=100; f++){
+    const letter = scenarioLetter(mid, f);
+    if(!letter) continue;
+    const yv = letterToY(letter);
+    const x = pad + usableW * (f/100);
+    const y = (h-pad) - usableH * (yv/(LETTER_ORDER.length-1));
+    if(!started){ ctx.moveTo(x,y); started = true; }
+    else ctx.lineTo(x,y);
+  }
+  if(started) ctx.stroke();
+}
+
+function drawSigmaVsLetter(){
+  const cv = document.getElementById("cvSigmaVsLetter");
+  const ctx = cv.getContext("2d");
+  const w = cv.width = cv.clientWidth * devicePixelRatio;
+  const h = cv.height = cv.clientHeight * devicePixelRatio;
+
+  const pad = 42*devicePixelRatio;
+  ctx.clearRect(0,0,w,h);
+
+  ctx.strokeStyle = "rgba(255,255,255,.18)";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(pad, 12);
+  ctx.lineTo(pad, h-pad);
+  ctx.lineTo(w-12, h-pad);
+  ctx.stroke();
+
+  const usableH = (h-pad) - 12;
+  for(let i=0;i<LETTER_ORDER.length;i++){
+    const y = (h-pad) - (usableH * (i/(LETTER_ORDER.length-1)));
+    ctx.strokeStyle = "rgba(255,255,255,.08)";
+    ctx.beginPath(); ctx.moveTo(pad, y); ctx.lineTo(w-12, y); ctx.stroke();
+    ctx.fillStyle = "rgba(255,255,255,.55)";
+    ctx.font = "12px system-ui";
+    ctx.fillText(LETTER_ORDER[i], 10, y+4);
+  }
+
+  const N = num("n");
+  if(modeByN(N) !== "T3") return;
+
+  const mid = num("midScore");
+  const fin = num("finalScore");
+  const old = document.getElementById("sigma").value;
+
+  const usableW = (w-12) - pad;
+
+  ctx.strokeStyle = "rgba(255,191,71,.95)";
+  ctx.lineWidth = 2*devicePixelRatio;
+  ctx.beginPath();
+
+  for(let s=5; s<=30; s++){
+    document.getElementById("sigma").value = String(s);
+    const letter = scenarioLetter(mid, fin);
+    const yv = letterToY(letter || "FF");
+    const x = pad + usableW * ((s-5)/25);
+    const y = (h-pad) - usableH * (yv/(LETTER_ORDER.length-1));
+    if(s===5) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+
+  document.getElementById("sigma").value = old;
+}
+
+function drawZT(){
+  const cv = document.getElementById("cvZT");
+  const ctx = cv.getContext("2d");
+  const w = cv.width = cv.clientWidth * devicePixelRatio;
+  const h = cv.height = cv.clientHeight * devicePixelRatio;
+  const pad = 42*devicePixelRatio;
+
+  ctx.clearRect(0,0,w,h);
+
+  ctx.strokeStyle = "rgba(255,255,255,.18)";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(pad, 12);
+  ctx.lineTo(pad, h-pad);
+  ctx.lineTo(w-12, h-pad);
+  ctx.stroke();
+
+  const usableW = (w-12) - pad;
+  const usableH = (h-pad) - 12;
+
+  ctx.font = "12px system-ui";
+  ctx.fillStyle = "rgba(255,255,255,.55)";
+  ctx.fillText("Z", w-24, h-10);
+  ctx.fillText("T", 12, 18);
+
+  for(let z=-3; z<=3; z++){
+    const x = pad + usableW * ((z+3)/6);
+    ctx.strokeStyle = "rgba(255,255,255,.08)";
+    ctx.beginPath(); ctx.moveTo(x, 12); ctx.lineTo(x, h-pad); ctx.stroke();
+    ctx.fillStyle = "rgba(255,255,255,.45)";
+    ctx.fillText(String(z), x-4*devicePixelRatio, h-10);
+  }
+  for(let T=20; T<=80; T+=10){
+    const y = (h-pad) - usableH * ((T-20)/60);
+    ctx.strokeStyle = "rgba(255,255,255,.08)";
+    ctx.beginPath(); ctx.moveTo(pad, y); ctx.lineTo(w-12, y); ctx.stroke();
+    ctx.fillStyle = "rgba(255,255,255,.45)";
+    ctx.fillText(String(T), 10, y+4);
+  }
+
+  ctx.strokeStyle = "rgba(109,124,255,.85)";
+  ctx.lineWidth = 2*devicePixelRatio;
+  ctx.beginPath();
+  for(let z=-3; z<=3; z+=0.05){
+    const T = 50 + 10*z;
+    const x = pad + usableW * ((z+3)/6);
+    const y = (h-pad) - usableH * ((T-20)/60);
+    if(z===-3) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+
+  const N = num("n");
+  if(modeByN(N) !== "T3") return;
+
+  const mid = num("midScore");
+  const fin = num("finalScore");
+  const midW = num("midW"), finW = num("finalW");
+  const extras = getExtras();
+  const {hbp} = calcHBP(mid, fin, midW, finW, extras);
+
+  const mean = num("classMean");
+  const sigmaStr = txt("sigma").trim();
+  const sigma = (sigmaStr === "" ? 15 : Number(sigmaStr));
+  if(!Number.isFinite(sigma) || sigma <= 0) return;
+
+  const z = (hbp - mean)/sigma;
+  const t = 50 + 10*z;
+
+  const zx = clamp(z, -3, 3);
+  const Tx = clamp(t, 20, 80);
+
+  const px = pad + usableW * ((zx+3)/6);
+  const py = (h-pad) - usableH * ((Tx-20)/60);
+
+  ctx.fillStyle = "rgba(255,255,255,.95)";
+  ctx.beginPath(); ctx.arc(px,py,5*devicePixelRatio,0,Math.PI*2); ctx.fill();
+
+  ctx.fillStyle = "rgba(255,255,255,.70)";
+  ctx.fillText(`Z=${fmt(z)} T=${fmt(t)}`, px+8*devicePixelRatio, py-8*devicePixelRatio);
+}
+
+renderExtras();
+</script>
+</body>
+</html>

@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MAKÜ • Hedef Final Hesaplayıcı (Bağıl Değerlendirme)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b132b;
+  --bg2:#111b33;
+  --card:#0f172a;
+  --glass:rgba(255,255,255,0.04);
+  --accent:#f7b733;
+  --accent2:#21e6c1;
+  --border:#1f2a44;
+  --text:#e8eefb;
+  --muted:#9fb1d1;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  padding:28px 18px 34px;
+  font-family:"Space Grotesk","Manrope",system-ui,-apple-system,sans-serif;
+  background:radial-gradient(circle at 18% 20%, rgba(33,230,193,0.16), transparent 32%),
+             radial-gradient(circle at 84% 12%, rgba(247,183,51,0.16), transparent 32%),
+             linear-gradient(145deg, var(--bg), var(--bg2));
+  color:var(--text);
+  line-height:1.6;
+}
+.shell{max-width:900px;margin:auto;padding:24px 18px 30px;}
+nav.nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+nav.nav a{
+  color:var(--text);text-decoration:none;padding:10px 14px;
+  border:1px solid var(--border);border-radius:12px;
+  background:rgba(255,255,255,0.05);font-weight:800;
+  transition:background .15s ease,border-color .15s ease,color .15s ease;
+}
+nav.nav a.active{border-color:var(--accent);color:var(--accent);background:rgba(247,183,51,0.12);}
+.container{
+  max-width:900px;
+  margin:auto;
+  background:var(--glass);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:22px;
+  box-shadow:0 18px 50px rgba(0,0,0,0.28);
+}
+h2{text-align:center;color:var(--accent);margin:0 0 14px;letter-spacing:-0.3px}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;justify-content:space-between;margin-bottom:10px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.full{grid-column:1/-1}
+label{font-weight:700;margin-top:6px;display:block;color:var(--text);font-size:14px}
+input,select,button{
+  width:100%;
+  padding:11px 12px;
+  margin-top:6px;
+  font-size:15px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,0.04);
+  color:var(--text);
+}
+input:focus,select:focus{
+  outline:none;
+  border-color:var(--accent2);
+  box-shadow:0 0 0 3px rgba(33,230,193,0.2);
+}
+button{
+  background:linear-gradient(120deg,var(--accent),#f37335);
+  color:#0b0c10;
+  border:none;
+  border-radius:12px;
+  font-weight:800;
+  cursor:pointer;
+  box-shadow:0 12px 30px rgba(243,115,53,0.25);
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+button:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(243,115,53,0.32);}
+.muted{font-size:12px;color:var(--muted);margin-top:4px}
+.card{
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  border-left:6px solid var(--accent2);
+  border-radius:12px;
+  padding:12px;
+  margin-top:12px;
+}
+.warn{background:rgba(247,183,51,0.08);border-left-color:#f59e0b}
+.dim{background:rgba(255,255,255,0.02);border-left-color:#111827}
+.ok{border-left-color:#22c55e}
+.extraGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.extraTitle{font-weight:800;margin-bottom:6px}
+.checkRow{display:flex;align-items:center;gap:10px;margin-top:8px}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.pill{display:inline-flex;gap:8px;align-items:center;padding:6px 10px;border-radius:999px;border:1px solid var(--border);background:rgba(255,255,255,0.05);font-weight:800;font-size:12px}
+.pill b{color:var(--accent)}
+@media(max-width:700px){.row{grid-template-columns:1fr;}}
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px}
+th,td{border-bottom:1px solid rgba(255,255,255,0.08);padding:8px 6px;text-align:left}
+th{color:var(--muted);font-weight:800}
+</style>
+</head>
+<body>
+<div class="shell">
+  <nav class="nav">
+    <a href="index.html">Ana Sayfa</a>
+    <a href="harf_notu_otomatik_grafikli.html">Harf Notu + Grafik</a>
+    <a href="heatmap.html">Heatmap</a>
+    <a class="active" href="detaylifinal.html">Hedef Final</a>
+    <a href="anogano.html">AGNO / GANO</a>
+    <a href="hakkinda.html">Hakkında</a>
+  </nav>
+
+  <div class="container">
+    <div class="bar">
+      <div>
+        <h2>MAKÜ • Hedef Final Hesaplayıcı</h2>
+        <div class="muted" id="note"></div>
+      </div>
+      <div style="min-width:240px">
+        <label style="margin-top:0">Program</label>
+        <select id="selProgram">
+          <option value="" selected disabled>Seçiniz…</option>
+          <option value="lisans">Lisans</option>
+          <option value="onlisans">Önlisans</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="formArea" style="display:none;">
+      <div class="row">
+        <div>
+          <label>Vize Notun</label>
+          <input id="inpMyMid" type="number" min="0" max="100" placeholder="0-100">
+        </div>
+        <div>
+          <label>Sınıf Vize Ortalaması</label>
+          <input id="inpClsMid" type="number" min="0" max="100" placeholder="0-100">
+        </div>
+
+        <div>
+          <label>Vize Ağırlığı (%)</label>
+          <input id="inpWMid" type="number" min="0" max="100" value="40">
+        </div>
+        <div>
+          <label>Final Ağırlığı (%)</label>
+          <input id="inpWFinal" type="number" min="0" max="100" value="60">
+          <div class="muted">Ek kalemlerle toplam %100 olmalı.</div>
+        </div>
+
+        <div>
+          <label>Sınıf Final Ortalaması</label>
+          <input id="inpClsFinal" type="number" min="0" max="100" placeholder="örn: 50">
+        </div>
+        <div>
+          <label>Hedef Harf Notu</label>
+          <select id="inpTarget">
+            <option value="FD">FD</option>
+            <option value="DD">DD</option>
+            <option value="DC">DC</option>
+            <option value="CC">CC</option>
+            <option value="CB">CB</option>
+            <option value="BB">BB</option>
+            <option value="BA">BA</option>
+            <option value="AA" selected>AA</option>
+          </select>
+          <div class="muted">Hedefin ve üzeri için gereken en düşük final bulunur.</div>
+        </div>
+
+        <div>
+          <label>Katılan Öğrenci Sayısı (N)</label>
+          <input id="inpN" type="number" min="1" step="1" placeholder="örn: 72">
+          <div class="muted">N ≥ 20: T = ((X−X̄)/S)×10 + 70 • N &lt; 20: T = (X−X̄) + 70</div>
+        </div>
+
+        <div>
+          <label>Standart Sapma (S) <span class="muted">(opsiyonel)</span></label>
+          <input id="inpS" type="number" min="0.1" max="60" step="0.1" placeholder="boş bırakırsan 10 / 15 / 20">
+          <div class="muted">S yalnızca N ≥ 20 iken gerekir (bağıl). Boşsa 10/15/20 senaryosu gösterilir.</div>
+        </div>
+
+        <div class="full">
+          <div class="pills">
+            <span class="pill">Eşikler: <b>BDKAL</b>=15</span>
+            <span class="pill"><b>HBAL</b>=35</span>
+            <span class="pill"><b>HBÜL</b>=90</span>
+            <span class="pill"><b>BDKÜL</b>=95</span>
+            <span class="pill" id="pillYssl">YSSL: —</span>
+          </div>
+        </div>
+
+        <div class="full checkRow">
+          <input id="chkExtra" type="checkbox" style="width:auto;transform:scale(1.1)">
+          <label for="chkExtra" style="margin:0;font-weight:800">Ek değerlendirme var (ödev/quiz/proje/lab...)</label>
+        </div>
+
+        <div id="extraArea" class="full" style="display:none">
+          <label>Kaç adet ek kalem?</label>
+          <select id="inpExtraCount">
+            <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+            <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+          </select>
+          <div class="muted">Her ek kalem için: ad, ağırlık %, senin notun, sınıf ortalaması</div>
+          <div id="extraList"></div>
+        </div>
+
+        <div class="full">
+          <button type="button" onclick="calculate()">Hesapla</button>
+        </div>
+      </div>
+
+      <div id="out"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ================= MAKÜ kuralları =================
+  - Program: Lisans / Önlisans
+  - Final barajı (YSSL): Lisans 50, Önlisans 45
+    Final < YSSL -> FD (doğrudan)
+  - Ham başarı notu (X): ağırlıklı toplam
+  - Eşikler: BDKAL=15, HBAL=35, HBÜL=90, BDKÜL=95
+      X < 15 -> FF
+      15 ≤ X < 35 -> FD
+      90 ≤ X < 95 -> AA
+      X ≥ 95 -> AA
+  - Diğerleri:
+      X̄: sınıf ağırlıklı ort.
+      N ≥ 20: T = ((X − X̄)/S)*10 + 70
+      N < 20: T = (X − X̄) + 70
+    Sonra Tablo II/III satır seçimi (X̄ aralığı) + T aralığıyla harf
+=================================================== */
+
+const THRESH = {BDKAL:15, HBAL:35, HBUL:90, BDKUL:95};
+
+const CONFIG = {
+  lisans: {
+    label: "Lisans",
+    yssl: 50,
+    table: [
+      {name:"Mükemmel 1", xbarLow:85.00, xbarHigh:95.00, ranges:{FD:[0.00,28.99], DD:[29.00,43.49], DC:[43.50,49.99], CC:[50.00,55.49], CB:[55.50,60.49], BB:[60.50,66.64], BA:[66.65,69.99], AA:[70.00,100.00]}},
+      {name:"Mükemmel 2", xbarLow:80.00, xbarHigh:84.99, ranges:{FD:[0.00,33.49], DD:[33.50,45.99], DC:[46.00,52.49], CC:[52.50,57.99], CB:[58.00,62.99], BB:[63.00,67.99], BA:[68.00,70.99], AA:[71.00,100.00]}},
+      {name:"Mükemmel 3", xbarLow:75.00, xbarHigh:79.99, ranges:{FD:[0.00,37.99], DD:[38.00,48.99], DC:[49.00,54.99], CC:[55.00,60.49], CB:[60.50,65.49], BB:[65.50,70.49], BA:[70.50,72.99], AA:[73.00,100.00]}},
+      {name:"Mükemmel 4", xbarLow:70.00, xbarHigh:74.99, ranges:{FD:[0.00,39.99], DD:[40.00,50.99], DC:[51.00,56.99], CC:[57.00,61.99], CB:[62.00,67.49], BB:[67.50,72.49], BA:[72.50,77.99], AA:[78.00,100.00]}},
+      {name:"Çok İyi",     xbarLow:62.50, xbarHigh:69.99, ranges:{FD:[0.00,50.99], DD:[51.00,55.99], DC:[56.00,60.49], CC:[60.50,65.49], CB:[65.50,70.49], BB:[70.50,75.99], BA:[76.00,80.49], AA:[80.50,100.00]}},
+      {name:"İyi",         xbarLow:57.50, xbarHigh:62.49, ranges:{FD:[0.00,52.49], DD:[52.50,57.99], DC:[58.00,62.49], CC:[62.50,67.99], CB:[68.00,72.99], BB:[73.00,77.99], BA:[78.00,82.49], AA:[82.50,100.00]}},
+      {name:"Orta Üstü",   xbarLow:52.50, xbarHigh:57.49, ranges:{FD:[0.00,54.99], DD:[55.00,58.99], DC:[59.00,64.99], CC:[65.00,69.99], CB:[70.00,74.99], BB:[75.00,79.99], BA:[80.00,84.49], AA:[84.50,100.00]}},
+      {name:"Orta",        xbarLow:47.50, xbarHigh:52.49, ranges:{FD:[0.00,56.99], DD:[57.00,61.99], DC:[62.00,66.99], CC:[67.00,71.99], CB:[72.00,76.99], BB:[77.00,81.49], BA:[81.50,87.49], AA:[87.50,100.00]}},
+      {name:"Zayıf",       xbarLow:42.50, xbarHigh:47.49, ranges:{FD:[0.00,58.99], DD:[59.00,63.99], DC:[64.00,68.99], CC:[69.00,73.99], CB:[74.00,78.99], BB:[79.00,83.99], BA:[84.00,88.49], AA:[88.50,100.00]}},
+      {name:"Kötü",        xbarLow:15.00, xbarHigh:42.49, ranges:{FD:[0.00,60.49], DD:[60.50,66.49], DC:[66.50,70.99], CC:[71.00,75.99], CB:[76.00,80.49], BB:[80.50,85.99], BA:[86.00,90.49], AA:[90.50,100.00]}},
+    ]
+  },
+  onlisans: {
+    label: "Önlisans",
+    yssl: 45,
+    table: [
+      {name:"Mükemmel 1", xbarLow:80.00, xbarHigh:95.00, ranges:{FD:[0.00,28.99], DD:[29.00,43.49], DC:[43.50,49.99], CC:[50.00,55.49], CB:[55.50,60.49], BB:[60.50,66.64], BA:[66.65,69.99], AA:[70.00,100.00]}},
+      {name:"Mükemmel 2", xbarLow:70.00, xbarHigh:79.99, ranges:{FD:[0.00,33.49], DD:[33.50,45.99], DC:[46.00,52.49], CC:[52.50,57.99], CB:[58.00,62.99], BB:[63.00,67.99], BA:[68.00,70.99], AA:[71.00,100.00]}},
+      {name:"Mükemmel 3", xbarLow:65.00, xbarHigh:69.99, ranges:{FD:[0.00,37.99], DD:[38.00,48.99], DC:[49.00,54.99], CC:[55.00,60.49], CB:[60.50,65.49], BB:[65.50,70.49], BA:[70.50,72.99], AA:[73.00,100.00]}},
+      {name:"Mükemmel 4", xbarLow:60.00, xbarHigh:64.99, ranges:{FD:[0.00,39.99], DD:[40.00,50.99], DC:[51.00,56.99], CC:[57.00,61.99], CB:[62.00,67.49], BB:[67.50,72.49], BA:[72.50,77.99], AA:[78.00,100.00]}},
+      {name:"Çok İyi",     xbarLow:55.00, xbarHigh:59.99, ranges:{FD:[0.00,50.99], DD:[51.00,55.99], DC:[56.00,60.49], CC:[60.50,65.49], CB:[65.50,70.49], BB:[70.50,75.99], BA:[76.00,80.49], AA:[80.50,100.00]}},
+      {name:"İyi",         xbarLow:50.00, xbarHigh:54.99, ranges:{FD:[0.00,52.49], DD:[52.50,57.99], DC:[58.00,62.49], CC:[62.50,67.99], CB:[68.00,72.99], BB:[73.00,77.99], BA:[78.00,82.49], AA:[82.50,100.00]}},
+      {name:"Orta Üstü",   xbarLow:45.00, xbarHigh:49.99, ranges:{FD:[0.00,54.99], DD:[55.00,58.99], DC:[59.00,64.99], CC:[65.00,69.99], CB:[70.00,74.99], BB:[75.00,79.99], BA:[80.00,84.49], AA:[84.50,100.00]}},
+      {name:"Orta",        xbarLow:35.00, xbarHigh:44.99, ranges:{FD:[0.00,56.99], DD:[57.00,61.99], DC:[62.00,66.99], CC:[67.00,71.99], CB:[72.00,76.99], BB:[77.00,81.49], BA:[81.50,87.49], AA:[87.50,100.00]}},
+      {name:"Zayıf",       xbarLow:25.00, xbarHigh:34.99, ranges:{FD:[0.00,58.99], DD:[59.00,63.99], DC:[64.00,68.99], CC:[69.00,73.99], CB:[74.00,78.99], BB:[79.00,83.99], BA:[84.00,88.49], AA:[88.50,100.00]}},
+      {name:"Kötü",        xbarLow:15.00, xbarHigh:24.99, ranges:{FD:[0.00,60.49], DD:[60.50,66.49], DC:[66.50,70.99], CC:[71.00,75.99], CB:[76.00,80.49], BB:[80.50,85.99], BA:[86.00,90.49], AA:[90.50,100.00]}},
+    ]
+  }
+};
+
+// Harf sıralaması (hedef ve üzeri)
+const RANK = {"FF":0,"FD":1,"DD":2,"DC":3,"CC":4,"CB":5,"BB":6,"BA":7,"AA":8};
+
+let activeKey = null;
+
+function pickRow(table, xbar){
+  for(const row of table){
+    if(xbar >= row.xbarLow && xbar <= row.xbarHigh) return row;
+  }
+  return null;
+}
+
+function letterFromT(ranges, t){
+  for(const [L, [lo, hi]] of Object.entries(ranges)){
+    if(t >= lo && t <= hi) return L;
+  }
+  if(t < 0) return "FD";
+  if(t > 100) return "AA";
+  return "FD";
+}
+
+function computeWeighted(myMid, myFinal, clsMid, clsFinal, wMidPct, wFinalPct, extras){
+  const wMid = wMidPct/100;
+  const wFinal = wFinalPct/100;
+  const exN = extras.map(x=>({...x, w: x.wPct/100}));
+
+  const userConst = myMid*wMid + exN.reduce((a,x)=>a + x.my*x.w,0);
+  const classConst = clsMid*wMid + exN.reduce((a,x)=>a + x.cls*x.w,0);
+
+  const X = userConst + myFinal*wFinal;
+  const Xbar = classConst + clsFinal*wFinal;
+
+  return { X, Xbar, userConst, classConst };
+}
+
+function gradeMAKU({programKey, myMid, myFinal, clsMid, clsFinal, N, S, wMidPct, wFinalPct, extras}){
+  const cfg = CONFIG[programKey];
+
+  // Final barajı (YSSL)
+  if(myFinal < cfg.yssl){
+    return {letter:"FD", reason:`Final < YSSL (${cfg.yssl})`, system:"Baraj", X:null, Xbar:null, T:null, level:null };
+  }
+
+  const {X, Xbar} = computeWeighted(myMid,myFinal,clsMid,clsFinal,wMidPct,wFinalPct,extras);
+
+  // Doğrudan eşikler
+  if(X < THRESH.BDKAL) return {letter:"FF", reason:`X < BDKAL (${THRESH.BDKAL})`, system:"Doğrudan", X, Xbar:null, T:null, level:null };
+  if(X >= THRESH.BDKUL) return {letter:"AA", reason:`X ≥ BDKÜL (${THRESH.BDKUL})`, system:"Doğrudan", X, Xbar:null, T:null, level:null };
+  if(X < THRESH.HBAL) return {letter:"FD", reason:`BDKAL ≤ X < HBAL (${THRESH.HBAL})`, system:"Doğrudan", X, Xbar:null, T:null, level:null };
+  if(X >= THRESH.HBUL) return {letter:"AA", reason:`HBÜL (${THRESH.HBUL}) ≤ X < BDKÜL (${THRESH.BDKUL})`, system:"Doğrudan", X, Xbar:null, T:null, level:null };
+
+  // T hesabı
+  let T=null, system=null;
+  if(N >= 20){
+    if(!(S > 0)) return {letter:"—", reason:`S > 0 olmalı (N≥20)`, system:"Bağıl (N≥20)", X, Xbar, T:null, level:null};
+    T = ((X - Xbar) / S) * 10 + 70;
+    system = "Bağıl (N ≥ 20)";
+  } else {
+    T = (X - Xbar) + 70;
+    system = "Yarı Bağıl (N < 20)";
+  }
+
+  const row = pickRow(cfg.table, Xbar);
+  if(!row){
+    return {letter:"—", reason:`X̄=${Xbar.toFixed(2)} tablo aralığı dışında`, system, X, Xbar, T, level:null};
+  }
+
+  const L = letterFromT(row.ranges, T);
+  return {letter:L, reason:`${row.name} satırı`, system, X, Xbar, T, level:row.name};
+}
+
+/* ====== Ek kalem UI ====== */
+const chkExtra=document.getElementById("chkExtra");
+const extraArea=document.getElementById("extraArea");
+const inpExtraCount=document.getElementById("inpExtraCount");
+const extraList=document.getElementById("extraList");
+
+chkExtra.addEventListener("change", ()=>{
+  extraArea.style.display = chkExtra.checked ? "block" : "none";
+  renderExtras();
+});
+inpExtraCount.addEventListener("change", renderExtras);
+
+function renderExtras(){
+  extraList.innerHTML="";
+  if(!chkExtra.checked) return;
+  const n=Number(inpExtraCount.value);
+  for(let i=1;i<=n;i++){
+    const div=document.createElement("div");
+    div.className="card";
+    div.innerHTML=`
+      <div class="extraTitle">Ek Kalem ${i}</div>
+      <div class="extraGrid">
+        <div>
+          <label>Ad (opsiyonel)</label>
+          <input id="exName${i}" placeholder="örn: Ödev">
+        </div>
+        <div>
+          <label>Ağırlık (%)</label>
+          <input id="exW${i}" type="number" min="0" max="100" placeholder="örn: 10">
+        </div>
+        <div>
+          <label>Senin Notun</label>
+          <input id="exMy${i}" type="number" min="0" max="100" placeholder="0-100">
+        </div>
+        <div>
+          <label>Sınıf Ortalaması</label>
+          <input id="exCls${i}" type="number" min="0" max="100" placeholder="0-100">
+        </div>
+      </div>
+    `;
+    extraList.appendChild(div);
+  }
+}
+renderExtras();
+
+/* ====== Program seçimi ====== */
+const selProgram=document.getElementById("selProgram");
+const formArea=document.getElementById("formArea");
+const note=document.getElementById("note");
+const pillYssl=document.getElementById("pillYssl");
+
+selProgram.addEventListener("change", ()=>{
+  activeKey = selProgram.value;
+  formArea.style.display = "block";
+  const cfg = CONFIG[activeKey];
+  note.textContent = `${cfg.label} seçili. Final barajı (YSSL) = ${cfg.yssl}.`;
+  pillYssl.innerHTML = `YSSL: <b>${cfg.yssl}</b>`;
+});
+
+/* ====== Hesapla ====== */
+function val01(x){ return Number.isFinite(x) && x>=0 && x<=100; }
+
+function collect(){
+  const myMid=Number(document.getElementById("inpMyMid").value);
+  const clsMid=Number(document.getElementById("inpClsMid").value);
+  const clsFinal=Number(document.getElementById("inpClsFinal").value);
+
+  const wMidPct=Number(document.getElementById("inpWMid").value);
+  const wFinalPct=Number(document.getElementById("inpWFinal").value);
+
+  const target=document.getElementById("inpTarget").value;
+  const N=Number(document.getElementById("inpN").value);
+
+  const sStr=document.getElementById("inpS").value.trim();
+  const Svals = sStr ? [Number(sStr)] : [10,15,20];
+
+  let extras=[];
+  let sumPct=wMidPct+wFinalPct;
+
+  if(chkExtra.checked){
+    const n=Number(inpExtraCount.value);
+    for(let i=1;i<=n;i++){
+      const name=(document.getElementById(`exName${i}`).value || `Ek ${i}`).trim();
+      const w=Number(document.getElementById(`exW${i}`).value);
+      const my=Number(document.getElementById(`exMy${i}`).value);
+      const cls=Number(document.getElementById(`exCls${i}`).value);
+
+      extras.push({name,wPct:w,my,cls});
+      sumPct += w;
+    }
+  }
+
+  return {myMid,clsMid,clsFinal,wMidPct,wFinalPct,target,N,Svals,extras,sumPct};
+}
+
+function validate(d){
+  if(!activeKey) return "Önce program (Lisans/Önlisans) seç.";
+  if(!val01(d.myMid) || !val01(d.clsMid) || !val01(d.clsFinal)) return "Vize ve sınıf ortalamaları 0–100 olmalı.";
+  if(!Number.isFinite(d.wMidPct) || !Number.isFinite(d.wFinalPct) || d.wMidPct<0 || d.wFinalPct<0) return "Ağırlıklar hatalı.";
+  if(!Number.isFinite(d.N) || d.N < 1) return "N en az 1 olmalı.";
+
+  for(const ex of d.extras){
+    if(!Number.isFinite(ex.wPct) || ex.wPct<0 || ex.wPct>100) return `${ex.name}: ağırlık 0–100 olmalı.`;
+    if(!val01(ex.my)) return `${ex.name}: senin notun 0–100 olmalı.`;
+    if(!val01(ex.cls)) return `${ex.name}: sınıf ort 0–100 olmalı.`;
+  }
+  const sum = d.sumPct;
+  if(Math.round(sum*100)/100 !== 100) return `Ağırlıkların toplamı 100 olmalı. Şu an: ${sum}`;
+
+  if(d.Svals.some(s=>!Number.isFinite(s) || s<=0 || s>60)) return "S (standart sapma) 0–60 aralığında olmalı.";
+  return null;
+}
+
+function buildBreakdownTable(wMidPct,wFinalPct,myMid,clsMid,clsFinal,extras){
+  const wMid=wMidPct/100, wFinal=wFinalPct/100;
+  const exN=extras.map(x=>({...x,w:x.wPct/100}));
+
+  const myKnown = myMid*wMid + exN.reduce((a,x)=>a + x.my*x.w,0);
+  const classKnown = clsMid*wMid + exN.reduce((a,x)=>a + x.cls*x.w,0);
+
+  let rows = `
+    <tr><td><b>Vize</b></td><td>${wMidPct}%</td><td>${myMid}</td><td>${clsMid}</td><td>${(myMid*wMid).toFixed(2)}</td><td>${(clsMid*wMid).toFixed(2)}</td></tr>
+    <tr><td><b>Final (?)</b></td><td>${wFinalPct}%</td><td>?</td><td>${clsFinal}</td><td>?</td><td>${(clsFinal*wFinal).toFixed(2)}</td></tr>
+  `;
+  exN.forEach(x=>{
+    rows += `<tr><td><b>${x.name}</b></td><td>${x.wPct}%</td><td>${x.my}</td><td>${x.cls}</td><td>${(x.my*x.w).toFixed(2)}</td><td>${(x.cls*x.w).toFixed(2)}</td></tr>`;
+  });
+
+  const classAvg = classKnown + clsFinal*wFinal;
+
+  return {
+    myKnown, classAvg,
+    table: `
+      <table>
+        <thead><tr><th>Kalem</th><th>Ağırlık</th><th>Sen</th><th>Sınıf Ort</th><th>Katkın</th><th>Sınıf Katkısı</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    `
+  };
+}
+
+function findMinFinalForTarget(base, S){
+  const cfg = CONFIG[activeKey];
+  const targetRank = RANK[base.target];
+
+  // 0.1 adım tarama (hassasiyet)
+  for(let f=0; f<=100.0001; f+=0.1){
+    const res = gradeMAKU({
+      programKey: activeKey,
+      myMid: base.myMid,
+      myFinal: f,
+      clsMid: base.clsMid,
+      clsFinal: base.clsFinal,
+      N: base.N,
+      S: S,
+      wMidPct: base.wMidPct,
+      wFinalPct: base.wFinalPct,
+      extras: base.extras
+    });
+    if(res.letter !== "—" && RANK[res.letter] >= targetRank){
+      return {final: Number(f.toFixed(1)), res};
+    }
+  }
+  return null;
+}
+
+function calculate(){
+  const out=document.getElementById("out");
+  out.innerHTML="";
+
+  const d = collect();
+  const err = validate(d);
+  if(err){
+    out.innerHTML = `<div class="card warn">Uyarı: ${err}</div>`;
+    return;
+  }
+
+  const {myKnown, classAvg, table} = buildBreakdownTable(d.wMidPct,d.wFinalPct,d.myMid,d.clsMid,d.clsFinal,d.extras);
+
+  const cfg = CONFIG[activeKey];
+
+  let html = `
+    <div class="card dim">
+      <div><b>Program:</b> ${cfg.label} • <b>YSSL:</b> ${cfg.yssl} • <b>N:</b> ${d.N}</div>
+      <div class="muted">Sınıf ortalaması (X̄) ve senin bilinen katkın final hariç hesaplanır; sonra final taranarak hedef harfe ulaşan en düşük final bulunur.</div>
+      <div style="margin-top:8px"><b>Sınıf Genel Ortalaması (X̄):</b> ${classAvg.toFixed(2)}</div>
+      <div><b>Senin bilinen katkın (final hariç):</b> ${myKnown.toFixed(2)}</div>
+      ${table}
+    </div>
+  `;
+
+  // S kullanılmıyorsa (N<20) tek senaryo
+  if(d.N < 20){
+    const found = findMinFinalForTarget(d, 10); // S önemsiz
+    if(!found){
+      out.innerHTML = html + `<div class="card warn">Bu koşullarda hedef <b>${d.target}</b> için final 0–100 aralığında bulunamadı.</div>`;
+      return;
+    }
+    const r = found.res;
+    html += `
+      <div class="card ok">
+        <div><b>Sonuç (N&lt;20 → Yarı bağıl):</b> Hedef <b>${d.target}</b> için gereken en düşük final ≈ <b>${found.final}</b></div>
+        <div class="muted">Bulunan notta harf: <b>${r.letter}</b> • Sistem: ${r.system} • Kural: ${r.reason}</div>
+      </div>
+    `;
+    out.innerHTML = html;
+    return;
+  }
+
+  // N≥20 ise: S senaryoları
+  const sStr=document.getElementById("inpS").value.trim();
+  const multi = !sStr;
+
+  html += `<div class="card"><b>Hedef:</b> ${d.target} (ve üzeri) • <b>N≥20</b> olduğu için T hesabında <b>S</b> kullanılır.</div>`;
+
+  d.Svals.forEach(S=>{
+    const found = findMinFinalForTarget(d, S);
+    if(!found){
+      html += `<div class="card warn"><b>S=${S}</b> → hedef <b>${d.target}</b> için 0–100 aralığında final bulunamadı.</div>`;
+      return;
+    }
+    const r = found.res;
+    const tag = multi ? `<span class="muted">(senaryo)</span>` : "";
+    html += `
+      <div class="card ok">
+        <div><b>S=${S}</b> ${tag} → gereken en düşük final ≈ <b>${found.final}</b></div>
+        <div class="muted">Bulunan notta harf: <b>${r.letter}</b> • T=${(r.T==null? "—" : r.T.toFixed(2))} • Seviye: ${r.level || "—"} • ${r.reason}</div>
+      </div>
+    `;
+  });
+
+  out.innerHTML = html;
+}
+</script>
+</body>
+</html>

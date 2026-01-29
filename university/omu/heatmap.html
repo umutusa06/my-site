@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>OMÜ | Final–σ Heatmap (Yakında)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b132b;--bg2:#0f162f;--card:#0f172a;--glass:rgba(255,255,255,0.05);
+      --accent:#f7b733;--accent2:#21e6c1;--text:#e8eefb;--muted:#9fb1d1;--border:#1f2a44;
+      --shadow:0 18px 48px rgba(0,0,0,0.32);
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      font-family:"Space Grotesk","Manrope",system-ui,-apple-system,sans-serif;
+      min-height:100vh;
+      background:radial-gradient(circle at 20% 18%, rgba(33,230,193,0.16), transparent 32%),
+                 radial-gradient(circle at 82% 8%, rgba(247,183,51,0.16), transparent 32%),
+                 linear-gradient(145deg, var(--bg), var(--bg2));
+      color:var(--text);
+    }
+    .wrap{max-width:1100px;margin:0 auto;padding:28px 18px 44px;}
+    nav.nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+    nav.nav a{
+      color:var(--text);text-decoration:none;padding:10px 14px;
+      border:1px solid var(--border);border-radius:12px;
+      background:rgba(255,255,255,0.05);font-weight:800;
+      transition:background .15s ease,border-color .15s ease,color .15s ease;
+    }
+    nav.nav a.active{border-color:var(--accent);color:var(--accent);background:rgba(247,183,51,0.12);}
+    .panel{
+      background:var(--glass);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:18px;
+      box-shadow:var(--shadow);
+      margin-bottom:14px;
+    }
+    h1{margin:0 0 8px;font-size:26px;letter-spacing:-0.3px;}
+    .muted{color:var(--muted);font-size:13px;line-height:1.55;}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+    label{display:block;font-weight:800;font-size:14px;margin-top:6px}
+    input,select,button{
+      width:100%;padding:11px 12px;border-radius:12px;border:1px solid var(--border);
+      background:rgba(255,255,255,0.05);color:var(--text);font-size:14px;box-sizing:border-box;
+    }
+    input::placeholder{color:rgba(232,238,251,0.55);}
+    button{
+      cursor:pointer;font-weight:900;
+      background:linear-gradient(120deg,var(--accent),#f37335);
+      border:none;color:#0b0c10;box-shadow:0 12px 30px rgba(243,115,53,0.25);
+      transition:transform .12s ease,box-shadow .12s ease;
+    }
+    button:hover{transform:translateY(-1px);box-shadow:0 16px 36px rgba(243,115,53,0.32);}
+    .layout{display:grid;grid-template-columns:1.4fr 1fr;gap:14px}
+    @media (max-width:980px){.layout{grid-template-columns:1fr}}
+    canvas{width:100%;height:520px;display:block;border-radius:12px;background:#0f172a}
+    .legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;
+      border:1px solid var(--border);background:rgba(255,255,255,.05);font-size:12px}
+    .sw{width:14px;height:14px;border-radius:4px;border:1px solid rgba(0,0,0,.2)}
+    .tooltip{
+      position:fixed;pointer-events:none;z-index:999;background:#0f172a;border:1px solid var(--border);
+      padding:10px 12px;border-radius:10px;display:none;max-width:320px;box-shadow:0 14px 35px rgba(0,0,0,.35);
+      font-size:12px;line-height:1.35
+    }
+    .tTitle{font-weight:900;margin-bottom:6px}
+    .warn{padding:10px 12px;border-radius:12px;border:1px solid #7f1d1d;background:rgba(127,29,29,.25);margin-top:10px}
+    .ok{padding:10px 12px;border-radius:12px;border:1px solid #14532d;background:rgba(20,83,45,.25);margin-top:10px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="harf_notu_otomatik_grafikli.html">Harf Notu + Grafik</a>
+      <a class="active" href="heatmap.html">Heatmap</a>
+      <a href="detaylifinal.html">Hedef Final</a>
+      <a href="anogano.html">AGNO / GANO</a>
+      <a href="hakkinda.html">Hakkında</a>
+    </nav>
+
+    <div class="panel">
+      <h1>Final–σ Heatmap (OMÜ)</h1>
+      <div class="muted">
+        OMÜ bağıl değerlendirme yönergesine göre senaryoları görselleştirmek için final ve σ kombinasyonları haritalanır. Yöntem seçimi için N (katılan sayısı) ve sınıf ortalamaları kullanılır.
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="grid">
+        <div>
+          <label>Dersin N sayısı</label>
+          <input id="inpN" type="number" min="1" value="30" />
+          <div class="muted">Yöntem seçimi için gerekli.</div>
+        </div>
+
+        <div>
+          <label>Vize Notun</label>
+          <input id="inpMyMid" type="number" min="0" max="100" value="50" />
+        </div>
+        <div>
+          <label>Final Notun (mevcut)</label>
+          <input id="inpMyFinal" type="number" min="0" max="100" value="50" />
+          <div class="muted">Heatmap final aralığını tarar; burası mevcut durum özeti için.</div>
+        </div>
+
+        <div>
+          <label>Sınıf Vize Ortalaması</label>
+          <input id="inpClsMid" type="number" min="0" max="100" value="55" />
+        </div>
+        <div>
+          <label>Sınıf Final Ortalaması</label>
+          <input id="inpClsFinal" type="number" min="0" max="100" value="50" />
+        </div>
+
+        <div>
+          <label>Vize Ağırlığı (%)</label>
+          <input id="inpWMid" type="number" min="0" max="100" value="40" />
+        </div>
+        <div>
+          <label>Final Ağırlığı (%)</label>
+          <input id="inpWFinal" type="number" min="0" max="100" value="60" />
+        </div>
+
+        <div>
+          <label>Final Aralığı (min–max)</label>
+          <div class="grid" style="grid-template-columns:1fr 1fr;gap:8px">
+            <input id="inpFinalMin" type="number" min="0" max="100" value="0" />
+            <input id="inpFinalMax" type="number" min="0" max="100" value="100" />
+          </div>
+        </div>
+
+        <div>
+          <label>σ Aralığı (min–max)</label>
+          <div class="grid" style="grid-template-columns:1fr 1fr;gap:8px">
+            <input id="inpSigmaMin" type="number" min="0.1" step="0.1" value="5" />
+            <input id="inpSigmaMax" type="number" min="0.1" step="0.1" value="30" />
+          </div>
+          <div class="muted">Tablo-3 (N≥30) için gerekir. Diğer yöntemlerde σ etkisiz.</div>
+        </div>
+
+        <div>
+          <label>Hücre Yoğunluğu</label>
+          <select id="inpRes">
+            <option value="40">Normal (40×40)</option>
+            <option value="55" selected>Detaylı (55×55)</option>
+            <option value="70">Çok detay (70×70)</option>
+          </select>
+        </div>
+
+        <div style="align-self:end">
+          <button type="button" onclick="drawAll()">Heatmap Çiz</button>
+          <div id="status" class="muted" style="margin-top:8px"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="layout">
+      <div class="panel">
+        <div style="font-weight:900;margin-bottom:8px">Heatmap</div>
+        <canvas id="cv"></canvas>
+        <div class="legend" id="legend"></div>
+        <div class="muted">X: Final notu — Y: σ. Hücre rengi: harf notu (yönergeye göre).</div>
+      </div>
+
+      <div class="panel">
+        <div style="font-weight:900;margin-bottom:8px">Mevcut Durum Özeti</div>
+        <div id="summary" class="muted">Henüz hesaplanmadı.</div>
+        <div id="methodNote" style="margin-top:10px"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tooltip" id="tip"></div>
+
+<script>
+/* =========================================================
+   OMÜ Yönerge Uyumlu Notlandırma
+   - Tablo-1: Mutlak (N≤10 veya ders ort ≥80)
+   - Tablo-2: 11–29: yüzdelik dağılım + sıralama (liste gerekir)
+   - Tablo-3: N≥30: Z->T, sınıf ort aralığına göre eşiklerle harf
+   - BDKL=20 altı FF (katılmaz)
+   - YSSL=50, BNAL=40 (başarı alt limitleri)
+   - Final≥50 & HBN≥60 olup bağıl sonuçla başarısız düşerse CC’ye sabitle
+========================================================= */
+
+const BDKL = 20;
+const BNAL = 40;
+const YSSL = 50;
+const MUTLAK_IF_CLASSAVG_GE = 80;
+
+function clamp(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
+
+function gradeTable1(hbn){
+  if (hbn >= 90) return "AA";
+  if (hbn >= 85) return "BA";
+  if (hbn >= 75) return "BB";
+  if (hbn >= 70) return "CB";
+  if (hbn >= 60) return "CC";
+  if (hbn >= 40) return "DC";
+  if (hbn >= 20) return "DD";
+  return "FF";
+}
+
+const TABLE3 = [
+  { name:"Pekiyi",   min:70.00,  max:79.99, thr:{ AA:59, BA:[54,58.99], BB:[49,53.99], CB:[44,48.99], CC:[39,43.99], DC:[34,38.99], DD:[29,33.99], FF:-Infinity } , ffBelow:29 },
+  { name:"Çok İyi",  min:62.50,  max:69.99, thr:{ AA:61, BA:[56,60.99], BB:[51,55.99], CB:[46,50.99], CC:[41,45.99], DC:[36,40.99], DD:[31,35.99], FF:-Infinity } , ffBelow:31 },
+  { name:"İyi",      min:57.50,  max:62.49, thr:{ AA:63, BA:[58,62.99], BB:[53,57.99], CB:[48,52.99], CC:[43,47.99], DC:[38,42.99], DD:[33,37.99], FF:-Infinity } , ffBelow:33 },
+  { name:"Ortanın Üstü", min:52.50, max:57.49, thr:{ AA:65, BA:[60,64.99], BB:[55,59.99], CB:[50,54.99], CC:[45,49.99], DC:[40,44.99], DD:[35,39.99], FF:-Infinity } , ffBelow:35 },
+  { name:"Orta",     min:47.50,  max:52.49, thr:{ AA:67, BA:[62,66.99], BB:[57,61.99], CB:[52,56.99], CC:[47,51.99], DC:[42,46.99], DD:[37,41.99], FF:-Infinity } , ffBelow:37 },
+  { name:"Zayıf",    min:42.50,  max:47.49, thr:{ AA:69, BA:[64,68.99], BB:[59,63.99], CB:[54,58.99], CC:[49,53.99], DC:[44,48.99], DD:[39,43.99], FF:-Infinity } , ffBelow:39 },
+  { name:"Kötü",     min:-Infinity, max:42.49, thr:{ AA:71, BA:[66,70.99], BB:[61,65.99], CB:[56,60.99], CC:[51,55.99], DC:[46,50.99], DD:[41,45.99], FF:-Infinity } , ffBelow:41 }
+];
+
+function pickTable3Row(classAvg){
+  for (const r of TABLE3){
+    if (classAvg > r.min && classAvg <= r.max) return r;
+  }
+  return TABLE3[TABLE3.length-1];
+}
+
+function gradeTable3ByT(row, T){
+  if (T < row.ffBelow) return "FF";
+  if (T >= row.thr.AA) return "AA";
+  if (T >= row.thr.BA[0] && T <= row.thr.BA[1]) return "BA";
+  if (T >= row.thr.BB[0] && T <= row.thr.BB[1]) return "BB";
+  if (T >= row.thr.CB[0] && T <= row.thr.CB[1]) return "CB";
+  if (T >= row.thr.CC[0] && T <= row.thr.CC[1]) return "CC";
+  if (T >= row.thr.DC[0] && T <= row.thr.DC[1]) return "DC";
+  if (T >= row.thr.DD[0] && T <= row.thr.DD[1]) return "DD";
+  return "FF";
+}
+
+function computeHBN(mid, fin, wMidPct, wFinPct){
+  const wMid = wMidPct/100, wFin = wFinPct/100;
+  return mid*wMid + fin*wFin;
+}
+
+function letterByDirective({N, myMid, myFinal, clsMid, clsFinal, wMidPct, wFinPct, sigma}){
+  const myHBN  = computeHBN(myMid,  myFinal,  wMidPct, wFinPct);
+  const clsHBN = computeHBN(clsMid, clsFinal, wMidPct, wFinPct);
+
+  if (myHBN < BDKL){
+    return { sys:"BDKL<20", letter:"FF", myHBN, clsHBN };
+  }
+
+  if (clsHBN >= MUTLAK_IF_CLASSAVG_GE){
+    return { sys:"TABLO-1 (ort≥80)", letter: gradeTable1(myHBN), myHBN, clsHBN };
+  }
+
+  if (N <= 10){
+    return { sys:"TABLO-1 (N≤10)", letter: gradeTable1(myHBN), myHBN, clsHBN };
+  }
+
+  if (N >= 11 && N <= 29){
+    return { sys:"TABLO-2 (11–29)", letter: null, myHBN, clsHBN };
+  }
+
+  const row = pickTable3Row(clsHBN);
+  const s = (Number.isFinite(sigma) && sigma > 0) ? sigma : 1e-9;
+  const Z = (myHBN - clsHBN) / s;
+  const T = 50 + 10*Z;
+  let letter = gradeTable3ByT(row, T);
+
+  const isFail = (letter === "DC" || letter === "DD" || letter === "FF");
+  if (myFinal >= YSSL && myHBN >= 60 && isFail){
+    letter = "CC";
+  }
+
+  return { sys:`TABLO-3 (N≥30) / ${row.name}`, letter, myHBN, clsHBN, Z, T };
+}
+
+const palette = {
+  "FF":"#991b1b",
+  "DD":"#dc2626",
+  "DC":"#f97316",
+  "CC":"#f59e0b",
+  "CB":"#84cc16",
+  "BB":"#22c55e",
+  "BA":"#06b6d4",
+  "AA":"#2563eb",
+  "NA":"#64748b"
+};
+
+function renderLegend(){
+  const el = document.getElementById("legend");
+  el.innerHTML = "";
+  const letters = ["FF","DD","DC","CC","CB","BB","BA","AA","NA"];
+  for (const L of letters){
+    const pill = document.createElement("span");
+    pill.className="pill";
+    const sw = document.createElement("span");
+    sw.className="sw";
+    sw.style.background = palette[L];
+    pill.appendChild(sw);
+    pill.appendChild(document.createTextNode(L === "NA" ? "NA (Tablo-2: liste gerekir)" : L));
+    el.appendChild(pill);
+  }
+}
+
+const canvas = document.getElementById("cv");
+const tip = document.getElementById("tip");
+let heat = null;
+
+function setupCanvas(){
+  const ctx = canvas.getContext("2d");
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = Math.floor(rect.width * dpr);
+  canvas.height = Math.floor(rect.height * dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return ctx;
+}
+
+function collect(){
+  return {
+    N: Number(document.getElementById("inpN").value),
+    myMid: Number(document.getElementById("inpMyMid").value),
+    myFinal: Number(document.getElementById("inpMyFinal").value),
+    clsMid: Number(document.getElementById("inpClsMid").value),
+    clsFinal: Number(document.getElementById("inpClsFinal").value),
+    wMidPct: Number(document.getElementById("inpWMid").value),
+    wFinPct: Number(document.getElementById("inpWFinal").value),
+    finalMin: Number(document.getElementById("inpFinalMin").value),
+    finalMax: Number(document.getElementById("inpFinalMax").value),
+    sigmaMin: Number(document.getElementById("inpSigmaMin").value),
+    sigmaMax: Number(document.getElementById("inpSigmaMax").value),
+    res: Number(document.getElementById("inpRes").value),
+  };
+}
+
+function validate(d){
+  const in01 = x => Number.isFinite(x) && x>=0 && x<=100;
+  if(!Number.isFinite(d.N) || d.N<1) return "N en az 1 olmalı.";
+  if(!in01(d.myMid) || !in01(d.myFinal) || !in01(d.clsMid) || !in01(d.clsFinal)) return "Notlar 0–100 aralığında olmalı.";
+  if(!Number.isFinite(d.wMidPct) || !Number.isFinite(d.wFinPct) || d.wMidPct<0 || d.wFinPct<0) return "Ağırlıklar geçerli değil.";
+  const sum = d.wMidPct + d.wFinPct;
+  if(Math.round(sum*100)/100 !== 100) return `Ağırlıkların toplamı 100 olmalı. Şu an: ${sum}`;
+  if(!Number.isFinite(d.finalMin) || !Number.isFinite(d.finalMax) || d.finalMin<0 || d.finalMax>100 || d.finalMin>=d.finalMax) return "Final aralığı hatalı (min<max, 0–100).";
+  if(!Number.isFinite(d.sigmaMin) || !Number.isFinite(d.sigmaMax) || d.sigmaMin<=0 || d.sigmaMax<=0 || d.sigmaMin>=d.sigmaMax) return "σ aralığı hatalı (min<max, >0).";
+  return null;
+}
+
+function drawAll(){
+  renderLegend();
+
+  const d = collect();
+  const err = validate(d);
+  const statusEl = document.getElementById("status");
+  const summaryEl = document.getElementById("summary");
+  const methodNote = document.getElementById("methodNote");
+  methodNote.innerHTML = "";
+
+  if(err){
+    statusEl.textContent = "Uyarı: " + err;
+    return;
+  }
+
+  const demoSigma = 15;
+  const now = letterByDirective({...d, sigma: demoSigma});
+  summaryEl.innerHTML =
+    `<b>Sınıf HBN:</b> ${now.clsHBN.toFixed(2)}<br>` +
+    `<b>Senin HBN:</b> ${now.myHBN.toFixed(2)}<br>` +
+    `<b>Yöntem:</b> ${now.sys}<br>` +
+    `<b>Harf (σ=${demoSigma}):</b> ${now.letter ?? "NA"}` +
+    (now.T!=null ? `<br><b>T:</b> ${now.T.toFixed(2)} | <b>Z:</b> ${now.Z.toFixed(3)}` : "");
+
+  if (d.N >= 11 && d.N <= 29){
+    methodNote.innerHTML = `<div class="warn">
+      <b>11–29 aralığı (Tablo-2):</b> Yönergeye göre y ordalarda ham başarı listesi gerekir; bu nedenle hücreler NA gösterilir.
+    </div>`;
+  } else {
+    methodNote.innerHTML = `<div class="ok"><b>Heatmap hazır:</b> Hücre rengi = yönergeye göre harf notu.</div>`;
+  }
+
+  const ctx = setupCanvas();
+  const W = canvas.getBoundingClientRect().width;
+  const H = canvas.getBoundingClientRect().height;
+
+  const padL = 54, padR = 14, padT = 18, padB = 44;
+  const plot = { x0: padL, y0: padT, x1: W-padR, y1: H-padB };
+
+  const n = d.res;
+  const cols = n, rows = n;
+  const cw = (plot.x1 - plot.x0) / cols;
+  const ch = (plot.y1 - plot.y0) / rows;
+
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = "#0f172a";
+  ctx.fillRect(0,0,W,H);
+
+  const data = Array.from({length:rows}, ()=>Array(cols));
+
+  for(let r=0;r<rows;r++){
+    const sigma = d.sigmaMax - (r + 0.5) * (d.sigmaMax - d.sigmaMin) / rows;
+    for(let c=0;c<cols;c++){
+      const fin = d.finalMin + (c + 0.5) * (d.finalMax - d.finalMin) / cols;
+
+      const res = letterByDirective({
+        ...d,
+        myFinal: fin,
+        sigma
+      });
+
+      const L = res.letter ?? "NA";
+      const x = plot.x0 + c*cw;
+      const y = plot.y0 + r*ch;
+
+      ctx.fillStyle = palette[L] || palette.NA;
+      ctx.fillRect(x, y, cw+0.2, ch+0.2);
+
+      data[r][c] = { ...res, final: fin, sigma, letter: L };
+    }
+  }
+
+  ctx.strokeStyle = "#1f2937";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(plot.x0, plot.y0);
+  ctx.lineTo(plot.x0, plot.y1);
+  ctx.lineTo(plot.x1, plot.y1);
+  ctx.stroke();
+
+  ctx.fillStyle="#9ca3af";
+  ctx.font="12px Arial";
+  const xlab="Final";
+  ctx.fillText(xlab, (plot.x0+plot.x1)/2 - ctx.measureText(xlab).width/2, plot.y1+32);
+  ctx.save();
+  ctx.translate(plot.x0-34, (plot.y0+plot.y1)/2);
+  ctx.rotate(-Math.PI/2);
+  const ylab="σ";
+  ctx.fillText(ylab, -ctx.measureText(ylab).width/2, 0);
+  ctx.restore();
+
+  const xt = 5, yt = 5;
+  for(let i=0;i<=xt;i++){
+    const f = d.finalMin + i*(d.finalMax-d.finalMin)/xt;
+    const x = plot.x0 + i*(plot.x1-plot.x0)/xt;
+    ctx.strokeStyle="#1f2937";
+    ctx.beginPath(); ctx.moveTo(x,plot.y0); ctx.lineTo(x,plot.y1); ctx.stroke();
+    ctx.fillStyle="#cdd7ea";
+    ctx.fillText(f.toFixed(0), x-6, plot.y1+18);
+  }
+  for(let i=0;i<=yt;i++){
+    const s = d.sigmaMax - i*(d.sigmaMax-d.sigmaMin)/yt;
+    const y = plot.y0 + i*(plot.y1-plot.y0)/yt;
+    ctx.strokeStyle="#1f2937";
+    ctx.beginPath(); ctx.moveTo(plot.x0,y); ctx.lineTo(plot.x1,y); ctx.stroke();
+    ctx.fillStyle="#cdd7ea";
+    ctx.fillText(s.toFixed(0), plot.x0-28, y+4);
+  }
+
+  heat = { plot, cols, rows, cw, ch, data };
+  statusEl.textContent = `Heatmap çizildi. (Final ${d.finalMin}-${d.finalMax}, σ ${d.sigmaMin}-${d.sigmaMax}, ${cols}×${rows})`;
+}
+
+canvas.addEventListener("mousemove", (e)=>{
+  if(!heat) return;
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+
+  const {plot, cw, ch, cols, rows, data} = heat;
+  if(mx < plot.x0 || mx > plot.x1 || my < plot.y0 || my > plot.y1){
+    tip.style.display="none"; return;
+  }
+  const c = clamp(Math.floor((mx - plot.x0)/cw), 0, cols-1);
+  const r = clamp(Math.floor((my - plot.y0)/ch), 0, rows-1);
+  const cell = data[r][c];
+  if(!cell){ tip.style.display="none"; return; }
+
+  const lines = [];
+  lines.push(`<div class="tTitle">${cell.letter}</div>`);
+  lines.push(`<b>Sistem:</b> ${cell.sys}`);
+  lines.push(`<b>Final:</b> ${cell.final.toFixed(1)} | <b>σ:</b> ${cell.sigma.toFixed(2)}`);
+  lines.push(`<b>Senin HBN:</b> ${cell.myHBN.toFixed(2)}`);
+  lines.push(`<b>Sınıf HBN:</b> ${cell.clsHBN.toFixed(2)}`);
+  if(cell.T!=null) lines.push(`<b>T:</b> ${cell.T.toFixed(2)} | <b>Z:</b> ${cell.Z.toFixed(3)}`);
+  if(cell.sys.startsWith("TABLO-2")) lines.push(`<span style="opacity:.85">Tablo-2 için sıralı ham başarı listesi gerekir.</span>`);
+
+  tip.innerHTML = lines.join("<br>");
+  tip.style.display="block";
+
+  const pad = 14;
+  let tx = e.clientX + 14, ty = e.clientY + 14;
+  const w = 330, h = 150;
+  if(tx + w > window.innerWidth - pad) tx = e.clientX - w - 14;
+  if(ty + h > window.innerHeight - pad) ty = e.clientY - h - 14;
+  tip.style.left = tx + "px";
+  tip.style.top = ty + "px";
+});
+canvas.addEventListener("mouseleave", ()=> tip.style.display="none");
+window.addEventListener("resize", ()=> { if(heat) drawAll(); });
+renderLegend();
+</script>
+</body>
+</html>

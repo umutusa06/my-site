@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sivas CÜ | Final–σ Heatmap</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b132b;
+      --bg2:#0f162f;
+      --card:#0f172a;
+      --glass:rgba(255,255,255,0.05);
+      --accent:#f7b733;
+      --accent2:#21e6c1;
+      --text:#e8eefb;
+      --muted:#9fb1d1;
+      --border:#1f2a44;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:"Space Grotesk","Manrope",system-ui,-apple-system,sans-serif;
+      min-height:100vh;
+      background:radial-gradient(circle at 20% 18%, rgba(33,230,193,0.16), transparent 32%),
+                 radial-gradient(circle at 82% 8%, rgba(247,183,51,0.16), transparent 32%),
+                 linear-gradient(145deg, var(--bg), var(--bg2));
+      color:var(--text);
+    }
+    .shell{max-width:1100px;margin:0 auto;padding:26px 18px 34px;}
+    nav.nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+    nav.nav a{
+      color:var(--text);text-decoration:none;padding:10px 14px;
+      border:1px solid var(--border);border-radius:12px;
+      background:rgba(255,255,255,0.05);font-weight:800;
+      transition:background .15s ease,border-color .15s ease,color .15s ease;
+    }
+    nav.nav a.active{border-color:var(--accent);color:var(--accent);background:rgba(247,183,51,0.12);}
+    .panel{
+      background:var(--glass);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:16px;
+      box-shadow:0 18px 50px rgba(0,0,0,0.28);
+      margin-bottom:14px;
+    }
+    h1,h2{margin:0 0 10px;}
+    h1{font-size:26px;letter-spacing:-0.3px;}
+    h2{font-size:20px;}
+    .lead{margin:0 0 12px;color:var(--muted);line-height:1.6;}
+    label{font-weight:700;display:block;margin-top:8px;font-size:14px}
+    input,select,button{
+      width:100%;
+      padding:11px 12px;
+      margin-top:6px;
+      box-sizing:border-box;
+      font-size:15px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.06);
+      color:var(--text);
+    }
+    input:focus,select:focus{
+      outline:none;
+      border-color:var(--accent2);
+      box-shadow:0 0 0 3px rgba(33,230,193,0.2);
+    }
+    button{
+      background:linear-gradient(120deg,var(--accent),#f37335);
+      color:#0b0c10;
+      border:none;
+      border-radius:12px;
+      font-weight:800;
+      cursor:pointer;
+      margin-top:12px;
+      box-shadow:0 12px 30px rgba(243,115,53,0.25);
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+    button:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(243,115,53,0.32);}
+    .muted{font-size:12px;color:var(--muted);margin-top:4px}
+    .warn{color:#ffd37a}
+    .bad{color:#ff9aa2}
+    .ok{color:#b7f7e8}
+    .card{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;padding:12px;margin-top:10px;}
+    .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+    .full{grid-column:1/-1}
+    .checkRow{display:flex;align-items:center;gap:10px;margin-top:10px}
+    .extraWrap{margin-top:10px}
+    .extraGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+    .extraTitle{font-weight:900;margin-bottom:6px}
+    .layout{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;margin-top:14px}
+    @media (max-width: 980px){ .layout{grid-template-columns:1fr} }
+    canvas{width:100%;height:520px;display:block;border-radius:12px;background:#0f172a}
+    .legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    .pill{padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.06);font-size:12px;color:var(--text);display:inline-flex;gap:8px;align-items:center;border:1px solid var(--border)}
+    .sw{width:14px;height:14px;border-radius:4px;border:1px solid rgba(0,0,0,.12)}
+    .tooltip{
+      position:fixed; pointer-events:none; z-index:99;
+      background:#0f172a; color:#fff; padding:10px 12px; border-radius:10px;
+      font-size:12px; max-width:280px; line-height:1.35; display:none;
+      box-shadow:0 10px 25px rgba(0,0,0,.35); border:1px solid var(--border);
+    }
+    .tipTitle{font-weight:900;margin-bottom:6px}
+    .gridSmall{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  </style>
+</head>
+
+<body>
+  <div class="shell">
+    <nav class="nav">
+      <a href="index.html">Ana Sayfa</a>
+      <a href="harf_notu_otomatik_grafikli.html">Harf Notu + Grafik</a>
+      <a class="active" href="heatmap.html">Heatmap</a>
+      <a href="detaylifinal.html">Hedef Final</a>
+      <a href="anogano.html">AGNO / GANO</a>
+      <a href="hakkinda.html">Hakkında</a>
+    </nav>
+
+    <div class="panel">
+      <h1>Sivas CÜ | Final–σ Heatmap</h1>
+      <p class="lead">
+        N ≥ 30 için Sivas CÜ Tablo-3 (Z→T) ile: Final notu ve σ değiştikçe harf notu nasıl değişiyor?
+        <br><span class="muted">11–29 (Tablo-2) bu sitede hesaplanmaz (liste gerekir); N ≤ 10 otomatik dağıtım yok.</span>
+      </p>
+
+      <div class="row">
+        <div>
+          <label>Bağıl değerlendirmeye katılan öğrenci sayısı (N)</label>
+          <input id="inpN" type="number" min="1" step="1" value="30">
+          <div class="muted">N ≥ 30: Tablo-3 | 11–29: uyarı | N ≤ 10: uyarı</div>
+        </div>
+
+        <div>
+          <label>BDKS / BNAL / YSSS (varsayılan)</label>
+          <div class="gridSmall">
+            <input id="inpBDKS" type="number" min="0" max="100" value="15" placeholder="BDKS">
+            <input id="inpBNAL" type="number" min="0" max="100" value="45" placeholder="BNAL">
+          </div>
+          <div class="gridSmall" style="margin-top:8px;">
+            <input id="inpYSSS" type="number" min="0" max="100" value="45" placeholder="YSSS">
+            <select id="inpNle10Mode" title="N≤10 modu">
+              <option value="warn" selected>N≤10: Uyarı</option>
+              <option value="mutlak_ek">N≤10: Ek sınav mutlak (AA/BA/BB/CB/FF)</option>
+            </select>
+          </div>
+          <div class="muted">YSSS altı: FF | HBP≥60 iken FF/DD/DC çıkarsa: CC’ye çekilir.</div>
+        </div>
+
+        <div>
+          <label>Vize Notun</label>
+          <input id="inpMyMid" type="number" min="0" max="100" placeholder="0-100" value="60">
+        </div>
+        <div>
+          <label>Final Notun (mevcut)</label>
+          <input id="inpMyFinal" type="number" min="0" max="100" placeholder="0-100" value="50">
+          <div class="muted">Heatmap final aralığını tarar; burası “mevcut” durum içindir.</div>
+        </div>
+        <div>
+          <label>Sınıf Vize Ortalaması</label>
+          <input id="inpClsMid" type="number" min="0" max="100" placeholder="0-100" value="55">
+        </div>
+        <div>
+          <label>Sınıf Final Ortalaması</label>
+          <input id="inpClsFinal" type="number" min="0" max="100" placeholder="0-100" value="50">
+        </div>
+
+        <div>
+          <label>Vize Ağırlığı (%)</label>
+          <input id="inpWMid" type="number" min="0" max="100" value="40">
+        </div>
+        <div>
+          <label>Final Ağırlığı (%)</label>
+          <input id="inpWFinal" type="number" min="0" max="100" value="60">
+        </div>
+
+        <div class="full">
+          <div class="checkRow">
+            <input id="chkExtra" type="checkbox" style="width:auto;transform:scale(1.1)">
+            <label for="chkExtra" style="margin:0;font-weight:900">Ek değerlendirme var (ödev/quiz/proje...)</label>
+          </div>
+        </div>
+
+        <div id="extraArea" class="full" style="display:none">
+          <label>Kaç adet ek kalem?</label>
+          <select id="inpExtraCount">
+            <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+            <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+          </select>
+          <div class="muted">Her ek kalem için: Ad, ağırlık %, senin notun, sınıf ortalaması</div>
+          <div id="extraList" class="extraWrap"></div>
+        </div>
+
+        <div class="full panel" style="margin-top:8px;">
+          <div class="gridSmall">
+            <div>
+              <label>Final Aralığı</label>
+              <div class="gridSmall">
+                <input id="inpFinalMin" type="number" min="0" max="100" value="50" placeholder="min">
+                <input id="inpFinalMax" type="number" min="0" max="100" value="100" placeholder="max">
+              </div>
+              <div class="muted">Örn: 50–100</div>
+            </div>
+            <div>
+              <label>σ Aralığı</label>
+              <div class="gridSmall">
+                <input id="inpSigmaMin" type="number" min="1" max="50" value="5" placeholder="min">
+                <input id="inpSigmaMax" type="number" min="1" max="50" value="30" placeholder="max">
+              </div>
+              <div class="muted">Örn: 5–30</div>
+            </div>
+          </div>
+
+          <div class="gridSmall">
+            <div>
+              <label>Hücre Yoğunluğu</label>
+              <select id="inpRes">
+                <option value="40">Normal (40x40)</option>
+                <option value="55" selected>Detaylı (55x55)</option>
+                <option value="70">Çok detay (70x70)</option>
+              </select>
+              <div class="muted">Daha detay = daha ağır çizim.</div>
+            </div>
+            <div>
+              <label>Harf seti</label>
+              <select id="inpLetterSet">
+                <option value="8" selected>FF-DD-DC-CC-CB-BB-BA-AA</option>
+                <option value="6">FF-DC-CC-CB-BB-AA (basit)</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="button" onclick="drawAll()">Heatmap Çiz</button>
+          <div id="status" class="muted"></div>
+        </div>
+      </div>
+
+      <div class="layout">
+        <div class="panel">
+          <div style="font-weight:900;margin-bottom:8px;">Heatmap</div>
+          <canvas id="cv"></canvas>
+          <div class="legend" id="legend"></div>
+          <div class="muted">X: Final notu — Y: σ. Hücre rengi = harf notu (N≥30 için).</div>
+        </div>
+
+        <div class="panel">
+          <div style="font-weight:900;margin-bottom:8px;">Mevcut Durum Özeti</div>
+          <div id="summary" class="muted">Henüz hesaplanmadı.</div>
+          <div class="card" style="margin-top:12px;">
+            <b>Not</b>
+            <div class="muted">N 11–29 aralığında resmi hesap için sınıf HBP listesi gerekir; bu sayfa bu aralıkta üretim yapmaz.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tooltip" id="tip"></div>
+
+<script>
+/* =========================
+   Sivas CÜ - Tablo-3 (N >= 30) Z->T
+   - 11–29 (Tablo-2): hesap yok (liste gerekir)
+   - N <= 10: otomatik yok (opsiyonel: ek sınav mutlak)
+   ========================= */
+
+function clamp(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
+function in01(x){ return Number.isFinite(x) && x >= 0 && x <= 100; }
+
+function modeByN(N){
+  if(!Number.isFinite(N) || N <= 0) return "UNKNOWN";
+  if(N <= 10) return "NLE10";
+  if(N >= 30) return "T3";
+  return "T2"; // 11–29
+}
+
+/* --- Sivas Tablo-3 sınıf düzeyi + T aralıkları (PDF) --- */
+const T3_LEVELS = [
+  // Üstün Başarı: 80-100
+  { name:"Üstün Başarı", min:80.00, max:100.00, bands:{AA:[57,Infinity], BA:[52,56.99], BB:[47,51.99], CB:[42,46.99], CC:[37,41.99], DC:[32,36.99], DD:[27,31.99], FF:[-Infinity,26.99]} },
+  { name:"Mükemmel",     min:70.00, max:79.99,  bands:{AA:[59,Infinity], BA:[54,58.99], BB:[49,53.99], CB:[44,48.99], CC:[39,43.99], DC:[34,38.99], DD:[29,33.99], FF:[-Infinity,28.99]} },
+  { name:"Çok İyi",      min:62.50, max:69.99,  bands:{AA:[61,Infinity], BA:[56,60.99], BB:[51,55.99], CB:[46,50.99], CC:[41,45.99], DC:[36,40.99], DD:[31,35.99], FF:[-Infinity,30.99]} },
+  { name:"İyi",          min:57.50, max:62.49,  bands:{AA:[63,Infinity], BA:[58,62.99], BB:[53,57.99], CB:[48,52.99], CC:[43,47.99], DC:[38,42.99], DD:[33,37.99], FF:[-Infinity,32.99]} },
+  { name:"Ortanın üstü", min:52.50, max:57.49,  bands:{AA:[65,Infinity], BA:[60,64.99], BB:[55,59.99], CB:[50,54.99], CC:[45,49.99], DC:[40,44.99], DD:[35,39.99], FF:[-Infinity,34.99]} },
+  { name:"Orta",         min:47.50, max:52.49,  bands:{AA:[67,Infinity], BA:[62,66.99], BB:[57,61.99], CB:[52,56.99], CC:[47,51.99], DC:[42,46.99], DD:[37,41.99], FF:[-Infinity,36.99]} },
+  { name:"Zayıf",        min:42.50, max:47.49,  bands:{AA:[69,Infinity], BA:[64,68.99], BB:[59,63.99], CB:[54,58.99], CC:[49,53.99], DC:[44,48.99], DD:[39,43.99], FF:[-Infinity,38.99]} },
+  { name:"Kötü",         min:0.00,  max:42.49,  bands:{AA:[71,Infinity], BA:[66,70.99], BB:[61,65.99], CB:[56,60.99], CC:[51,55.99], DC:[46,50.99], DD:[41,45.99], FF:[-Infinity,40.99]} },
+];
+
+function pickT3Level(classAvg){
+  const m = Number(classAvg);
+  for(const r of T3_LEVELS){
+    if(m >= r.min && m <= r.max) return r;
+  }
+  return T3_LEVELS[T3_LEVELS.length - 1];
+}
+
+function letterFromT3(level, t){
+  const order = ["AA","BA","BB","CB","CC","DC","DD","FF"];
+  for(const g of order){
+    const [lo, hi] = level.bands[g];
+    if(t >= lo && t <= hi) return g;
+  }
+  return "FF";
+}
+
+/* --- N<=10 opsiyonel (ek sınav mutlak) --- */
+function ekSinavMutlak(hbp){
+  if(hbp >= 90) return "AA";
+  if(hbp >= 80) return "BA";
+  if(hbp >= 70) return "BB";
+  if(hbp >= 60) return "CB";
+  return "FF";
+}
+
+/* --- Ek değerlendirme UI --- */
+const chkExtra = document.getElementById("chkExtra");
+const extraArea = document.getElementById("extraArea");
+const inpExtraCount = document.getElementById("inpExtraCount");
+const extraList = document.getElementById("extraList");
+
+chkExtra.addEventListener("change", ()=>{
+  extraArea.style.display = chkExtra.checked ? "block" : "none";
+  renderExtras();
+});
+inpExtraCount.addEventListener("change", renderExtras);
+
+function renderExtras(){
+  extraList.innerHTML = "";
+  if(!chkExtra.checked) return;
+  const n = Number(inpExtraCount.value);
+  for(let i=1;i<=n;i++){
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `
+      <div class="extraTitle">Ek Kalem ${i}</div>
+      <div class="extraGrid">
+        <div>
+          <label>Ad</label>
+          <input id="exName${i}" placeholder="örn: Quiz">
+        </div>
+        <div>
+          <label>Ağırlık (%)</label>
+          <input id="exW${i}" type="number" min="0" max="100" placeholder="örn: 10" value="10">
+        </div>
+        <div>
+          <label>Senin Notun</label>
+          <input id="exMy${i}" type="number" min="0" max="100" placeholder="0-100" value="70">
+        </div>
+        <div>
+          <label>Sınıf Ortalaması</label>
+          <input id="exCls${i}" type="number" min="0" max="100" placeholder="0-100" value="60">
+        </div>
+      </div>
+    `;
+    extraList.appendChild(div);
+  }
+}
+renderExtras();
+
+/* --- Data collection --- */
+function collect(){
+  const N = Number(document.getElementById("inpN").value);
+  const bdks = Number(document.getElementById("inpBDKS").value);
+  const bnal = Number(document.getElementById("inpBNAL").value);
+  const ysss = Number(document.getElementById("inpYSSS").value);
+  const nle10Mode = document.getElementById("inpNle10Mode").value;
+
+  const myMid = Number(document.getElementById("inpMyMid").value);
+  const myFinal = Number(document.getElementById("inpMyFinal").value);
+  const clsMid = Number(document.getElementById("inpClsMid").value);
+  const clsFinal = Number(document.getElementById("inpClsFinal").value);
+
+  const wMidPct = Number(document.getElementById("inpWMid").value);
+  const wFinalPct = Number(document.getElementById("inpWFinal").value);
+
+  const finalMin = Number(document.getElementById("inpFinalMin").value);
+  const finalMax = Number(document.getElementById("inpFinalMax").value);
+  const sigmaMin = Number(document.getElementById("inpSigmaMin").value);
+  const sigmaMax = Number(document.getElementById("inpSigmaMax").value);
+
+  const res = Number(document.getElementById("inpRes").value);
+  const letterSet = document.getElementById("inpLetterSet").value;
+
+  let extras = [];
+  if(chkExtra.checked){
+    const n = Number(inpExtraCount.value);
+    for(let i=1;i<=n;i++){
+      const name = (document.getElementById(`exName${i}`).value || `Ek ${i}`).trim();
+      const wPct = Number(document.getElementById(`exW${i}`).value);
+      const my = Number(document.getElementById(`exMy${i}`).value);
+      const cls = Number(document.getElementById(`exCls${i}`).value);
+      extras.push({name, wPct, my, cls});
+    }
+  }
+
+  return { N, bdks, bnal, ysss, nle10Mode, myMid,myFinal,clsMid,clsFinal,wMidPct,wFinalPct,extras, finalMin,finalMax,sigmaMin,sigmaMax, res, letterSet };
+}
+
+function validate(d){
+  if(!Number.isFinite(d.N) || d.N < 1) return "N geçerli değil.";
+  if(!in01(d.bdks) || !in01(d.bnal) || !in01(d.ysss)) return "BDKS/BNAL/YSSS 0–100 olmalı.";
+  if(!in01(d.myMid) || !in01(d.myFinal) || !in01(d.clsMid) || !in01(d.clsFinal)) return "Vize/Final ve sınıf ortalamaları 0–100 olmalı.";
+  if(!Number.isFinite(d.wMidPct) || !Number.isFinite(d.wFinalPct) || d.wMidPct<0 || d.wFinalPct<0) return "Ağırlıklar geçerli değil.";
+
+  for(const ex of d.extras){
+    if(!Number.isFinite(ex.wPct) || ex.wPct<0 || ex.wPct>100) return `${ex.name}: ağırlık 0–100 olmalı.`;
+    if(!in01(ex.my)) return `${ex.name}: senin notun 0–100 olmalı.`;
+    if(!in01(ex.cls)) return `${ex.name}: sınıf ort 0–100 olmalı.`;
+  }
+
+  const sum = d.wMidPct + d.wFinalPct + d.extras.reduce((a,x)=>a + x.wPct,0);
+  if(Math.round(sum*100)/100 !== 100) return `Ağırlıkların toplamı 100 olmalı. Şu an: ${sum}`;
+
+  if(!Number.isFinite(d.finalMin) || !Number.isFinite(d.finalMax) || d.finalMin<0 || d.finalMax>100 || d.finalMin>=d.finalMax) return "Final aralığı hatalı (min<max, 0–100).";
+  if(!Number.isFinite(d.sigmaMin) || !Number.isFinite(d.sigmaMax) || d.sigmaMin<=0 || d.sigmaMax>50 || d.sigmaMin>=d.sigmaMax) return "σ aralığı hatalı (min<max, 0–50).";
+  return null;
+}
+
+function computeBase(d){
+  const wMid = d.wMidPct/100;
+  const wFinal = d.wFinalPct/100;
+  const extrasN = d.extras.map(x=>({...x, w: x.wPct/100}));
+
+  const userConst = d.myMid*wMid + extrasN.reduce((a,x)=>a + x.my*x.w,0);
+  const classConst = d.clsMid*wMid + extrasN.reduce((a,x)=>a + x.cls*x.w,0);
+
+  const classAvg = classConst + d.clsFinal*wFinal;
+  const ogrOrt = userConst + d.myFinal*wFinal;
+
+  return {wMid,wFinal,extrasN,userConst,classConst,classAvg,ogrOrt};
+}
+
+/* --- Harf seti / renk --- */
+function letterPalette(letterSet){
+  const pal8 = {
+    "FF":"#991b1b",
+    "DD":"#dc2626",
+    "DC":"#f97316",
+    "CC":"#f59e0b",
+    "CB":"#84cc16",
+    "BB":"#22c55e",
+    "BA":"#06b6d4",
+    "AA":"#2563eb"
+  };
+  const pal6 = {
+    "FF":"#991b1b",
+    "DC":"#f97316",
+    "CC":"#f59e0b",
+    "CB":"#84cc16",
+    "BB":"#22c55e",
+    "AA":"#2563eb"
+  };
+  return letterSet === "6" ? pal6 : pal8;
+}
+
+function allowedLetters(letterSet){
+  return letterSet === "6"
+    ? ["FF","DC","CC","CB","BB","AA"]
+    : ["FF","DD","DC","CC","CB","BB","BA","AA"];
+}
+
+function legendRender(pal, letterSet){
+  const legend = document.getElementById("legend");
+  legend.innerHTML = "";
+  const letters = allowedLetters(letterSet);
+  letters.forEach(L=>{
+    const pill = document.createElement("span");
+    pill.className="pill";
+    const sw = document.createElement("span");
+    sw.className="sw";
+    sw.style.background = pal[L] || "#9ca3af";
+    pill.appendChild(sw);
+    pill.appendChild(document.createTextNode(L));
+    legend.appendChild(pill);
+  });
+}
+
+function mapToSet(L, letterSet){
+  if(letterSet === "8") return L;
+  if(L==="FF") return "FF";
+  if(L==="DD" || L==="DC") return "DC";
+  if(L==="CC") return "CC";
+  if(L==="CB") return "CB";
+  if(L==="BB") return "BB";
+  return "AA";
+}
+
+/* --- Sivas kuralları (limitler + CC düzeltme) --- */
+function applySivasRules({hbp, finalScore, bdks, bnal, ysss, letter}){
+  // YSSS: final altı direkt FF
+  if(Number.isFinite(ysss) && finalScore < ysss){
+    return { letter:"FF", forced:true, note:`YSSS: Final < ${ysss} → FF` };
+  }
+  // BDKS: havuza girmez (biz simülasyonda FF döndürüyoruz)
+  if(Number.isFinite(bdks) && hbp < bdks){
+    return { letter:"FF", forced:true, note:`BDKS: HBP < ${bdks} → FF` };
+  }
+  // BNAL: alt limiti aşamayan FF
+  if(Number.isFinite(bnal) && hbp < bnal){
+    return { letter:"FF", forced:true, note:`BNAL: HBP < ${bnal} → FF` };
+  }
+  // HBP>=60 kuralı: FF/DD/DC çıkarsa CC’ye çek
+  if(hbp >= 60 && (letter === "FF" || letter === "DD" || letter === "DC")){
+    return { letter:"CC", forced:true, note:"HBP ≥ 60 iken FF/DD/DC çıktı → CC" };
+  }
+  return { letter, forced:false, note:"" };
+}
+
+/* --- Relative (T3) --- */
+function runT3({ogrOrt, classAvg, sigma}){
+  const level = pickT3Level(classAvg);
+  const z = (ogrOrt - classAvg) / sigma;
+  const t = 50 + 10*z;
+  const raw = letterFromT3(level, t);
+  return { levelName: level.name, z, t, rawLetter: raw };
+}
+
+/* ---------------- heatmap drawing ---------------- */
+const tip = document.getElementById("tip");
+const canvas = document.getElementById("cv");
+const statusEl = document.getElementById("status");
+const summaryEl = document.getElementById("summary");
+let heat = null;
+
+function setupCanvas(){
+  const ctx = canvas.getContext("2d");
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = Math.floor(rect.width * dpr);
+  canvas.height = Math.floor(rect.height * dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return ctx;
+}
+
+function drawAll(){
+  const d = collect();
+  const err = validate(d);
+  if(err){
+    statusEl.innerHTML = `<span class="warn">⚠️ ${err}</span>`;
+    heat = null;
+    return;
+  }
+
+  const mode = modeByN(d.N);
+  if(mode === "T2"){
+    statusEl.innerHTML = `<span class="warn">⚠️ 11–29 aralığında (Tablo-2) doğru hesap için sınıf HBP listesi gerekir. Bu sayfa bu aralıkta heatmap üretmez.</span>`;
+    summaryEl.innerHTML = "N 11–29: Hesap yapılmadı.";
+    heat = null;
+    const ctx = setupCanvas();
+    const W = canvas.getBoundingClientRect().width;
+    const H = canvas.getBoundingClientRect().height;
+    ctx.clearRect(0,0,W,H);
+    return;
+  }
+  if(mode === "NLE10" && d.nle10Mode === "warn"){
+    statusEl.innerHTML = `<span class="warn">⚠️ N ≤ 10: öğretim elemanı takdiri. Bu sayfa otomatik heatmap üretmez.</span>`;
+    summaryEl.innerHTML = "N ≤ 10: Hesap yapılmadı.";
+    heat = null;
+    const ctx = setupCanvas();
+    const W = canvas.getBoundingClientRect().width;
+    const H = canvas.getBoundingClientRect().height;
+    ctx.clearRect(0,0,W,H);
+    return;
+  }
+
+  const base = computeBase(d);
+
+  // Mevcut durum özeti (σ=15 ile)
+  let summary = `<b>Sınıf HBP Ort:</b> ${base.classAvg.toFixed(2)}<br>
+                 <b>Senin HBP:</b> ${base.ogrOrt.toFixed(2)}<br>
+                 <b>Mod:</b> ${mode === "T3" ? "N ≥ 30 (Tablo-3)" : "N ≤ 10 (Mutlak ek)"}<br>`;
+
+  if(mode === "NLE10"){
+    const raw = ekSinavMutlak(base.ogrOrt);
+    const adj = applySivasRules({hbp:base.ogrOrt, finalScore:d.myFinal, bdks:d.bdks, bnal:d.bnal, ysss:d.ysss, letter:raw});
+    summary += `<b>Harf (mutlak ek):</b> ${adj.letter}` + (adj.note ? `<br><span class="muted">${adj.note}</span>` : "");
+    summaryEl.innerHTML = summary;
+    statusEl.innerHTML = `<span class="ok">✅ N≤10 (mutlak ek) için heatmap üretildi (σ etkisiz)</span>`;
+  } else {
+    const rel = runT3({ogrOrt:base.ogrOrt, classAvg:base.classAvg, sigma:15});
+    const adj = applySivasRules({hbp:base.ogrOrt, finalScore:d.myFinal, bdks:d.bdks, bnal:d.bnal, ysss:d.ysss, letter:rel.rawLetter});
+    summary += `<b>Sınıf düzeyi:</b> ${rel.levelName}<br>
+                <b>σ=15 ile:</b> Z=${rel.z.toFixed(3)} | T=${rel.t.toFixed(2)} | Harf=${mapToSet(adj.letter, d.letterSet)}` +
+               (adj.note ? `<br><span class="muted">${adj.note}</span>` : "");
+    summaryEl.innerHTML = summary;
+    statusEl.textContent = "";
+  }
+
+  const ctx = setupCanvas();
+  const W = canvas.getBoundingClientRect().width;
+  const H = canvas.getBoundingClientRect().height;
+
+  const padL = 54, padR = 14, padT = 18, padB = 44;
+  const plot = { x0: padL, y0: padT, x1: W-padR, y1: H-padB };
+
+  const pal = letterPalette(d.letterSet);
+  legendRender(pal, d.letterSet);
+
+  const n = d.res;
+  const cols = n, rows = n;
+
+  const fmin = d.finalMin;
+  const fmax = d.finalMax;
+  const smin = d.sigmaMin;
+  const smax = d.sigmaMax;
+
+  const cw = (plot.x1 - plot.x0) / cols;
+  const ch = (plot.y1 - plot.y0) / rows;
+
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle = "#0f172a";
+  ctx.fillRect(0,0,W,H);
+
+  const data = new Array(rows);
+
+  for(let r=0;r<rows;r++){
+    data[r] = new Array(cols);
+    const sigma = smax - (r + 0.5) * (smax - smin) / rows;
+
+    for(let c=0;c<cols;c++){
+      const final = fmin + (c + 0.5) * (fmax - fmin) / cols;
+
+      // Candidate HBP
+      const ogrOrt = base.userConst + final * base.wFinal;
+
+      let sys = (mode === "T3") ? "BAĞIL (Tablo-3)" : "N≤10 Mutlak";
+      let levelName = "—";
+      let z=null, t=null;
+
+      let rawLetter = "FF";
+      if(mode === "NLE10"){
+        rawLetter = ekSinavMutlak(ogrOrt);
+      } else {
+        const rel = runT3({ogrOrt, classAvg:base.classAvg, sigma});
+        levelName = rel.levelName;
+        z = rel.z; t = rel.t;
+        rawLetter = rel.rawLetter;
+      }
+
+      const adj = applySivasRules({hbp:ogrOrt, finalScore:final, bdks:d.bdks, bnal:d.bnal, ysss:d.ysss, letter:rawLetter});
+      const harf = mapToSet(adj.letter, d.letterSet);
+      const color = pal[harf] || "#9ca3af";
+
+      const x = plot.x0 + c*cw;
+      const y = plot.y0 + r*ch;
+
+      ctx.fillStyle = color;
+      ctx.fillRect(x, y, cw+0.2, ch+0.2);
+
+      data[r][c] = {final, sigma, harf, sys, z, t, levelName, ogrOrt, note: adj.note || ""};
+    }
+  }
+
+  // axes + grid
+  ctx.strokeStyle = "#1f2937";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(plot.x0, plot.y0);
+  ctx.lineTo(plot.x0, plot.y1);
+  ctx.lineTo(plot.x1, plot.y1);
+  ctx.stroke();
+
+  ctx.fillStyle="#9ca3af";
+  ctx.font="12px Arial";
+  const xlab="Final";
+  ctx.fillText(xlab, (plot.x0+plot.x1)/2 - ctx.measureText(xlab).width/2, plot.y1+32);
+  ctx.save();
+  ctx.translate(plot.x0-34, (plot.y0+plot.y1)/2);
+  ctx.rotate(-Math.PI/2);
+  const ylab="σ";
+  ctx.fillText(ylab, -ctx.measureText(ylab).width/2, 0);
+  ctx.restore();
+
+  const xt = 5;
+  for(let i=0;i<=xt;i++){
+    const f = fmin + i*(fmax-fmin)/xt;
+    const x = plot.x0 + i*(plot.x1-plot.x0)/xt;
+    ctx.strokeStyle="#1f2937";
+    ctx.beginPath(); ctx.moveTo(x,plot.y0); ctx.lineTo(x,plot.y1); ctx.stroke();
+    ctx.fillStyle="#cdd7ea";
+    ctx.fillText(f.toFixed(0), x-6, plot.y1+18);
+  }
+
+  const yt = 5;
+  for(let i=0;i<=yt;i++){
+    const s = smax - i*(smax-smin)/yt;
+    const y = plot.y0 + i*(plot.y1-plot.y0)/yt;
+    ctx.strokeStyle="#1f2937";
+    ctx.beginPath(); ctx.moveTo(plot.x0,y); ctx.lineTo(plot.x1,y); ctx.stroke();
+    ctx.fillStyle="#cdd7ea";
+    ctx.fillText(s.toFixed(0), plot.x0-28, y+4);
+  }
+
+  heat = { plot, cols, rows, cw, ch, data, W, H, mode };
+  statusEl.textContent = `✅ Heatmap hazır. (Final ${fmin}-${fmax}, σ ${smin}-${smax}, ${cols}x${rows})`;
+}
+
+/* ---------------- tooltip interactions ---------------- */
+canvas.addEventListener("mousemove", (e)=>{
+  if(!heat) return;
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+
+  const {plot, cw, ch, data} = heat;
+  if(x < plot.x0 || x > plot.x1 || y < plot.y0 || y > plot.y1){
+    tip.style.display="none";
+    return;
+  }
+  const c = Math.floor((x - plot.x0)/cw);
+  const r = Math.floor((y - plot.y0)/ch);
+  const cell = data?.[r]?.[c];
+  if(!cell){ tip.style.display="none"; return; }
+
+  const lines = [];
+  lines.push(`<div class="tipTitle">${cell.harf} <span style="opacity:.8">(${cell.sys})</span></div>`);
+  lines.push(`<b>Final:</b> ${cell.final.toFixed(1)}`);
+  lines.push(`<b>σ:</b> ${cell.sigma.toFixed(2)}`);
+  lines.push(`<b>Senin HBP:</b> ${cell.ogrOrt.toFixed(2)}`);
+
+  if(cell.sys.startsWith("BAĞIL")){
+    lines.push(`<b>Sınıf düzeyi:</b> ${cell.levelName}`);
+    lines.push(`<b>Z:</b> ${cell.z.toFixed(3)} | <b>T:</b> ${cell.t.toFixed(2)}`);
+  } else {
+    lines.push(`<span style="opacity:.85">N≤10 mutlak: σ etkisiz</span>`);
+  }
+
+  if(cell.note){
+    lines.push(`<span style="opacity:.9">Kural: ${cell.note}</span>`);
+  }
+
+  tip.innerHTML = lines.join("<br>");
+  tip.style.display="block";
+
+  const pad = 14;
+  let tx = e.clientX + 14;
+  let ty = e.clientY + 14;
+  const w = 290;
+  const h = 160;
+  if(tx + w > window.innerWidth - pad) tx = e.clientX - w - 14;
+  if(ty + h > window.innerHeight - pad) ty = e.clientY - h - 14;
+
+  tip.style.left = tx + "px";
+  tip.style.top = ty + "px";
+});
+
+canvas.addEventListener("mouseleave", ()=> tip.style.display="none");
+
+window.addEventListener("resize", ()=>{
+  if(heat){
+    try{ drawAll(); }catch(e){}
+  }
+});
+</script>
+
+</body>
+</html>

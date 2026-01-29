@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sivas CÜ | Hedef Final (Bağıl)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b132b;
+  --bg2:#111b33;
+  --card:#0f172a;
+  --glass:rgba(255,255,255,0.04);
+  --accent:#f7b733;
+  --accent2:#21e6c1;
+  --border:#1f2a44;
+  --text:#e8eefb;
+  --muted:#9fb1d1;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  padding:28px 18px 34px;
+  font-family:"Space Grotesk","Manrope",system-ui,-apple-system,sans-serif;
+  background:radial-gradient(circle at 18% 20%, rgba(33,230,193,0.16), transparent 32%),
+             radial-gradient(circle at 84% 12%, rgba(247,183,51,0.16), transparent 32%),
+             linear-gradient(145deg, var(--bg), var(--bg2));
+  color:var(--text);
+  line-height:1.6;
+}
+.shell{max-width:900px;margin:auto;padding:24px 18px 30px;}
+nav.nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+nav.nav a{
+  color:var(--text);text-decoration:none;padding:10px 14px;
+  border:1px solid var(--border);border-radius:12px;
+  background:rgba(255,255,255,0.05);font-weight:800;
+  transition:background .15s ease,border-color .15s ease,color .15s ease;
+}
+nav.nav a.active{border-color:var(--accent);color:var(--accent);background:rgba(247,183,51,0.12);}
+.container{
+  max-width:900px;
+  margin:auto;
+  background:var(--glass);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:22px;
+  box-shadow:0 18px 50px rgba(0,0,0,0.28);
+}
+h2{text-align:center;color:var(--accent);margin:0 0 8px;letter-spacing:-0.3px}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;justify-content:space-between;margin-bottom:10px}
+.muted{font-size:12px;color:var(--muted);margin-top:4px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.full{grid-column:1/-1}
+label{font-weight:700;margin-top:6px;display:block;color:var(--text);font-size:14px}
+input,select,button{
+  width:100%;
+  padding:11px 12px;
+  margin-top:6px;
+  font-size:15px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:rgba(255,255,255,0.04);
+  color:var(--text);
+}
+input:focus,select:focus{
+  outline:none;
+  border-color:var(--accent2);
+  box-shadow:0 0 0 3px rgba(33,230,193,0.2);
+}
+button{
+  background:linear-gradient(120deg,var(--accent),#f37335);
+  color:#0b0c10;
+  border:none;
+  border-radius:12px;
+  font-weight:800;
+  cursor:pointer;
+  box-shadow:0 12px 30px rgba(243,115,53,0.25);
+  transition:transform .18s ease, box-shadow .18s ease;
+}
+button:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(243,115,53,0.32);}
+.card{
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border);
+  border-left:6px solid var(--accent2);
+  border-radius:12px;
+  padding:12px;
+  margin-top:12px;
+}
+.warn{background:rgba(247,183,51,0.08);border-left-color:#f59e0b}
+.bad{background:rgba(255,0,0,0.08);border-left-color:#ef4444}
+.ok{background:rgba(33,230,193,0.06);border-left-color:#21e6c1}
+.mutlak{background:rgba(255,255,255,0.02);border-left-color:#111827}
+.extraGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.extraTitle{font-weight:800;margin-bottom:6px}
+.checkRow{display:flex;align-items:center;gap:10px;margin-top:8px}
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13px}
+th,td{border-bottom:1px solid rgba(255,255,255,0.08);padding:8px 6px;text-align:left;color:var(--text)}
+th{color:var(--muted);font-weight:900}
+@media(max-width:700px){.row{grid-template-columns:1fr;}}
+.pill{display:inline-flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,0.10);background:rgba(255,255,255,0.05);padding:6px 10px;border-radius:999px;font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="shell">
+  <nav class="nav">
+    <a href="index.html">Ana Sayfa</a>
+    <a href="harf_notu_otomatik_grafikli.html">Harf Notu + Grafik</a>
+    <a href="heatmap.html">Heatmap</a>
+    <a class="active" href="detaylifinal.html">Hedef Final</a>
+    <a href="anogano.html">AGNO / GANO</a>
+    <a href="hakkinda.html">Hakkında</a>
+  </nav>
+
+  <div class="container">
+    <div class="bar">
+      <div style="width:100%">
+        <h2>Sivas CÜ | Bağıl Değerlendirme Hedef Final</h2>
+        <div class="muted" id="uniNote">
+          N ≥ 30: Tablo-3 (Z→T) + Sınıf düzeyi/T aralıkları. 11–29: Tablo-2 için liste gerekir (hesap yok). N ≤ 10: Tablo-1 (mutlak) önerilir.
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label>Bağıl değerlendirmeye katılan öğrenci sayısı (N)</label>
+        <input id="inpN" type="number" min="1" step="1" value="30">
+        <div class="muted">N ≤ 10 → Tablo-1 | 11–29 → Tablo-2 (liste gerekir) | N ≥ 30 → Tablo-3</div>
+      </div>
+
+      <div>
+        <label>Hedef Harf Notu</label>
+        <select id="inpTarget">
+          <option value="DC">DC</option>
+          <option value="CC" selected>CC</option>
+          <option value="CB">CB</option>
+          <option value="BB">BB</option>
+          <option value="BA">BA</option>
+          <option value="AA">AA</option>
+          <option value="DD">DD</option>
+          <option value="FF">FF</option>
+        </select>
+        <div class="muted">N ≥ 30 için hedef “en düşük T eşiği” ile çözülür.</div>
+      </div>
+
+      <div>
+        <label>Vize Notun</label>
+        <input id="inpMyMid" type="number" min="0" max="100" placeholder="0-100" value="60">
+      </div>
+      <div>
+        <label>Sınıf Vize Ortalaması</label>
+        <input id="inpClsMid" type="number" min="0" max="100" placeholder="0-100" value="55">
+      </div>
+
+      <div>
+        <label>Vize Ağırlığı (%)</label>
+        <input id="inpWMid" type="number" min="0" max="100" value="40">
+      </div>
+      <div>
+        <label>Final Ağırlığı (%)</label>
+        <input id="inpWFinal" type="number" min="0" max="100" value="60">
+        <div class="muted">Ek kalemlerle toplam %100 olmalı.</div>
+      </div>
+
+      <div>
+        <label>Sınıf Final Ortalaması</label>
+        <input id="inpClsFinal" type="number" min="0" max="100" placeholder="örn: 45" value="50">
+      </div>
+
+      <div>
+        <label>Tahmini Standart Sapma (σ) <span class="muted">(opsiyonel)</span></label>
+        <input id="inpSigma" type="number" min="1" max="50" placeholder="boş bırakırsan 10 / 15 / 20">
+      </div>
+
+      <div class="full">
+        <div class="card mutlak">
+          <div style="font-weight:900;margin-bottom:6px;">Sivas CÜ Sınırlar (varsayılan)</div>
+          <div class="row">
+            <div>
+              <label>BDKS (Bağıl Değerlendirmeye Katma Sınırı)</label>
+              <input id="inpBDKS" type="number" min="0" max="100" value="15">
+            </div>
+            <div>
+              <label>HBAS (Ham Başarı Alt Sınırı)</label>
+              <input id="inpHBAS" type="number" min="0" max="100" value="45">
+            </div>
+            <div class="full">
+              <label>YSSS (Yarıyıl Sonu Sınav Sınırı) — “Final barajı”</label>
+              <input id="inpYSSS" type="number" min="0" max="100" value="45">
+              <div class="muted">Final < YSSS ise doğrudan FF. BDKS altı havuza alınmaz. HBAS altı FF (ama ortalamaya dahil). (Sivas CÜ Mühendislik)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="full checkRow">
+        <input id="chkExtra" type="checkbox" style="width:auto;transform:scale(1.1)">
+        <label for="chkExtra" style="margin:0;font-weight:800">Ek değerlendirme var (ödev/quiz/proje/lab...)</label>
+      </div>
+
+      <div id="extraArea" class="full" style="display:none">
+        <label>Kaç adet ek kalem?</label>
+        <select id="inpExtraCount">
+          <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+          <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+        </select>
+        <div class="muted">Her ek kalem için: ad, ağırlık %, senin notun, sınıf ortalaman</div>
+        <div id="extraList"></div>
+      </div>
+
+      <div class="full">
+        <button id="btnCalc" type="button" onclick="calculate()">Hesapla</button>
+      </div>
+    </div>
+
+    <div id="out"></div>
+
+    <div class="muted" style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+      <span class="pill">N ≥ 30: Z=(X−X̄)/σ, T=50+10Z</span>
+      <span class="pill">Sınıf düzeyi: X̄ bandına göre seçilir</span>
+      <span class="pill">11–29: dağılım için liste gerekir</span>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================
+   Sivas CÜ (Mühendislik) - Hedef Final
+   - N >= 30: Tablo-3 (Z->T) + Sınıf düzeyi / T aralıkları
+   - 11-29 (Tablo-2): LISTE gerekir -> hesap YOK
+   - N <= 10: Tablo-1 (mutlak) ile hedef final (yaklaşık)
+   ========================= */
+
+function clamp(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
+function fmt(n, d=2){ return Number.isFinite(n) ? n.toFixed(d) : "—"; }
+
+function modeByN(N){
+  if(!Number.isFinite(N) || N <= 0) return "UNKNOWN";
+  if(N <= 10) return "ABS_T1";
+  if(N >= 30) return "REL_T3";
+  return "NEEDS_LIST"; // 11-29
+}
+
+/* --- Sivas Tablo-3: Sınıf düzeyi ve T aralıkları (AA..FF) --- */
+const T3_LEVELS = [
+  { name:"Üstün Başarı", min:80.00, max:100.00, thr: { AA:57, BA:52, BB:47, CB:42, CC:37, DC:32, DD:27 } },
+  { name:"Mükemmel",     min:70.00, max:79.99,  thr: { AA:59, BA:54, BB:49, CB:44, CC:39, DC:34, DD:29 } },
+  { name:"Çok İyi",      min:62.50, max:69.99,  thr: { AA:61, BA:56, BB:51, CB:46, CC:41, DC:36, DD:31 } },
+  { name:"İyi",          min:57.50, max:62.49,  thr: { AA:63, BA:58, BB:53, CB:48, CC:43, DC:38, DD:33 } },
+  { name:"Ortanın üstü", min:52.50, max:57.49,  thr: { AA:65, BA:60, BB:55, CB:50, CC:45, DC:40, DD:35 } },
+  { name:"Orta",         min:47.50, max:52.49,  thr: { AA:67, BA:62, BB:57, CB:52, CC:47, DC:42, DD:37 } },
+  { name:"Zayıf",        min:42.50, max:47.49,  thr: { AA:69, BA:64, BB:59, CB:54, CC:49, DC:44, DD:39 } },
+  { name:"Kötü",         min:0.00,  max:42.49,  thr: { AA:71, BA:66, BB:61, CB:56, CC:51, DC:46, DD:41 } },
+];
+
+function pickT3Level(classAvg){
+  const x = Number(classAvg);
+  for(const r of T3_LEVELS){
+    if(x >= r.min && x <= r.max) return r;
+  }
+  return T3_LEVELS[T3_LEVELS.length-1];
+}
+
+function letterFromT3(level, t){
+  // en yüksekten aşağı kontrol
+  if(t >= level.thr.AA) return "AA";
+  if(t >= level.thr.BA) return "BA";
+  if(t >= level.thr.BB) return "BB";
+  if(t >= level.thr.CB) return "CB";
+  if(t >= level.thr.CC) return "CC";
+  if(t >= level.thr.DC) return "DC";
+  if(t >= level.thr.DD) return "DD";
+  return "FF";
+}
+
+/* --- Tablo-1 (mutlak) hedef final için: AA/BA/BB/CB/CC/DC/DD/FF (genel aralık) --- */
+function table1Letter(hbp){
+  if(hbp >= 90) return "AA";
+  if(hbp >= 85) return "BA";
+  if(hbp >= 75) return "BB";
+  if(hbp >= 70) return "CB";
+  if(hbp >= 60) return "CC";
+  if(hbp >= 40) return "DC";
+  if(hbp >= 20) return "DD";
+  return "FF";
+}
+
+/* --- Sivas sınır kuralları --- */
+function applySivasLimits({hbp, finalScore, bdks, hbas, ysss}){
+  // YSSS altında final => FF
+  if(Number.isFinite(ysss) && finalScore < ysss){
+    return { ok:false, letter:"FF", note:`YSSS: Final < ${ysss} → FF` };
+  }
+  // BDKS altında HBP => havuz dışı FF
+  if(Number.isFinite(bdks) && hbp < bdks){
+    return { ok:false, letter:"FF", note:`BDKS: HBP < ${bdks} → FF (havuz dışı)` };
+  }
+  // HBAS altında HBP => FF (havuzda kalsa da sonuç FF)
+  if(Number.isFinite(hbas) && hbp < hbas){
+    return { ok:false, letter:"FF", note:`HBAS: HBP < ${hbas} → FF` };
+  }
+  return { ok:true, letter:null, note:"" };
+}
+
+/* --- Ek değerlendirme UI --- */
+const chkExtra=document.getElementById("chkExtra");
+const extraArea=document.getElementById("extraArea");
+const inpExtraCount=document.getElementById("inpExtraCount");
+const extraList=document.getElementById("extraList");
+
+chkExtra.addEventListener("change", ()=>{
+  extraArea.style.display = chkExtra.checked ? "block" : "none";
+  renderExtras();
+});
+inpExtraCount.addEventListener("change", renderExtras);
+
+function renderExtras(){
+  extraList.innerHTML="";
+  if(!chkExtra.checked) return;
+  const n=Number(inpExtraCount.value);
+  for(let i=1;i<=n;i++){
+    const div=document.createElement("div");
+    div.className="card";
+    div.innerHTML=`
+      <div class="extraTitle">Ek Kalem ${i}</div>
+      <div class="extraGrid">
+        <div>
+          <label>Ad (opsiyonel)</label>
+          <input id="exName${i}" placeholder="örn: Ödev">
+        </div>
+        <div>
+          <label>Ağırlık (%)</label>
+          <input id="exW${i}" type="number" min="0" max="100" placeholder="örn: 10" value="10">
+        </div>
+        <div>
+          <label>Senin Notun</label>
+          <input id="exMy${i}" type="number" min="0" max="100" placeholder="0-100" value="70">
+        </div>
+        <div>
+          <label>Sınıf Ortalaması</label>
+          <input id="exCls${i}" type="number" min="0" max="100" placeholder="0-100" value="60">
+        </div>
+      </div>
+    `;
+    extraList.appendChild(div);
+  }
+}
+renderExtras();
+
+function calculate(){
+  const out=document.getElementById("out");
+  out.innerHTML="";
+
+  const N = Number(document.getElementById("inpN").value);
+  const mode = modeByN(N);
+
+  const myMid=Number(document.getElementById("inpMyMid").value);
+  const clsMid=Number(document.getElementById("inpClsMid").value);
+  const clsFinal=Number(document.getElementById("inpClsFinal").value);
+
+  const wMidPct=Number(document.getElementById("inpWMid").value);
+  const wFinalPct=Number(document.getElementById("inpWFinal").value);
+
+  const target=document.getElementById("inpTarget").value;
+
+  const bdks=Number(document.getElementById("inpBDKS").value);
+  const hbas=Number(document.getElementById("inpHBAS").value);
+  const ysss=Number(document.getElementById("inpYSSS").value);
+
+  const sigmaStr=document.getElementById("inpSigma").value.trim();
+  const sigmas = sigmaStr ? [Number(sigmaStr)] : [10,15,20];
+
+  // basic validations
+  if([myMid,clsMid,clsFinal].some(v=>!Number.isFinite(v)||v<0||v>100)){
+    out.innerHTML=`<div class="card warn">Uyarı: Vize, sınıf vize ort, sınıf final ort 0-100 arasında olmalı.</div>`;
+    return;
+  }
+  if(!Number.isFinite(wMidPct)||!Number.isFinite(wFinalPct)||wMidPct<0||wFinalPct<0){
+    out.innerHTML=`<div class="card warn">Uyarı: Ağırlıkları düzgün gir.</div>`;
+    return;
+  }
+  if([bdks,hbas,ysss].some(v=>!Number.isFinite(v)||v<0||v>100)){
+    out.innerHTML=`<div class="card warn">Uyarı: BDKS/HBAS/YSSS 0-100 olmalı.</div>`;
+    return;
+  }
+  if(sigmas.some(s=>!Number.isFinite(s)||s<=0||s>50)){
+    out.innerHTML=`<div class="card warn">Uyarı: σ değeri 1-50 arasında olmalı.</div>`;
+    return;
+  }
+
+  // extras
+  let extras=[];
+  let sumPct=wMidPct+wFinalPct;
+
+  if(chkExtra.checked){
+    const n=Number(inpExtraCount.value);
+    for(let i=1;i<=n;i++){
+      const name=(document.getElementById(`exName${i}`).value || `Ek ${i}`).trim();
+      const w=Number(document.getElementById(`exW${i}`).value);
+      const my=Number(document.getElementById(`exMy${i}`).value);
+      const cls=Number(document.getElementById(`exCls${i}`).value);
+
+      if(!Number.isFinite(w)||w<0||w>100) return out.innerHTML=`<div class="card warn">Uyarı: ${name}: ağırlık 0-100 olmalı.</div>`;
+      if(!Number.isFinite(my)||my<0||my>100) return out.innerHTML=`<div class="card warn">Uyarı: ${name}: senin notun 0-100 olmalı.</div>`;
+      if(!Number.isFinite(cls)||cls<0||cls>100) return out.innerHTML=`<div class="card warn">Uyarı: ${name}: sınıf ort 0-100 olmalı.</div>`;
+
+      sumPct += w;
+      extras.push({name,wPct:w,my,cls});
+    }
+  }
+
+  if(Math.round(sumPct*100)/100 !== 100){
+    out.innerHTML=`<div class="card warn">Uyarı: Ağırlıkların toplamı <b>100</b> olmalı. Şu an: <b>${sumPct}</b></div>`;
+    return;
+  }
+
+  const wMid=wMidPct/100;
+  const wFinal=wFinalPct/100;
+  const extrasN=extras.map(x=>({...x,w:x.wPct/100}));
+
+  const classAvg =
+    clsMid*wMid +
+    clsFinal*wFinal +
+    extrasN.reduce((a,x)=>a + x.cls*x.w, 0);
+
+  const myKnown =
+    myMid*wMid +
+    extrasN.reduce((a,x)=>a + x.my*x.w, 0);
+
+  let table = `
+    <table>
+      <thead><tr><th>Kalem</th><th>Ağırlık</th><th>Sen</th><th>Sınıf Ort</th><th>Katkın</th><th>Sınıf Katkısı</th></tr></thead>
+      <tbody>
+        <tr><td><b>Vize</b></td><td>${wMidPct}%</td><td>${myMid}</td><td>${clsMid}</td><td>${fmt(myMid*wMid)}</td><td>${fmt(clsMid*wMid)}</td></tr>
+        <tr><td><b>Final (?)</b></td><td>${wFinalPct}%</td><td>?</td><td>${clsFinal}</td><td>?</td><td>${fmt(clsFinal*wFinal)}</td></tr>
+  `;
+  extrasN.forEach(x=>{
+    table += `<tr><td><b>${x.name}</b></td><td>${x.wPct}%</td><td>${x.my}</td><td>${x.cls}</td><td>${fmt(x.my*x.w)}</td><td>${fmt(x.cls*x.w)}</td></tr>`;
+  });
+  table += `</tbody></table>`;
+
+  let html = `
+    <div class="card">
+      <div><b>Sınıf Genel HBP Ortalaması (X̄):</b> ${fmt(classAvg)}</div>
+      <div class="muted">X̄ = tüm kalemlerin sınıf ortalamalarıyla ağırlıklı toplamı</div>
+      ${table}
+      <div class="muted" style="margin-top:10px"><b>Senin bilinen katkın (final hariç):</b> ${fmt(myKnown)}</div>
+      <div class="muted"><b>Sınırlar:</b> BDKS=${bdks} • HBAS=${hbas} • YSSS=${ysss}</div>
+    </div>
+  `;
+
+  if(mode === "UNKNOWN"){
+    out.innerHTML = html + `<div class="card warn">Uyarı: N geçersiz.</div>`;
+    return;
+  }
+
+  if(mode === "NEEDS_LIST"){
+    out.innerHTML = html + `
+      <div class="card warn">
+        <b>11–29 öğrenci aralığı (Tablo-2) bu sayfada hesaplanmıyor.</b><br>
+        Bu aralıkta resmi yöntem “sıralama + yüzdelik dağıtım” kullandığı için, <b>sınıfın ham başarı (HBP) listesi</b> gerekir. Liste olmadan doğru sonuç üretilemez.
+      </div>
+    `;
+    return;
+  }
+
+  // Hedef FF seçilirse: en düşük final barajının altını göstermek yerine kuralı anlat
+  if(target === "FF"){
+    out.innerHTML = html + `
+      <div class="card bad">
+        <b>Hedef: FF</b><br>
+        FF için genellikle YSSS (final barajı) altında kalmak veya HBAS/BDKS altında kalmak yeterlidir.
+        <div class="muted">YSSS altı: Final < ${ysss} → FF</div>
+      </div>
+    `;
+    return;
+  }
+
+  // ABS (N<=10): Tablo-1'e göre hedef harf alt sınır HBP aralığı ile çöz
+  if(mode === "ABS_T1"){
+    const targetMinHbp = ({
+      "AA":90, "BA":85, "BB":75, "CB":70, "CC":60, "DC":40, "DD":20
+    })[target];
+
+    if(!Number.isFinite(targetMinHbp)){
+      out.innerHTML = html + `<div class="card warn">Uyarı: N ≤ 10 modunda hedef harf desteklenmiyor.</div>`;
+      return;
+    }
+
+    let needFinal = Math.ceil((targetMinHbp - myKnown) / wFinal);
+    if(!Number.isFinite(needFinal)) needFinal = 999;
+
+    // YSSS barajı her durumda geçerli (final < ysss => FF)
+    const showFinal = Math.max(ysss, needFinal);
+
+    // sınır kuralları ile kontrol
+    const hbpAtShow = myKnown + showFinal*wFinal;
+    const lim = applySivasLimits({hbp:hbpAtShow, finalScore:showFinal, bdks, hbas, ysss});
+
+    out.innerHTML = html + `
+      <div class="card mutlak">
+        <b>Mod: N ≤ 10 → Tablo-1 (Mutlak)</b><br>
+        Hedef: <b>${target}</b> (HBP ≥ ${targetMinHbp})<br>
+        Gereken final (min YSSS=${ysss}): <b>${showFinal > 100 ? "İMKANSIZ" : showFinal}</b>
+        ${lim.ok ? "" : `<div class="muted">Kural: ${lim.note}</div>`}
+      </div>
+    `;
+    return;
+  }
+
+  // REL (N>=30): Tablo-3 eşiklerinden hedef T alt sınırı
+  const level = pickT3Level(classAvg);
+  const thr = level.thr;
+
+  // hedef harfin T alt sınırı
+  const targetT = thr[target];
+  if(!Number.isFinite(targetT)){
+    out.innerHTML = html + `<div class="card warn">Uyarı: Hedef harf için T eşiği bulunamadı.</div>`;
+    return;
+  }
+
+  html += `
+    <div class="card ok">
+      <b>Mod: N ≥ 30 → Tablo-3 (Z→T)</b><br>
+      <b>Sınıf düzeyi:</b> ${level.name} (${fmt(level.min)}–${fmt(level.max)})<br>
+      <b>Hedef:</b> ${target} (T ≥ ${targetT})<br>
+      <div class="muted">Z = (X − X̄) / σ, T = 50 + 10Z</div>
+    </div>
+  `;
+
+  // her sigma için gereken final
+  for(const s of sigmas){
+    const zNeed = (targetT - 50) / 10;
+    const xNeed = classAvg + zNeed * s; // gereken HBP
+    let needFinalRaw = (xNeed - myKnown) / wFinal;
+    let needFinal = Math.ceil(needFinalRaw);
+    if(!Number.isFinite(needFinal)) needFinal = 999;
+
+    // YSSS barajı
+    needFinal = Math.max(needFinal, ysss);
+
+    // 0-100 clamp (sunum)
+    const show = needFinal > 100 ? "İMKANSIZ" : clamp(needFinal, 0, 100);
+
+    // kural check (show final ile HBP/limit)
+    const hbpAt = (show === "İMKANSIZ") ? NaN : (myKnown + Number(show) * wFinal);
+    const lim = (show === "İMKANSIZ") ? {ok:false, note:"100 üstü final gerekir."} : applySivasLimits({hbp:hbpAt, finalScore:Number(show), bdks, hbas, ysss});
+
+    html += `
+      <div class="card">
+        <b>σ = ${s}</b><br>
+        Gereken final (min YSSS=${ysss}): <b>${show}</b><br>
+        <div class="muted">Gereken HBP: ${fmt(xNeed)} • Senin bilinen katkın: ${fmt(myKnown)} • Final ağırlığı: ${(wFinal*100).toFixed(0)}%</div>
+        ${lim.ok ? "" : `<div class="muted">Kural: ${lim.note}</div>`}
+      </div>
+    `;
+  }
+
+  out.innerHTML = html;
+}
+</script>
+</body>
+</html>

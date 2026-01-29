@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Harf Notu (Ek Kalem + Grafik)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b132b;
+      --bg2:#111b33;
+      --card:#0f172a;
+      --glass:rgba(255,255,255,0.03);
+      --accent:#f7b733;
+      --accent2:#21e6c1;
+      --border:#1f2a44;
+      --text:#e8eefb;
+      --muted:#9fb1d1;
+    }
+    .shell{max-width:1100px;margin:0 auto;padding:24px 18px 30px;}
+    nav.nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+    nav.nav a{color:var(--text);text-decoration:none;padding:10px 14px;border:1px solid var(--border);border-radius:12px;background:rgba(255,255,255,0.05);font-weight:800;transition:background .15s ease,border-color .15s ease,color .15s ease}
+    nav.nav a.active{border-color:var(--accent);color:var(--accent);background:rgba(247,183,51,0.12);}
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      padding:28px 18px 34px;
+      font-family:"Space Grotesk","Manrope",system-ui,-apple-system,sans-serif;
+      background:radial-gradient(circle at 20% 18%, rgba(33,230,193,0.16), transparent 32%),
+                 radial-gradient(circle at 82% 8%, rgba(247,183,51,0.16), transparent 32%),
+                 linear-gradient(145deg, var(--bg), var(--bg2));
+      color:var(--text);
+      line-height:1.6;
+    }
+    .container{
+      max-width:1100px;
+      margin:auto;
+      background:var(--glass);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:22px;
+      box-shadow:0 18px 50px rgba(0,0,0,0.28);
+    }
+    h2{
+      text-align:center;
+      color:var(--accent);
+      margin:0 0 6px;
+      letter-spacing:-0.4px;
+    }
+    .bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;justify-content:space-between;margin-bottom:10px}
+    .selectWrap{display:flex;align-items:center;gap:8px;color:var(--muted);font-weight:700;font-size:14px}
+    select.uni{
+      width:auto;
+      min-width:220px;
+      padding:9px 12px;
+      border-radius:10px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid var(--border);
+      color:var(--text);
+    }
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .full{grid-column:1/-1}
+    label{font-weight:700;display:block;margin-top:6px;color:var(--text);font-size:14px}
+    input,select,button{
+      width:100%;
+      padding:11px 12px;
+      margin-top:6px;
+      box-sizing:border-box;
+      font-size:15px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,0.04);
+      color:var(--text);
+    }
+    input:focus,select:focus{
+      outline:none;
+      border-color:var(--accent2);
+      box-shadow:0 0 0 3px rgba(33,230,193,0.2);
+    }
+    button{
+      background:linear-gradient(120deg,var(--accent),#f37335);
+      color:#0b0c10;
+      border:none;
+      border-radius:12px;
+      font-weight:800;
+      cursor:pointer;
+      margin-top:16px;
+      box-shadow:0 12px 30px rgba(243,115,53,0.25);
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+    button:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(243,115,53,0.32);}
+    .card{
+      background:rgba(255,255,255,0.03);
+      border:1px solid var(--border);
+      border-left:6px solid var(--accent2);
+      border-radius:14px;
+      padding:12px;
+      margin-top:12px;
+    }
+    .warn{background:rgba(247,183,51,0.08);border-left-color:#f59e0b;}
+    .mutlak{background:rgba(255,255,255,0.02);border-left-color:#111827;}
+    .good{border-left-color:#16a34a;}
+    .low{border-left-color:#17a2b8;}
+    .mid{border-left-color:#28a745;}
+    .high{border-left-color:#dc3545;}
+    .muted{font-size:12px;color:var(--muted);margin-top:6px}
+    table{width:100%;border-collapse:collapse;margin-top:10px;background:rgba(255,255,255,0.02);border-radius:10px;overflow:hidden}
+    th,td{border-bottom:1px solid var(--border);padding:8px;font-size:14px;text-align:left;color:var(--text)}
+    th{color:var(--muted);font-weight:700;}
+    .charts{display:grid;grid-template-columns:1fr;gap:16px;margin-top:18px}
+    @media (min-width: 980px){
+      .charts{grid-template-columns:1fr 1fr}
+      .charts .fullchart{grid-column:1/-1}
+    }
+    .chartCard{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px;
+      box-shadow:0 12px 28px rgba(0,0,0,0.25);
+    }
+    .chartTitle{font-weight:800;margin-bottom:8px;color:var(--text)}
+    canvas{width:100%;height:320px;display:block;border-radius:12px;background:#0f172a}
+    .legend{font-size:12px;color:var(--muted);margin-top:8px;display:flex;gap:10px;flex-wrap:wrap}
+    .tag{display:inline-flex;align-items:center;gap:6px;padding:3px 8px;border-radius:999px;background:rgba(255,255,255,0.05);border:1px solid var(--border)}
+    .dot{width:10px;height:10px;border-radius:50%;}
+    .checkRow{display:flex;align-items:center;gap:10px;margin-top:10px}
+    .extraWrap{margin-top:10px}
+    .extraGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+    .extraTitle{font-weight:900;margin-bottom:6px}
+    @media(max-width:680px){.row{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+<div class="shell">
+  <nav class="nav">
+    <a href="index.html">Ana Sayfa</a>
+    <a class="active" href="harf_notu_otomatik_grafikli.html">Harf Notu + Grafik</a>
+    <a href="heatmap.html">Heatmap</a>
+    <a href="detaylifinal.html">Hedef Final</a>
+    <a href="anogano.html">AGNO / GANO</a>
+    <a href="hakkinda.html">Hakkında</a>
+  </nav>
+
+<div class="container">
+  <div class="bar">
+    <div>
+      <h2>Harf Notu (Ek Kalem + Grafik)</h2>
+      <div class="muted" id="uniNote"></div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div>
+      <label>Vize Notun</label>
+      <input id="inpMyMid" type="number" min="0" max="100" placeholder="0-100">
+    </div>
+    <div>
+      <label>Final Notun</label>
+      <input id="inpMyFinal" type="number" min="0" max="100" placeholder="0-100">
+      <div class="muted" id="finalBarajNote">Final baraj: <b>50</b> (50 altı otomatik FF)</div>
+    </div>
+
+    <div>
+      <label>Sınıf Vize Ortalaması</label>
+      <input id="inpClsMid" type="number" min="0" max="100" placeholder="0-100">
+    </div>
+    <div>
+      <label>Sınıf Final Ortalaması</label>
+      <input id="inpClsFinal" type="number" min="0" max="100" placeholder="0-100">
+    </div>
+
+    <div>
+      <label>Vize Ağırlığı (%)</label>
+      <input id="inpWMid" type="number" min="0" max="100" value="40">
+    </div>
+    <div>
+      <label>Final Ağırlığı (%)</label>
+      <input id="inpWFinal" type="number" min="0" max="100" value="60">
+      <div class="muted">Ek kalem varsa toplam ağırlık yine 100 olmalı.</div>
+    </div>
+
+    <div class="full">
+      <div class="checkRow">
+        <input id="chkExtra" type="checkbox" style="width:auto;transform:scale(1.1)">
+        <label for="chkExtra" style="margin:0;font-weight:900">Ek değerlendirme var (ödev/quiz/proje/lab...)</label>
+      </div>
+    </div>
+
+    <div id="extraArea" class="full" style="display:none">
+      <label>Kaç adet ek kalem?</label>
+      <select id="inpExtraCount">
+        <option value="1">1</option><option value="2">2</option><option value="3">3</option>
+        <option value="4">4</option><option value="5">5</option><option value="6">6</option>
+      </select>
+      <div class="muted">Her ek kalem için: Ad, ağırlık %, senin notun, sınıf ortalaması</div>
+      <div id="extraList" class="extraWrap"></div>
+    </div>
+
+    <div class="full">
+      <label>Standart Sapma (σ) <span class="muted">(opsiyonel)</span></label>
+      <input id="inpSigma" type="number" min="0.1" step="0.1" placeholder="bilmiyorsan boş bırak → σ 5.0–25.0 (0.1 adım) simülasyon">
+    </div>
+
+    <div class="full">
+      <button id="btnCalc" type="button" onclick="hesapla()">Hesapla + Grafik Çiz</button>
+    </div>
+  </div>
+
+  <div id="out"></div>
+
+  <div id="chartArea" class="charts" style="display:none;">
+    <div class="chartCard">
+      <div class="chartTitle">Final notu vs Harf notu</div>
+      <canvas id="cvFinalVsLetter"></canvas>
+      <div class="legend" id="legendFinalVs"></div>
+      <div class="muted">Ek kalemler sabit kabul edilip final 50-100 taranır.</div>
+    </div>
+
+    <div class="chartCard">
+      <div class="chartTitle">σ değişince harf nasıl değişiyor?</div>
+      <canvas id="cvSigmaVsLetter"></canvas>
+      <div class="muted">Final sabit: girdiğin final. σ 5.0–25.0 aralığında (0.1 adım) simüle edilir.</div>
+    </div>
+
+    <div class="chartCard fullchart">
+      <div class="chartTitle">Z-T grafiği (T = 50 + 10Z)</div>
+      <canvas id="cvZT"></canvas>
+      <div class="muted">Seçilen σ ile senin noktan (Z,T) işaretlenir. σ boşsa 15 ile gösterilir.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---------- Config ---------- */
+const UNIVERSITY_CONFIGS = {
+  "Samsun Üniversitesi": {
+    enabled: true,
+    finalBaraj: 50,
+    mutlakEsik: 80,
+    letterSet: ["FF","DD","DC","CC","CB","BB","BA","AA"],
+    defaultWeights: { midterm: 40, final: 60 },
+    // σ bilinmiyorsa: yüzdelik dağılım simülasyonu için 5.0–25.0 (0.1 adım)
+    // Grafiklerde gösterilecek temsilci σ değerleri:
+    sigmaDefaults: [5,15,25],
+    notes: "Samsun Üniversitesi için aktif."
+  }
+};
+
+let activeUniversityConfig = UNIVERSITY_CONFIGS["Samsun Üniversitesi"];
+
+/* ---------- Core grading logic ---------- */
+function clamp(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
+
+const TABLE = [
+  { name:"Mükemmel",      min:70.0, max:79.99, t:{AA:59, BA:54, BB:49, CB:44, CC:39, DC:34, DD:29} },
+  { name:"Çok iyi",       min:62.5, max:69.99, t:{AA:61, BA:56, BB:51, CB:46, CC:41, DC:36, DD:31} },
+  { name:"İyi",           min:57.5, max:62.49, t:{AA:63, BA:58, BB:53, CB:48, CC:43, DC:38, DD:33} },
+  { name:"Orta",          min:52.5, max:57.49, t:{AA:65, BA:60, BB:55, CB:50, CC:45, DC:40, DD:35} },
+  { name:"Yeterli",       min:47.5, max:52.49, t:{AA:67, BA:62, BB:57, CB:52, CC:47, DC:42, DD:37} },
+  { name:"Yeterli geçer", min:42.5, max:47.49, t:{AA:69, BA:64, BB:59, CB:54, CC:49, DC:44, DD:39} },
+  { name:"Şartlı geçer",  min:-1.0, max:42.49, t:{AA:71, BA:66, BB:61, CB:56, CC:51, DC:46, DD:41} }
+];
+
+function pickRowByClassAvg(classAvg){
+  return TABLE.find(r => classAvg > r.min && classAvg <= r.max) || null;
+}
+
+function mutlakHarf(ogrOrt){
+  if (ogrOrt >= 90) return {harf:"AA", aciklama:"Mükemmel"};
+  if (ogrOrt >= 85) return {harf:"BA", aciklama:"Çok iyi"};
+  if (ogrOrt >= 80) return {harf:"BB", aciklama:"İyi"};
+  if (ogrOrt >= 75) return {harf:"CB", aciklama:"Orta üstü"};
+  if (ogrOrt >= 70) return {harf:"CC", aciklama:"Orta"};
+  if (ogrOrt >= 65) return {harf:"DC", aciklama:"Orta altı"};
+  if (ogrOrt >= 60) return {harf:"DD", aciklama:"Geçer"};
+  return {harf:"FF", aciklama:"Başarısız"};
+}
+
+function bagilHarfFromRow(row, t){
+  const thr = row.t;
+  if (t >= thr.AA) return "AA";
+  if (t >= thr.BA) return "BA";
+  if (t >= thr.BB) return "BB";
+  if (t >= thr.CB) return "CB";
+  if (t >= thr.CC) return "CC";
+  if (t >= thr.DC) return "DC";
+  if (t >= thr.DD) return "DD";
+  return "FF";
+}
+
+function runRelative({ogrOrt, classAvg, sigma}){
+  const z = (ogrOrt - classAvg) / sigma;
+  const t = 50 + 10*z;
+  const yuzdelik = clamp(50 + z*34.13, 0, 100);
+  const row = pickRowByClassAvg(classAvg);
+  const harf = row ? bagilHarfFromRow(row, t) : "FF";
+  return { z, t, yuzdelik, rowName: row ? row.name : "Bilinmiyor", harf };
+}
+
+/* ---------- UI refs ---------- */
+const chkExtra = document.getElementById("chkExtra");
+const extraArea = document.getElementById("extraArea");
+const inpExtraCount = document.getElementById("inpExtraCount");
+const extraList = document.getElementById("extraList");
+const uniNote = document.getElementById("uniNote");
+const btnCalc = document.getElementById("btnCalc");
+const finalBarajNote = document.getElementById("finalBarajNote");
+
+/* ---------- University selector (fixed to Samsun) ---------- */
+function applyUniversityConfig(cfg){
+  uniNote.textContent = cfg.notes || "";
+  if(cfg.defaultWeights){
+    document.getElementById("inpWMid").value = cfg.defaultWeights.midterm;
+    document.getElementById("inpWFinal").value = cfg.defaultWeights.final;
+  }
+  document.getElementById("inpSigma").placeholder = "bilmiyorsan boş bırak → σ 5.0–25.0 (0.1 adım) simülasyon";
+  finalBarajNote.innerHTML = `Final baraj: <b>${cfg.finalBaraj ?? 50}</b> (${cfg.finalBaraj ?? 50} altı otomatik FF)`;
+  btnCalc.disabled = !cfg.enabled;
+  btnCalc.textContent = cfg.enabled ? "Hesapla + Grafik Çiz" : "Yakında eklenecek";
+}
+
+chkExtra.addEventListener("change", ()=>{
+  extraArea.style.display = chkExtra.checked ? "block" : "none";
+  renderExtras();
+});
+inpExtraCount.addEventListener("change", renderExtras);
+
+function renderExtras(){
+  extraList.innerHTML = "";
+  if(!chkExtra.checked) return;
+  const n = Number(inpExtraCount.value);
+  for(let i=1;i<=n;i++){
+    const div = document.createElement("div");
+    div.className = "card";
+    div.innerHTML = `
+      <div class="extraTitle">Ek Kalem ${i}</div>
+      <div class="extraGrid">
+        <div>
+          <label>Ad (opsiyonel)</label>
+          <input id="exName${i}" placeholder="örn: Ödev">
+        </div>
+        <div>
+          <label>Ağırlık (%)</label>
+          <input id="exW${i}" type="number" min="0" max="100" placeholder="örn: 10">
+        </div>
+        <div>
+          <label>Senin Notun</label>
+          <input id="exMy${i}" type="number" min="0" max="100" placeholder="0-100">
+        </div>
+        <div>
+          <label>Sınıf Ortalaması</label>
+          <input id="exCls${i}" type="number" min="0" max="100" placeholder="0-100">
+        </div>
+      </div>
+    `;
+    extraList.appendChild(div);
+  }
+}
+
+/* ---------- Data ---------- */
+function collectData(){
+  return {
+    myMid: Number(document.getElementById("inpMyMid").value),
+    myFinal: Number(document.getElementById("inpMyFinal").value),
+    clsMid: Number(document.getElementById("inpClsMid").value),
+    clsFinal: Number(document.getElementById("inpClsFinal").value),
+    wMidPct: Number(document.getElementById("inpWMid").value),
+    wFinalPct: Number(document.getElementById("inpWFinal").value),
+    sigmaStr: document.getElementById("inpSigma").value.trim(),
+    extras: readExtras()
+  };
+}
+
+function readExtras(){
+  if(!chkExtra.checked) return [];
+  const n = Number(inpExtraCount.value);
+  const arr = [];
+  for(let i=1;i<=n;i++){
+    arr.push({
+      name: (document.getElementById(`exName${i}`).value || `Ek ${i}`).trim(),
+      wPct: Number(document.getElementById(`exW${i}`).value),
+      my: Number(document.getElementById(`exMy${i}`).value),
+      cls: Number(document.getElementById(`exCls${i}`).value)
+    });
+  }
+  return arr;
+}
+
+function validateData(d){
+  const nums = [d.myMid, d.myFinal, d.clsMid, d.clsFinal];
+  if(nums.some(v => !Number.isFinite(v) || v<0 || v>100)) return "Tüm notlar 0-100 arasında olmalı.";
+  if(!Number.isFinite(d.wMidPct)||!Number.isFinite(d.wFinalPct)||d.wMidPct<0||d.wFinalPct<0) return "Ağırlıkları düzgün gir.";
+
+  const sigmaStr = d.sigmaStr;
+  if(sigmaStr){
+    const s = Number(sigmaStr);
+    if(!Number.isFinite(s) || s<=0 || s>50) return "σ (standart sapma) 0-50 arasında olmalı.";
+  }
+
+  let total = d.wMidPct + d.wFinalPct;
+  for(const ex of d.extras){
+    if(!Number.isFinite(ex.wPct)||ex.wPct<0||ex.wPct>100) return `${ex.name}: ağırlık 0-100 olmalı.`;
+    if(!Number.isFinite(ex.my)||ex.my<0||ex.my>100) return `${ex.name}: senin notun 0-100 olmalı.`;
+    if(!Number.isFinite(ex.cls)||ex.cls<0||ex.cls>100) return `${ex.name}: sınıf ortalaması 0-100 olmalı.`;
+    total += ex.wPct;
+  }
+  if(Math.round(total*100)/100 !== 100) return `Ağırlıkların toplamı 100 olmalı. Şu an: ${total}`;
+  return null;
+}
+
+/* ---------- Totals ---------- */
+function computeTotals(d){
+  const wMid = d.wMidPct/100;
+  const wFinal = d.wFinalPct/100;
+  const extrasN = d.extras.map(ex => ({...ex, w: ex.wPct/100}));
+
+  const ogrOrt =
+    d.myMid*wMid +
+    d.myFinal*wFinal +
+    extrasN.reduce((a,x)=>a + x.my*x.w, 0);
+
+  const classAvg =
+    d.clsMid*wMid +
+    d.clsFinal*wFinal +
+    extrasN.reduce((a,x)=>a + x.cls*x.w, 0);
+
+  return {ogrOrt, classAvg, wMid, wFinal, extrasN};
+}
+
+/* ---------- Chart helpers ---------- */
+const LETTERS=["AA","BA","BB","CB","CC","DC","DD","FF"];
+function letterIndex(L){ return LETTERS.indexOf(L); }
+
+function setupCanvas(canvas){
+  const ctx = canvas.getContext("2d");
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  ctx.scale(dpr,dpr);
+  return ctx;
+}
+
+function clear(ctx, W, H){
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle="#0f172a";
+  ctx.fillRect(0,0,W,H);
+}
+
+function drawAxes(ctx, plot, xlabel, ylabel){
+  ctx.strokeStyle="#1f2937"; ctx.lineWidth=1.2;
+  ctx.beginPath(); ctx.moveTo(plot.x0, plot.y1); ctx.lineTo(plot.x1, plot.y1); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(plot.x0, plot.y0); ctx.lineTo(plot.x0, plot.y1); ctx.stroke();
+  ctx.fillStyle="#cdd7ea"; ctx.font="12px Arial"; ctx.fillText(xlabel, plot.x1-10, plot.y1+22);
+  ctx.save(); ctx.translate(plot.x0-26, plot.y0+12); ctx.rotate(-Math.PI/2); ctx.fillText(ylabel, 0,0); ctx.restore();
+}
+
+function drawLine(ctx, pts, color, width){
+  ctx.strokeStyle=color; ctx.lineWidth=width;
+  ctx.beginPath();
+  pts.forEach((p,i)=> i===0 ? ctx.moveTo(p.x,p.y) : ctx.lineTo(p.x,p.y));
+  ctx.stroke();
+}
+
+function drawPoints(ctx, pts, color, size){
+  ctx.fillStyle=color;
+  pts.forEach(p=>{
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,size,0,Math.PI*2);
+    ctx.fill();
+  });
+}
+
+function drawXGrid(ctx, plot, xs){
+  ctx.strokeStyle="#1f2937";
+  xs.forEach(x=>{
+    ctx.beginPath(); ctx.moveTo(x, plot.y0); ctx.lineTo(x, plot.y1); ctx.stroke();
+  });
+}
+
+function xScale(v, vmin, vmax, plot){
+  return plot.x0 + (v - vmin) * (plot.x1 - plot.x0) / (vmax - vmin);
+}
+function yScale(v, vmin, vmax, plot){
+  return plot.y1 - (v - vmin) * (plot.y1 - plot.y0) / (vmax - vmin);
+}
+
+/* ---------- Charts ---------- */
+function drawFinalVsLetterWithExtras({d, totals, sigmaStr, sigmasToShow}){
+  const canvas = document.getElementById("cvFinalVsLetter");
+  const ctx = setupCanvas(canvas);
+  const W = canvas.getBoundingClientRect().width;
+  const H = canvas.getBoundingClientRect().height;
+  clear(ctx, W, H);
+
+  const plot = {x0:46, y0:18, x1:W-10, y1:H-40};
+  drawAxes(ctx, plot, "Final", "Harf");
+
+  const xmin=50, xmax=100;
+  const xt=[50,60,70,80,90,100];
+  drawXGrid(ctx, plot, xt.map(v=>xScale(v,xmin,xmax,plot)));
+  ctx.fillStyle="#cdd7ea"; ctx.font="12px Arial";
+  xt.forEach(v=>ctx.fillText(String(v), xScale(v,xmin,xmax,plot)-6, plot.y1+18));
+
+  const sigmas = sigmaStr ? [Number(sigmaStr)] : sigmasToShow;
+  const colors = ["#16a34a","#f59e0b","#ef4444"];
+  sigmas.forEach((s,idx)=>{
+    const pts=[];
+    for(let f=xmin; f<=xmax; f+=0.5){
+      const d2 = {...d, myFinal:f, sigmaStr:String(s)};
+      const totals2 = computeTotals(d2);
+      const res = runRelative({ogrOrt:totals2.ogrOrt, classAvg:totals2.classAvg, sigma:s});
+      const x = xScale(f,xmin,xmax,plot);
+      const y = plot.y1 - (letterIndex(res.harf) * (plot.y1-plot.y0)/(LETTERS.length-1));
+      pts.push({x,y});
+    }
+    drawLine(ctx, pts, colors[idx%colors.length], 2);
+  });
+
+  const legend = document.getElementById("legendFinalVs");
+  legend.innerHTML = sigmas.map((s,i)=>`<span class="tag"><span class="dot" style="background:${colors[i%colors.length]}"></span>σ=${s}</span>`).join("");
+}
+
+function drawSigmaVsLetterWithExtras({d, totals}){
+  const canvas = document.getElementById("cvSigmaVsLetter");
+  const ctx = setupCanvas(canvas);
+  const W = canvas.getBoundingClientRect().width;
+  const H = canvas.getBoundingClientRect().height;
+  clear(ctx, W, H);
+
+  const plot = {x0:46, y0:18, x1:W-10, y1:H-40};
+  drawAxes(ctx, plot, "σ (Standart Sapma)", "Harf");
+
+  const xmin=5, xmax=25;
+  const xt=[5,10,15,20,25];
+  drawXGrid(ctx, plot, xt.map(v=>xScale(v,xmin,xmax,plot)));
+  ctx.fillStyle="#cdd7ea"; ctx.font="12px Arial";
+  xt.forEach(v=>ctx.fillText(String(v), xScale(v,xmin,xmax,plot)-6, plot.y1+18));
+
+  const ogrOrt = totals.ogrOrt;
+
+  if(totals.classAvg > activeUniversityConfig.mutlakEsik){
+    const L = mutlakHarf(ogrOrt).harf;
+    const y = plot.y1 - (letterIndex(L) * (plot.y1-plot.y0)/(LETTERS.length-1));
+    ctx.strokeStyle="#111827";
+    ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(plot.x0,y); ctx.lineTo(plot.x1,y); ctx.stroke();
+    ctx.fillStyle="#cdd7ea";
+    ctx.fillText("Mutlak değerlendirme → σ etkisiz", plot.x0+8, plot.y0+14);
+    return;
+  }
+
+  const sigmas=[];
+  for(let s=xmin; s<=xmax+1e-9; s+=0.1) sigmas.push(Math.round(s*10)/10);
+
+  const pts = sigmas.map(s=>{
+    const L = runRelative({ogrOrt, classAvg:totals.classAvg, sigma:s}).harf;
+    return {
+      x: xScale(s,xmin,xmax,plot),
+      y: plot.y1 - (letterIndex(L) * (plot.y1-plot.y0)/(LETTERS.length-1))
+    };
+  });
+
+  drawLine(ctx, pts, "#111827", 2);
+
+  [5,15,25].forEach(s=>{
+    const L = runRelative({ogrOrt, classAvg:totals.classAvg, sigma:s}).harf;
+    const x = xScale(s,xmin,xmax,plot);
+    const y = plot.y1 - (letterIndex(L) * (plot.y1-plot.y0)/(LETTERS.length-1));
+    drawPoints(ctx, [{x,y}], "#dc2626", 3);
+    ctx.fillStyle="#cdd7ea"; ctx.font="12px Arial";
+    ctx.fillText(`σ=${s}`, x+6, y-6);
+    ctx.fillText(L, x+6, y+10);
+  });
+}
+
+function drawZTWithExtras({totals, sigmaForPoint}){
+  const canvas = document.getElementById("cvZT");
+  const ctx = setupCanvas(canvas);
+  const W = canvas.getBoundingClientRect().width;
+  const H = canvas.getBoundingClientRect().height;
+  clear(ctx, W, H);
+
+  const plot = {x0:52, y0:16, x1:W-16, y1:H-44};
+  drawAxes(ctx, plot, "Z", "T");
+
+  const zmin=-3,zmax=3,tmin=20,tmax=80;
+
+  const zticks=[-3,-2,-1,0,1,2,3];
+  const tticks=[20,30,40,50,60,70,80];
+  ctx.font="12px Arial"; ctx.fillStyle="#cdd7ea";
+  zticks.forEach(z=>{
+    const x=xScale(z,zmin,zmax,plot);
+    ctx.strokeStyle="#1f2937";
+    ctx.beginPath(); ctx.moveTo(x,plot.y0); ctx.lineTo(x,plot.y1); ctx.stroke();
+    ctx.fillText(String(z), x-4, plot.y1+18);
+  });
+  tticks.forEach(t=>{
+    const y=yScale(t,tmin,tmax,plot);
+    ctx.strokeStyle="#1f2937";
+    ctx.beginPath(); ctx.moveTo(plot.x0,y); ctx.lineTo(plot.x1,y); ctx.stroke();
+    ctx.fillText(String(t), plot.x0-30, y+4);
+  });
+
+  const line=[];
+  for(let z=zmin;z<=zmax;z+=0.05){
+    const t=50+10*z;
+    line.push({x:xScale(z,zmin,zmax,plot), y:yScale(t,tmin,tmax,plot)});
+  }
+  drawLine(ctx, line, "#111827", 2);
+
+  const z = (totals.ogrOrt - totals.classAvg) / sigmaForPoint;
+  const t = 50 + 10*z;
+
+  const px = xScale(clamp(z,zmin,zmax), zmin,zmax,plot);
+  const py = yScale(clamp(t,tmin,tmax), tmin,tmax,plot);
+  drawPoints(ctx, [{x:px,y:py}], "#dc2626", 4);
+  ctx.fillStyle="#dc2626";
+  ctx.fillText(`(Z=${z.toFixed(2)}, T=${t.toFixed(1)})`, px+8, py-8);
+}
+
+/* ---------- Main ---------- */
+function hesapla(){
+  const out = document.getElementById("out");
+  out.innerHTML = "";
+
+  const d = collectData();
+  const err = validateData(d);
+  if(err){
+    out.innerHTML = `<div class="card warn">Uyarı: ${err}</div>`;
+    document.getElementById("chartArea").style.display="none";
+    return;
+  }
+
+  if(d.myFinal < activeUniversityConfig.finalBaraj){
+    out.innerHTML = `<div class="card warn"><b>SONUÇ: FF</b><br>Final ${activeUniversityConfig.finalBaraj} altı → otomatik kaldın.</div>`;
+    document.getElementById("chartArea").style.display="none";
+    return;
+  }
+
+  const totals = computeTotals(d);
+
+  let html = `
+    <div class="card">
+      <b>Öğrenci Genel Ort:</b> ${totals.ogrOrt.toFixed(2)}<br>
+      <b>Sınıf Genel Ort:</b> ${totals.classAvg.toFixed(2)}
+      <div class="muted">Ek kalemler dahil genel ortalamalar ağırlıklı hesaplandı.</div>
+    </div>
+  `;
+
+  let t = `
+    <table>
+      <thead><tr><th>Kalem</th><th>Ağırlık</th><th>Sen</th><th>Sınıf Ort</th><th>Sen Katkın</th><th>Sınıf Katkısı</th></tr></thead>
+      <tbody>
+        <tr><td><b>Vize</b></td><td>${d.wMidPct}%</td><td>${d.myMid}</td><td>${d.clsMid}</td><td>${(d.myMid*totals.wMid).toFixed(2)}</td><td>${(d.clsMid*totals.wMid).toFixed(2)}</td></tr>
+        <tr><td><b>Final</b></td><td>${d.wFinalPct}%</td><td>${d.myFinal}</td><td>${d.clsFinal}</td><td>${(d.myFinal*totals.wFinal).toFixed(2)}</td><td>${(d.clsFinal*totals.wFinal).toFixed(2)}</td></tr>
+  `;
+  totals.extrasN.forEach(ex=>{
+    t += `<tr><td><b>${ex.name}</b></td><td>${ex.wPct}%</td><td>${ex.my}</td><td>${ex.cls}</td><td>${(ex.my*ex.w).toFixed(2)}</td><td>${(ex.cls*ex.w).toFixed(2)}</td></tr>`;
+  });
+  t += `</tbody></table>`;
+  html += `<div class="card">${t}</div>`;
+
+  if(totals.classAvg > activeUniversityConfig.mutlakEsik){
+    const m = mutlakHarf(totals.ogrOrt);
+    html += `<div class="card mutlak">→ <b>MUTLAK</b> değerlendirme</div>
+             <div class="card good"><b>Harf:</b> ${m.harf} (${m.aciklama})</div>`;
+  } else {
+    const sigmaStr = d.sigmaStr;
+
+    // σ girilmişse: tek sonuç
+    if(sigmaStr){
+      const s = Number(sigmaStr);
+      const r = runRelative({ogrOrt:totals.ogrOrt, classAvg:totals.classAvg, sigma:s});
+      html += `<div class="card good">
+        <b>Bağıl değerlendirme</b><br>
+        <b>σ=${s}</b> → Harf: <b>${r.harf}</b><br>
+        Z: ${r.z.toFixed(3)} | T: ${r.t.toFixed(2)} | %: ${r.yuzdelik.toFixed(1)}<br>
+        Sınıf düzeyi: <b>${r.rowName}</b>
+      </div>`;
+    }
+
+    // σ bilinmiyorsa: 5.0–25.0 aralığında (0.1 adım) tarayıp sadece yüzdelik dağılım yaz
+    if(!sigmaStr){
+      const sMin = 5.0, sMax = 25.0, step = 0.1;
+      const counts = {};
+      let n = 0;
+      for(let s=sMin; s<=sMax+1e-9; s+=step){
+        const sigma = Math.round(s*10)/10;
+        const L = runRelative({ogrOrt:totals.ogrOrt, classAvg:totals.classAvg, sigma}).harf;
+        counts[L] = (counts[L]||0) + 1;
+        n++;
+      }
+
+      const letters = LETTERS.filter(L => counts[L]);
+      html += `<div class="card">
+        <b>Harf notu olasılığı (σ bilinmiyor)</b>
+        <div class="muted">σ 5.0–25.0 aralığında 0.1 adım ile tarandı (tüm σ değerleri eşit ağırlıklı).</div>
+        <table>
+          <thead><tr><th>Harf</th><th>Olasılık</th></tr></thead>
+          <tbody>
+            ${letters.map(L=>{
+              const p = (counts[L] / n) * 100;
+              return `<tr><td><b>${L}</b></td><td>${p.toFixed(1)}%</td></tr>`;
+            }).join("")}
+          </tbody>
+        </table>
+      </div>`;
+    }
+  }
+
+  out.innerHTML = html;
+
+  document.getElementById("chartArea").style.display="grid";
+
+  const sigmaStr = d.sigmaStr;
+  const sigmasToShow = sigmaStr ? [Number(sigmaStr)] : (activeUniversityConfig.sigmaDefaults || [10,15,20]);
+
+  drawFinalVsLetterWithExtras({d, totals, sigmaStr, sigmasToShow});
+  drawSigmaVsLetterWithExtras({d, totals});
+  const sigmaForPoint = sigmaStr ? Number(sigmaStr) : 15;
+  drawZTWithExtras({totals, sigmaForPoint});
+}
+
+function initUniversitySelector(){
+  // Bu sayfa şu an tek üniversiteye sabit (Samsun).
+  // Yine de konfigürasyon uygulanarak placeholder/varsayılan ağırlıklar ayarlanır.
+  applyUniversityConfig(activeUniversityConfig);
+  renderExtras();
+}
+
+window.addEventListener("resize", ()=>{
+  const chartArea = document.getElementById("chartArea");
+  if(chartArea.style.display !== "none"){
+    try{ hesapla(); }catch(e){}
+  }
+});
+
+initUniversitySelector();
+</script>
+</div>
+</body>
+</html>

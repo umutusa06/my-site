@@ -1,0 +1,808 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kocaeli Üni | Harf Notu + Grafik (BDS/MDS)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0b132b;--bg2:#0f162f;--card:#0f172a;--glass:rgba(255,255,255,0.05);
+      --accent:#f7b733;--accent2:#21e6c1;--text:#e8eefb;--muted:#9fb1d1;--border:#1f2a44;
+      --line:rgba(255,255,255,.10);
+      --shadow:0 18px 48px rgba(0,0,0,0.32);
+    }
+    *{box-sizing:border-box;}
+    body{
+      margin:0;
+      font-family:"Space Grotesk","Manrope",system-ui,-apple-system,sans-serif;
+      min-height:100vh;
+      background:radial-gradient(circle at 20% 18%, rgba(33,230,193,0.16), transparent 32%),
+                 radial-gradient(circle at 82% 8%, rgba(247,183,51,0.16), transparent 32%),
+                 linear-gradient(145deg, var(--bg), var(--bg2));
+      color:var(--text);
+    }
+    .wrap{max-width:1100px;margin:0 auto;padding:28px 18px 44px;}
+    nav.nav{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+    nav.nav a{
+      color:var(--text);text-decoration:none;padding:10px 14px;
+      border:1px solid var(--border);border-radius:12px;
+      background:rgba(255,255,255,0.05);font-weight:800;
+      transition:background .15s ease,border-color .15s ease,color .15s ease;
+    }
+    nav.nav a.active{border-color:var(--accent);color:var(--accent);background:rgba(247,183,51,0.12);}
+    .panel{
+      background:var(--glass);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:18px;
+      box-shadow:var(--shadow);
+      margin-bottom:14px;
+    }
+    h1{margin:0 0 8px;font-size:26px;letter-spacing:-0.3px;}
+    .muted{color:var(--muted);font-size:13px;line-height:1.55;}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+    label{display:block;font-weight:800;font-size:14px;margin-top:6px}
+    input,select,button,textarea{
+      width:100%;padding:11px 12px;border-radius:12px;border:1px solid var(--border);
+      background:rgba(255,255,255,0.05);color:var(--text);font-size:14px;box-sizing:border-box;
+    }
+    textarea{min-height:120px;resize:vertical;}
+    input::placeholder,textarea::placeholder{color:rgba(232,236,255,0.55);}
+    button{
+      cursor:pointer;font-weight:900;
+      background:linear-gradient(120deg,var(--accent),#f37335);
+      border:none;color:#0b0c10;box-shadow:0 12px 30px rgba(243,115,53,0.25);
+      transition:transform .12s ease,box-shadow .12s ease;
+    }
+    button:hover{transform:translateY(-1px);box-shadow:0 16px 36px rgba(243,115,53,0.32);}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .small{font-size:12px;color:var(--muted);}
+    .divider{height:1px;background:var(--line);margin:12px 0}
+    .toggleRow{display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap}
+    .toggleRow input{width:auto}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--muted);font-size:12px}
+    .charts{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .chartCard{background:var(--glass);border:1px solid var(--border);border-radius:14px;padding:12px;box-shadow:var(--shadow);}
+    .chartTitle{font-weight:700;margin:0 0 8px}
+    canvas{width:100%;height:240px;background:#0f172a;border:1px solid var(--border);border-radius:12px}
+    .full{grid-column:1 / -1}
+    .out{margin-top:12px;white-space:pre-wrap}
+    .warn{color:#ffd37a}
+    .bad{color:#ff9aa2}
+    .ok{color:#b7f7e8}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="nav">
+    <a href="index.html">Ana Sayfa</a>
+    <a class="active" href="harf_notu_otomatik_grafikli.html">Harf Notu + Grafik</a>
+    <a href="heatmap.html">Heatmap</a>
+    <a href="detaylifinal.html">Hedef Final</a>
+    <a href="anogano.html">AGNO / GANO</a>
+    <a href="hakkinda.html">Hakkında</a>
+  </nav>
+
+  <div class="panel">
+    <h1>Kocaeli Üniversitesi | Harf Notu + Grafik (BDS/MDS)</h1>
+    <p class="muted">
+      Bu sayfa <b>unofficial</b> bir simülasyondur. KOÜ “Başarı Notunun Değerlendirilmesi Usul ve Esaslar” mantığı:
+      <br>
+      <b>Final/Bütünleme alt sınırı: 40</b> (altında <b>doğrudan FF</b>).
+      <br>
+      <b>N &lt; 25</b> veya <b>Sınıf DSN ortalaması (X̄) ≥ 80</b> → <b>MDS (Tablo-1)</b>.
+      <br>
+      Diğer durumlar → <b>BDS</b>: T = ((DSN−X̄)/S)×10 + 50 ve <b>Tablo-2</b> ile dönüşüm.
+      <br>
+      <b>Kural:</b> BDS’den çıkan harf notu, öğrencinin <b>DSN’inin Tablo-1 (MDS) karşılığından daha düşük olamaz</b>.
+      <br>
+      <span class="small">Not: DC “koşullu başarılı”dır; kesin durum AGNO’ya göre değerlendirilir (bu sayfa AGNO hesaplamaz).</span>
+    </p>
+  </div>
+
+  <div class="panel">
+    <div class="grid">
+      <div>
+        <label>Yarıyıl içi (vize) notu</label>
+        <input id="midScore" type="number" min="0" max="100" step="0.01" value="60" />
+      </div>
+      <div>
+        <label>Yarıyıl içi ağırlığı (%)</label>
+        <input id="midW" type="number" min="0" max="100" step="0.01" value="40" />
+      </div>
+
+      <div>
+        <label>Final / Bütünleme notu</label>
+        <input id="examScore" type="number" min="0" max="100" step="0.01" value="50" />
+        <div class="small">100 üzerinden <b>40</b> altı → doğrudan <b>FF</b>.</div>
+      </div>
+      <div>
+        <label>Final / Bütünleme ağırlığı (%)</label>
+        <input id="examW" type="number" min="0" max="100" step="0.01" value="60" />
+      </div>
+
+      <div>
+        <label>Bağıl değerlendirmeye katılan öğrenci sayısı (N)</label>
+        <input id="n" type="number" min="1" step="1" value="30" />
+        <div class="small">N &lt; 25 ise KOÜ’de <b>MDS</b> uygulanır.</div>
+      </div>
+
+      <div>
+        <label>Sınıf DSN ortalaması (X̄)</label>
+        <input id="classMean" type="number" min="0" max="100" step="0.01" value="55" />
+        <div class="small">X̄ ≥ 80 ise (N’den bağımsız) <b>MDS</b>.</div>
+      </div>
+
+      <div>
+        <label>Standart sapma (S)</label>
+        <input id="sigma" type="number" min="0.01" step="0.01" placeholder="Boş bırak → 5.0–25.0 aralığı 0.1 adımlı senaryo" />
+        <div class="small">BDS’de gerekir. Boş bırakılırsa S=5.0’dan 25.0’e 0.1 artımlı tüm senaryolar hesaplanır ve dağılım gösterilir.</div>
+      </div>
+
+      <div>
+        <label>Devamsız mısın?</label>
+        <div class="toggleRow" style="margin-top:6px">
+          <input id="isAbsent" type="checkbox" />
+          <label for="isAbsent" style="margin:0;color:var(--text);font-size:13px;cursor:pointer;">Devamsız (D)</label>
+        </div>
+        <div class="small">Devamsızlıkta DSN hesaplanmaz ve harf notu <b>D</b> verilir.</div>
+      </div>
+
+      <div>
+        <label>Bütünleme sonrası mı?</label>
+        <div class="toggleRow" style="margin-top:6px">
+          <input id="isMakeup" type="checkbox" />
+          <label for="isMakeup" style="margin:0;color:var(--text);font-size:13px;cursor:pointer;">Bütünleme (MDS)</label>
+        </div>
+        <div class="small">Bütünleme sonrası harf notu KOÜ’de <b>Tablo-1 (MDS)</b> ile verilir.</div>
+      </div>
+    </div>
+
+    <div class="toggleRow">
+      <input id="hasExtras" type="checkbox" />
+      <label for="hasExtras" style="margin:0;color:var(--text);font-size:13px;cursor:pointer;">
+        Ek değerlendirme var (ödev/quiz/proje/lab…)
+      </label>
+    </div>
+
+    <div id="extrasBox" class="panel" style="display:none;padding:12px;margin-top:10px">
+      <div class="grid">
+        <div>
+          <label>Kaç adet ek kalem?</label>
+          <select id="extraCount">
+            <option>1</option><option>2</option><option>3</option><option>4</option>
+          </select>
+        </div>
+        <div>
+          <label>Not: ağırlıkların toplamı 100 olmalı</label>
+          <div class="pill">Vize + Final/Büt + Ek kalemler = 100%</div>
+        </div>
+      </div>
+      <div id="extraFields"></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div style="margin-top:12px">
+      <button id="btnCalc" type="button" onclick="hesapla()">Hesapla + Grafik Çiz</button>
+    </div>
+
+    <div class="muted" style="margin-top:10px">
+      <span class="pill">DSN = ağırlıklı ortalama</span>
+      <span class="pill">BDS: T = 50 + 10 * ((DSN − X̄) / S)</span>
+      <span class="pill">BDS sonucu &lt; MDS karşılığı olamaz</span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2 style="margin:0 0 8px;font-size:16px">Sonuç</h2>
+    <div id="out" class="out muted">Henüz hesaplama yapılmadı.</div>
+  </div>
+
+  <div id="chartArea" class="charts" style="display:none;">
+    <div class="chartCard">
+      <div class="chartTitle">Final/Büt notu vs Harf notu</div>
+      <canvas id="cvExamVsLetter"></canvas>
+      <div class="muted small">Ek kalemler sabit kabul edilir, final/büt 0–100 taranır. Final/Büt &lt; 40 ise FF.</div>
+    </div>
+
+    <div class="chartCard">
+      <div class="chartTitle">S değişince harf nasıl değişiyor?</div>
+      <canvas id="cvSigmaVsLetter"></canvas>
+      <div class="muted small">Sadece BDS koşullarında. Final/büt sabit: girdiğin not. S 5–30 aralığında simüle edilir.</div>
+    </div>
+
+    <div class="chartCard full">
+      <div class="chartTitle">Z–T grafiği (T = 50 + 10Z)</div>
+      <canvas id="cvZT"></canvas>
+      <div class="muted small">BDS koşullarında: seçilen S ile senin noktan (Z,T) işaretlenir. S boşsa 15 ile gösterilir.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================
+   KOÜ — Harf Notu + Grafik (BDS/MDS)
+   - Final/Büt alt sınırı: 40 (altında FF)
+   - N<25 veya Xbar>=80 -> MDS (Tablo-1)
+   - Diğer -> BDS: T=50+10*((DSN-Xbar)/S) ve Tablo-2
+   - BDS harfi, DSN'in Tablo-1 karşılığından düşük olamaz
+   ========================= */
+
+function clamp(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
+function num(id){ return Number(document.getElementById(id).value); }
+function txt(id){ return String(document.getElementById(id).value || ""); }
+function fmt(v, d=2){ return (Number.isFinite(v) ? v.toFixed(d) : ""); }
+
+/* ---- Ek kalemler ---- */
+const hasExtras = document.getElementById("hasExtras");
+const extrasBox = document.getElementById("extrasBox");
+const extraCount = document.getElementById("extraCount");
+const extraFields = document.getElementById("extraFields");
+
+hasExtras.addEventListener("change", () => {
+  extrasBox.style.display = hasExtras.checked ? "block" : "none";
+  renderExtras();
+});
+extraCount.addEventListener("change", renderExtras);
+
+function renderExtras(){
+  extraFields.innerHTML = "";
+  if(!hasExtras.checked) return;
+
+  const k = Number(extraCount.value);
+  for(let i=1;i<=k;i++){
+    const row = document.createElement("div");
+    row.className = "row";
+    row.style.marginTop = "10px";
+    row.innerHTML = `
+      <div>
+        <label>Ek Kalem ${i} Ağırlık (%)</label>
+        <input id="exW${i}" type="number" min="0" max="100" step="0.01" value="10" />
+      </div>
+      <div>
+        <label>Senin Notun</label>
+        <input id="exS${i}" type="number" min="0" max="100" step="0.01" value="70" />
+      </div>
+    `;
+    extraFields.appendChild(row);
+  }
+}
+function getExtras(){
+  if(!hasExtras.checked) return [];
+  const k = Number(extraCount.value);
+  const arr = [];
+  for(let i=1;i<=k;i++){
+    const w = Number(document.getElementById(`exW${i}`).value);
+    const s = Number(document.getElementById(`exS${i}`).value);
+    if(Number.isFinite(w) && w > 0){
+      arr.push({ w, s: Number.isFinite(s) ? s : 0 });
+    }
+  }
+  return arr;
+}
+
+/* ---- DSN hesapla (ağırlıklı ortalama) ---- */
+function calcDSN(mid, exam, midW, examW, extras){
+  let totalW = midW + examW;
+  let score = (mid * midW + exam * examW) / 100.0;
+  for(const ex of extras){
+    totalW += ex.w;
+    score += (ex.s * ex.w) / 100.0;
+  }
+  return { dsn: score, totalW };
+}
+
+/* ---- Tablo-1 (MDS) ---- */
+function table1Letter(dsn){
+  const x = Number(dsn);
+  if(!Number.isFinite(x)) return "FF";
+  if(x >= 90) return "AA";
+  if(x >= 80) return "BA";
+  if(x >= 75) return "BB";
+  if(x >= 70) return "CB";
+  if(x >= 60) return "CC";
+  if(x >= 50) return "DC";
+  if(x >= 40) return "DD";
+  if(x >= 30) return "FD";
+  return "FF";
+}
+const LETTER_RANK = ["FF","FD","DD","DC","CC","CB","BB","BA","AA"];
+function maxLetter(a,b){
+  const ia = LETTER_RANK.indexOf(a);
+  const ib = LETTER_RANK.indexOf(b);
+  if(ia === -1) return b;
+  if(ib === -1) return a;
+  return (ia >= ib) ? a : b;
+}
+
+/* ---- Tablo-2 (BDS) ---- */
+const TABLE2 = [
+  {
+    name:"Mükemmel",
+    minExclusive:70.00, maxExclusive:80.00,
+    bands:{ FF:[-Infinity,23.99], FD:[24,28.99], DD:[29,33.99], DC:[34,38.99], CC:[39,43.99], CB:[44,48.99], BB:[49,53.99], BA:[54,58.99], AA:[59,Infinity] }
+  },
+  {
+    name:"Çok iyi",
+    minExclusive:62.50, maxInclusive:70.00,
+    bands:{ FF:[-Infinity,25.99], FD:[26,30.99], DD:[31,35.99], DC:[36,40.99], CC:[41,45.99], CB:[46,50.99], BB:[51,55.99], BA:[56,60.99], AA:[61,Infinity] }
+  },
+  {
+    name:"İyi",
+    minExclusive:57.50, maxInclusive:62.50,
+    bands:{ FF:[-Infinity,27.99], FD:[28,32.99], DD:[33,37.99], DC:[38,42.99], CC:[43,47.99], CB:[48,52.99], BB:[53,57.99], BA:[58,62.99], AA:[63,Infinity] }
+  },
+  {
+    name:"Ortanın üstü",
+    minExclusive:52.50, maxInclusive:57.50,
+    bands:{ FF:[-Infinity,29.99], FD:[30,34.99], DD:[35,39.99], DC:[40,44.99], CC:[45,49.99], CB:[50,54.99], BB:[55,59.99], BA:[60,64.99], AA:[65,Infinity] }
+  },
+  {
+    name:"Orta",
+    minExclusive:47.50, maxInclusive:52.50,
+    bands:{ FF:[-Infinity,31.99], FD:[32,36.99], DD:[37,41.99], DC:[42,46.99], CC:[47,51.99], CB:[52,56.99], BB:[57,61.99], BA:[62,66.99], AA:[67,Infinity] }
+  },
+  {
+    name:"Zayıf",
+    minExclusive:42.50, maxInclusive:47.50,
+    bands:{ FF:[-Infinity,33.99], FD:[34,38.99], DD:[39,43.99], DC:[44,48.99], CC:[49,53.99], CB:[54,58.99], BB:[59,63.99], BA:[64,68.99], AA:[69,Infinity] }
+  },
+  {
+    name:"Kötü",
+    maxInclusive:42.50,
+    bands:{ FF:[-Infinity,35.99], FD:[36,40.99], DD:[41,45.99], DC:[46,50.99], CC:[51,55.99], CB:[56,60.99], BB:[61,65.99], BA:[66,70.99], AA:[71,Infinity] }
+  }
+];
+
+function pickTable2Level(mean){
+  const m = Number(mean);
+  // Üstün Başarı (Xbar>=80) zaten MDS'ye yönlendiriliyor.
+  for(const r of TABLE2){
+    if(r.name === "Mükemmel"){
+      if(m > r.minExclusive && m < r.maxExclusive) return r;
+    }else if(r.name === "Çok iyi"){
+      if(m > r.minExclusive && m <= r.maxInclusive) return r;
+    }else if(r.name === "İyi"){
+      if(m > r.minExclusive && m <= r.maxInclusive) return r;
+    }else if(r.name === "Ortanın üstü"){
+      if(m > r.minExclusive && m <= r.maxInclusive) return r;
+    }else if(r.name === "Orta"){
+      if(m > r.minExclusive && m <= r.maxInclusive) return r;
+    }else if(r.name === "Zayıf"){
+      if(m > r.minExclusive && m <= r.maxInclusive) return r;
+    }else if(r.name === "Kötü"){
+      if(m <= r.maxInclusive) return r;
+    }
+  }
+  return TABLE2[TABLE2.length-1];
+}
+
+function letterFromTable2(mean, dsn, sigma){
+  const m = Number(mean);
+  const s = Number(sigma);
+  const x = Number(dsn);
+  const z = (x - m) / s;
+  const t = 50 + 10*z;
+  const level = pickTable2Level(m);
+
+  const order = ["AA","BA","BB","CB","CC","DC","DD","FD","FF"]; // test high->low
+  for(const g of order){
+    const [lo, hi] = level.bands[g];
+    if(t >= lo && t <= hi) return { letter:g, z, t, level: level.name };
+  }
+  return { letter:"FF", z, t, level: level.name };
+}
+
+/* ---- Ana motor ---- */
+function decideSystem({N, mean, isMakeup}){
+  if(isMakeup) return "MDS_MAKEUP";
+  if(!Number.isFinite(N) || N < 25) return "MDS_NLT25";
+  if(Number.isFinite(mean) && mean >= 80) return "MDS_MEAN80";
+  return "BDS";
+}
+
+function gradeOnce({mid, exam, midW, examW, extras, N, mean, sigma, isAbsent, isMakeup}){
+  // Devamsız
+  if(isAbsent){
+    return { system:"ABSENT", letter:"D", note:"Devamsız: DSN hesaplanmaz, harf notu D.", dsn:null };
+  }
+
+  // Ağırlık kontrol
+  const {dsn, totalW} = calcDSN(mid, exam, midW, examW, extras);
+  if(Math.abs(totalW - 100) > 0.01){
+    return { system:"ERR", letter:"", note:`Hata: Ağırlıkların toplamı 100 olmalı. Şu an toplam: ${fmt(totalW,2)}`, dsn };
+  }
+
+  // Final/Büt alt sınırı 40
+  if(Number.isFinite(exam) && exam < 40){
+    return { system:"FAIL_EXAM_MIN", letter:"FF", note:"Final/Bütünleme alt sınırı: 40 altında → doğrudan FF.", dsn };
+  }
+
+  // Sistem seçimi
+  const sys = decideSystem({N, mean, isMakeup});
+
+  // DSN < 15 (BDS hesabına girmez, finalden başarısız sayılıp büt)
+  if(sys === "BDS" && Number.isFinite(dsn) && dsn < 15){
+    return { system:"BDS_DSN_LT15", letter:"FF", note:"DSN < 15: Bağıl değerlendirmeye katılmaz; yarıyıl sonu sınavından başarısız sayılır (bütünleme gerekir).", dsn };
+  }
+
+  if(sys.startsWith("MDS")){
+    const l = table1Letter(dsn);
+    let note = "";
+    if(sys === "MDS_MAKEUP") note = "Bütünleme sonrası: MDS (Tablo-1) ile dönüştürüldü.";
+    else if(sys === "MDS_NLT25") note = "N < 25: MDS (Tablo-1) ile dönüştürüldü.";
+    else if(sys === "MDS_MEAN80") note = "Sınıf ortalaması ≥ 80: MDS (Tablo-1) ile dönüştürüldü.";
+
+    if(l === "DC") note += "\nNot: DC koşullu başarılıdır; kesin durum AGNO’ya göre değerlendirilir.";
+    return { system:sys, letter:l, note, dsn };
+  }
+
+  // BDS
+  const sStr = txt("sigma").trim();
+  const hasSigma = (sStr !== "" && Number.isFinite(sigma) && sigma > 0);
+
+  if(!hasSigma){
+    const lvl = pickTable2Level(mean);
+    const mdsL = table1Letter(dsn);
+    const lines = [];
+    lines.push(`Mod: BDS (Tablo-2)`);
+    lines.push(`X̄: ${fmt(mean)} → ${lvl.name}`);
+    lines.push(`DSN: ${fmt(dsn)}`);
+    lines.push(`MDS alt sınırı (Tablo-1 karşılığı): ${mdsL}`);
+    lines.push(`S bilinmiyor → 5.0'dan 25.0'e 0.1 adım ile simülasyon:`);
+
+    const counts = {};
+    const sigmas = [];
+    for(let s=5; s<=25.0001; s+=0.1){
+      const ss = Number(s.toFixed(1));
+      sigmas.push(ss);
+      const rel = letterFromTable2(mean, dsn, ss);
+      const finalL = maxLetter(rel.letter, mdsL);
+      counts[finalL] = (counts[finalL] || 0) + 1;
+    }
+
+    const total = sigmas.length;
+    const displayOrder = ["AA","BA","BB","CB","CC","DC","DD","FD","FF"];
+    let bestLetter = null, bestCount = -1;
+    for(const l of displayOrder){
+      const c = counts[l] || 0;
+      if(c > bestCount){ bestCount = c; bestLetter = l; }
+    }
+
+    lines.push(`Toplam ${total} senaryo değerlendirdi.`); 
+    if(bestLetter){
+      lines.push(`En yüksek olasılık: ${bestLetter} (%${(bestCount*100/total).toFixed(2)})`);
+    }
+    lines.push(`Dağılım (%):`);
+    for(const l of displayOrder){
+      const c = counts[l] || 0;
+      if(c === 0) continue; // %0.00 olanları yazma
+      const pct = (c*100/total).toFixed(2);
+      lines.push(`${l}: %${pct}`);
+    }
+    const last = lines.join("\n");
+    return { system:"BDS_SIGMA_UNKNOWN", letter:"", note:last, dsn };
+  }
+
+  const mdsL = table1Letter(dsn);
+  const rel = letterFromTable2(mean, dsn, sigma);
+  const finalL = maxLetter(rel.letter, mdsL);
+  let note = `Mod: BDS (Tablo-2)\nX̄: ${fmt(mean)} → ${rel.level}\nS: ${fmt(sigma)}\nDSN: ${fmt(dsn)}\nZ: ${fmt(rel.z)}\nT: ${fmt(rel.t)}\nTablo-2: ${rel.letter}\nMDS alt sınırı (Tablo-1 karşılığı): ${mdsL}`;
+  if(finalL !== rel.letter) note += `\nKoruma kuralı: ${rel.letter} daha düşük olduğu için sonuç ${finalL} yapıldı.`;
+  if(finalL === "DC") note += "\nNot: DC koşullu başarılıdır; kesin durum AGNO’ya göre değerlendirilir.";
+  return { system:"BDS", letter:finalL, note, dsn, z:rel.z, t:rel.t, level:rel.level };
+}
+
+function hesapla(){
+  const out = document.getElementById("out");
+
+  const mid = num("midScore");
+  const exam = num("examScore");
+  const midW = num("midW");
+  const examW = num("examW");
+  const N = num("n");
+  const mean = num("classMean");
+  const sigmaStr = txt("sigma").trim();
+  const sigma = (sigmaStr === "" ? null : Number(sigmaStr));
+
+  const isAbsent = document.getElementById("isAbsent").checked;
+  const isMakeup = document.getElementById("isMakeup").checked;
+
+  const extras = getExtras();
+
+  // Sigma validasyonu (girildiyse)
+  if(sigma !== null && (!Number.isFinite(sigma) || sigma <= 0)){
+    out.innerHTML = `<span class="warn"><b>Hata:</b> Standart sapma (S) pozitif bir sayı olmalı.</span>`;
+    document.getElementById("chartArea").style.display = "none";
+    return;
+  }
+
+  const res = gradeOnce({mid, exam, midW, examW, extras, N, mean, sigma, isAbsent, isMakeup});
+
+  if(res.system === "ERR"){
+    out.innerHTML = `<span class="warn"><b>${res.note}</b></span>`;
+    document.getElementById("chartArea").style.display = "none";
+    return;
+  }
+
+  if(res.system === "ABSENT"){
+    out.innerHTML = `<span class="bad"><b>Sonuç: D</b></span>\n${res.note}`;
+    document.getElementById("chartArea").style.display = "none";
+    return;
+  }
+
+  // BDS sigma yoksa res.letter boş kalıyor (senaryo metni var)
+  if(res.system === "BDS_SIGMA_UNKNOWN"){
+    out.innerHTML = `<span class="ok"><b>${res.note}</b></span>`;
+    drawCharts();
+    return;
+  }
+
+  // Normal çıktı
+  const badgeCls = (res.letter === "FF" || res.letter === "FD" || res.letter === "DD") ? "bad" : "ok";
+  out.innerHTML =
+    `<span class="${badgeCls}"><b>Sonuç: ${res.letter}</b></span>\n` +
+    `DSN: ${fmt(res.dsn)}\n` +
+    `${res.note}`;
+
+  drawCharts();
+}
+
+/* ----------------- Charts (Canvas) ----------------- */
+const LETTER_ORDER = ["FF","FD","DD","DC","CC","CB","BB","BA","AA"];
+function letterToY(letter){
+  const idx = LETTER_ORDER.indexOf(letter);
+  return idx === -1 ? 0 : idx;
+}
+
+function drawAxes(ctx, w, h, pad=36){
+  ctx.clearRect(0,0,w,h);
+  ctx.strokeStyle = "rgba(255,255,255,.18)";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(pad, 12);
+  ctx.lineTo(pad, h-pad);
+  ctx.lineTo(w-12, h-pad);
+  ctx.stroke();
+
+  ctx.fillStyle = "rgba(255,255,255,.55)";
+  ctx.font = "12px system-ui";
+  ctx.fillText("Harf", 8, 18);
+
+  const usableH = (h - pad) - 12;
+  for(let i=0;i<LETTER_ORDER.length;i++){
+    const y = (h-pad) - (usableH * (i/(LETTER_ORDER.length-1)));
+    ctx.strokeStyle = "rgba(255,255,255,.08)";
+    ctx.beginPath(); ctx.moveTo(pad, y); ctx.lineTo(w-12, y); ctx.stroke();
+    ctx.fillStyle = "rgba(255,255,255,.55)";
+    ctx.fillText(LETTER_ORDER[i], 10, y+4);
+  }
+}
+
+function scenarioLetter(mid, exam){
+  const midW = num("midW"), examW = num("examW");
+  const extras = getExtras();
+  const {dsn, totalW} = calcDSN(mid, exam, midW, examW, extras);
+  if(Math.abs(totalW - 100) > 0.01) return "";
+
+  const N = num("n");
+  const mean = num("classMean");
+  const sigmaStr = txt("sigma").trim();
+  const sigma = (sigmaStr === "" ? 15 : Number(sigmaStr));
+
+  const isAbsent = document.getElementById("isAbsent").checked;
+  const isMakeup = document.getElementById("isMakeup").checked;
+  if(isAbsent) return ""; // devamsızda grafik yok
+  if(Number.isFinite(exam) && exam < 40) return "FF";
+
+  const sys = decideSystem({N, mean, isMakeup});
+  if(sys.startsWith("MDS")) return table1Letter(dsn);
+
+  if(Number.isFinite(dsn) && dsn < 15) return "FF"; // büt gerekir
+
+  if(!Number.isFinite(sigma) || sigma <= 0) return "FF";
+  const rel = letterFromTable2(mean, dsn, sigma);
+  const mdsL = table1Letter(dsn);
+  return maxLetter(rel.letter, mdsL);
+}
+
+function drawCharts(){
+  const area = document.getElementById("chartArea");
+  // Devamsızsa grafikleri kapat
+  if(document.getElementById("isAbsent").checked){
+    area.style.display = "none";
+    return;
+  }
+  area.style.display = "grid";
+  drawExamVsLetter();
+  drawSigmaVsLetter();
+  drawZT();
+}
+
+function drawExamVsLetter(){
+  const cv = document.getElementById("cvExamVsLetter");
+  const ctx = cv.getContext("2d");
+  const w = cv.width = cv.clientWidth * devicePixelRatio;
+  const h = cv.height = cv.clientHeight * devicePixelRatio;
+
+  const pad = 42*devicePixelRatio;
+  drawAxes(ctx, w, h, pad);
+
+  const mid = num("midScore");
+  const usableW = (w-12) - pad;
+  const usableH = (h-pad) - 12;
+
+  ctx.strokeStyle = "rgba(109,124,255,.95)";
+  ctx.lineWidth = 2*devicePixelRatio;
+  ctx.beginPath();
+
+  let started = false;
+  for(let f=0; f<=100; f++){
+    const letter = scenarioLetter(mid, f);
+    if(!letter) continue;
+    const yv = letterToY(letter);
+    const x = pad + usableW * (f/100);
+    const y = (h-pad) - usableH * (yv/(LETTER_ORDER.length-1));
+    if(!started){ ctx.moveTo(x,y); started = true; }
+    else ctx.lineTo(x,y);
+  }
+  if(started) ctx.stroke();
+}
+
+function drawSigmaVsLetter(){
+  const cv = document.getElementById("cvSigmaVsLetter");
+  const ctx = cv.getContext("2d");
+  const w = cv.width = cv.clientWidth * devicePixelRatio;
+  const h = cv.height = cv.clientHeight * devicePixelRatio;
+
+  const pad = 42*devicePixelRatio;
+  ctx.clearRect(0,0,w,h);
+
+  ctx.strokeStyle = "rgba(255,255,255,.18)";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(pad, 12);
+  ctx.lineTo(pad, h-pad);
+  ctx.lineTo(w-12, h-pad);
+  ctx.stroke();
+
+  const usableH = (h-pad) - 12;
+  for(let i=0;i<LETTER_ORDER.length;i++){
+    const y = (h-pad) - (usableH * (i/(LETTER_ORDER.length-1)));
+    ctx.strokeStyle = "rgba(255,255,255,.08)";
+    ctx.beginPath(); ctx.moveTo(pad, y); ctx.lineTo(w-12, y); ctx.stroke();
+    ctx.fillStyle = "rgba(255,255,255,.55)";
+    ctx.font = "12px system-ui";
+    ctx.fillText(LETTER_ORDER[i], 10, y+4);
+  }
+
+  // BDS koşulu değilse boş bırak (MDS'de S anlamsız)
+  const N = num("n");
+  const mean = num("classMean");
+  const isMakeup = document.getElementById("isMakeup").checked;
+  const sys = decideSystem({N, mean, isMakeup});
+  if(sys !== "BDS") return;
+
+  const mid = num("midScore");
+  const exam = num("examScore");
+  const old = document.getElementById("sigma").value;
+
+  const usableW = (w-12) - pad;
+
+  ctx.strokeStyle = "rgba(255,191,71,.95)";
+  ctx.lineWidth = 2*devicePixelRatio;
+  ctx.beginPath();
+
+  for(let s=5; s<=30; s++){
+    document.getElementById("sigma").value = String(s);
+    const letter = scenarioLetter(mid, exam);
+    const yv = letterToY(letter || "FF");
+    const x = pad + usableW * ((s-5)/25);
+    const y = (h-pad) - usableH * (yv/(LETTER_ORDER.length-1));
+    if(s===5) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+
+  document.getElementById("sigma").value = old;
+}
+
+function drawZT(){
+  const cv = document.getElementById("cvZT");
+  const ctx = cv.getContext("2d");
+  const w = cv.width = cv.clientWidth * devicePixelRatio;
+  const h = cv.height = cv.clientHeight * devicePixelRatio;
+  const pad = 42*devicePixelRatio;
+
+  ctx.clearRect(0,0,w,h);
+
+  // BDS koşulu değilse ZT grafiğini kapat (boş bırak)
+  const N = num("n");
+  const mean = num("classMean");
+  const isMakeup = document.getElementById("isMakeup").checked;
+  const sys = decideSystem({N, mean, isMakeup});
+  if(sys !== "BDS"){
+    // yine de eksen çizmek yerine alanı boş bırakıyoruz
+    return;
+  }
+
+  ctx.strokeStyle = "rgba(255,255,255,.18)";
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(pad, 12);
+  ctx.lineTo(pad, h-pad);
+  ctx.lineTo(w-12, h-pad);
+  ctx.stroke();
+
+  const usableW = (w-12) - pad;
+  const usableH = (h-pad) - 12;
+
+  ctx.font = "12px system-ui";
+  ctx.fillStyle = "rgba(255,255,255,.55)";
+  ctx.fillText("Z", w-24, h-10);
+  ctx.fillText("T", 12, 18);
+
+  for(let z=-3; z<=3; z++){
+    const x = pad + usableW * ((z+3)/6);
+    ctx.strokeStyle = "rgba(255,255,255,.08)";
+    ctx.beginPath(); ctx.moveTo(x, 12); ctx.lineTo(x, h-pad); ctx.stroke();
+    ctx.fillStyle = "rgba(255,255,255,.45)";
+    ctx.fillText(String(z), x-4*devicePixelRatio, h-10);
+  }
+  for(let T=20; T<=80; T+=10){
+    const y = (h-pad) - usableH * ((T-20)/60);
+    ctx.strokeStyle = "rgba(255,255,255,.08)";
+    ctx.beginPath(); ctx.moveTo(pad, y); ctx.lineTo(w-12, y); ctx.stroke();
+    ctx.fillStyle = "rgba(255,255,255,.45)";
+    ctx.fillText(String(T), 10, y+4);
+  }
+
+  // T=50+10Z doğrusu
+  ctx.strokeStyle = "rgba(109,124,255,.85)";
+  ctx.lineWidth = 2*devicePixelRatio;
+  ctx.beginPath();
+  for(let z=-3; z<=3; z+=0.05){
+    const T = 50 + 10*z;
+    const x = pad + usableW * ((z+3)/6);
+    const y = (h-pad) - usableH * ((T-20)/60);
+    if(z===-3) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  }
+  ctx.stroke();
+
+  // Nokta
+  const mid = num("midScore");
+  const exam = num("examScore");
+  const midW = num("midW"), examW = num("examW");
+  const extras = getExtras();
+  const {dsn, totalW} = calcDSN(mid, exam, midW, examW, extras);
+  if(Math.abs(totalW - 100) > 0.01) return;
+  if(Number.isFinite(exam) && exam < 40) return;
+  if(Number.isFinite(dsn) && dsn < 15) return;
+
+  const sigmaStr = txt("sigma").trim();
+  const sigma = (sigmaStr === "" ? 15 : Number(sigmaStr));
+  if(!Number.isFinite(sigma) || sigma <= 0) return;
+
+  const z = (dsn - mean)/sigma;
+  const t = 50 + 10*z;
+
+  const zx = clamp(z, -3, 3);
+  const Tx = clamp(t, 20, 80);
+
+  const px = pad + usableW * ((zx+3)/6);
+  const py = (h-pad) - usableH * ((Tx-20)/60);
+
+  ctx.fillStyle = "rgba(255,255,255,.95)";
+  ctx.beginPath(); ctx.arc(px,py,5*devicePixelRatio,0,Math.PI*2); ctx.fill();
+
+  ctx.fillStyle = "rgba(255,255,255,.70)";
+  ctx.fillText(`Z=${fmt(z)} T=${fmt(t)}`, px+8*devicePixelRatio, py-8*devicePixelRatio);
+}
+
+renderExtras();
+</script>
+</body>
+</html>
